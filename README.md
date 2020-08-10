@@ -3,11 +3,11 @@
 # Group 00
 
 ## Members
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
-* SURNAME, GivenName (sXXXX)
+* Bossen, William (s3658961)
+* Kourn, Chhayhy (s3699618)
+* Le, Hue Phuong (s3687477)
+* Leng, Meng Kheang (s3704080)
+* Villaflores, Vincent (s3728807)
 
 ## Records
 
