@@ -23,9 +23,16 @@ public class AdminDetails {
     @NotBlank(message = "Business owner's name is required")
     @Column(name="admin_name")
     private String adminName;
+    
+    @NotBlank(message = "Service is required")
+    @Column(name="service")
+    private String service;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
     private List<WorkerDetails> workerList = new ArrayList<WorkerDetails>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin_id")
+    private List<WorkingHours> workingHoursList = new ArrayList<WorkingHours>();
 
     public AdminDetails() {
 

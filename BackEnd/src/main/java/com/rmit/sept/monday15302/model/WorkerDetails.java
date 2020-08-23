@@ -5,6 +5,8 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="worker_details")
@@ -29,6 +31,9 @@ public class WorkerDetails {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="admin_id", referencedColumnName="user_id")
     private AdminDetails admin;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "worker")
+    private List<Booking> bookingList = new ArrayList<Booking>();
 
     public WorkerDetails() {
 

@@ -6,6 +6,8 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="customer_details")
@@ -34,6 +36,9 @@ public class CustomerDetails {
     @Size(min = 8, max = 15)
     @Column(name="phone_number")
     private int phoneNumber;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    private List<Booking> bookingLists = new ArrayList<Booking>();
 
     public CustomerDetails() {
 
