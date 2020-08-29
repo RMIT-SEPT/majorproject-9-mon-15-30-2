@@ -13,7 +13,7 @@ public class WorkingHours {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="working_hours_id")
-    private Long id;
+    private String id;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="admin_id", referencedColumnName="user_id")
@@ -42,4 +42,16 @@ public class WorkingHours {
     @Temporal(TemporalType.TIME)
     @Column(name="end_time")
     private Date endTime;
+
+    public String getId() { return id; }
+
+    public AdminDetails getAdmin_id() { return admin_id; }
+
+    public int getDay() { return day; }
+
+    public Date getDate() { return date; }
+
+    public Date getStartTime() { return startTime; }
+
+    public Date getEndTime() { return endTime; }
 }

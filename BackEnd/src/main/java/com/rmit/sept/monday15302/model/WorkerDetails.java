@@ -1,5 +1,6 @@
 package com.rmit.sept.monday15302.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Table(name="worker_details")
 public class WorkerDetails {
     @Id
-    private Long id;
+    private String id;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -32,10 +33,19 @@ public class WorkerDetails {
     @JoinColumn(name="admin_id", referencedColumnName="user_id")
     private AdminDetails admin;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "worker")
-    private List<Booking> bookingList = new ArrayList<Booking>();
+    private List<Booking> bookingList = new ArrayList<>();
 
     public WorkerDetails() {
 
     }
+
+    public String getId() { return id; }
+
+    public String getfName() { return fName; }
+
+    public String getlName() { return lName; }
+
+    public AdminDetails getAdmin() { return admin; }
 }
