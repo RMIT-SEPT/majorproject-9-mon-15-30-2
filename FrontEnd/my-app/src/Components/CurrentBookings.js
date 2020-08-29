@@ -1,10 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 class CurrentBookings extends Component {
     render() {
         return (
             <div className="container">
-                <h1>This is CurrentBookings</h1>
+                <Alert variant='danger'>
+                    No Current Booking Available
+                </Alert>
             </div>
         )
     }

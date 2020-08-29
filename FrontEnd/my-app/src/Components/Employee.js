@@ -1,10 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Alert from 'react-bootstrap/Alert';
 
 class Employee extends Component {
     render() {
         return (
             <div className="container">
-                <h1>This is Employee page</h1>
+                <Alert variant='danger'>
+                    No Employee Available
+                </Alert>
             </div>
         )
     }

@@ -10,6 +10,7 @@ import AddEmployee from './Components/AddEmployee';
 import AvailableWorkers from './Components/AvailableWorkers';
 import CurrentBookings from './Components/CurrentBookings';
 import Employee from './Components/Employee';
+import Register from './Components/Login/Register'
 
 import {BrowserRouter as Router, Route} from "react-router-dom";
 // import {Provider} from "react-redux";
@@ -31,6 +32,7 @@ function App() {
                 <Route exact path= "/availableworkers" component={AvailableWorkers} />
                 <Route exact path= "/currentbookings" component={CurrentBookings} />
                 <Route exact path= "/employee" component={Employee} />
+                <Route exact path="/register" component={Register} />
 
             </div>
         </Router>
