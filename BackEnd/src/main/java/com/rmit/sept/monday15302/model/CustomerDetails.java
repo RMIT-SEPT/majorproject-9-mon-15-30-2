@@ -38,6 +38,10 @@ public class CustomerDetails {
     @Column(name="phone_number")
     private int phoneNumber;
 
+    @NotBlank(message = "Email is required")
+    @Column(name = "email")
+    private String email;
+
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Booking> bookingLists = new ArrayList<>();
@@ -55,5 +59,7 @@ public class CustomerDetails {
     public String getAddress() { return address; }
 
     public int getPhoneNumber() { return phoneNumber; }
+
+    public String getEmail() { return email; }
 
 }
