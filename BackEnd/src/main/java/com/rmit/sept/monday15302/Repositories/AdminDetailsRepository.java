@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AdminDetailsRepository extends CrudRepository<AdminDetails, String> {
 
@@ -14,4 +16,7 @@ public interface AdminDetailsRepository extends CrudRepository<AdminDetails, Str
 
     @Query("select admin.service from AdminDetails admin where admin.id = :id")
     String getServiceByAdminId(@Param("id") String id);
+
+    @Query("select DISTINCT admin.service from AdminDetails admin")
+    List<String> getAllServices();
 }

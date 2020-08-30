@@ -15,4 +15,7 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
 
     @Query("select DISTINCT worker.admin.id from WorkerDetails worker where worker.id = :id")
     String getAdminIdFromWorkerId(@Param("id") String id);
+
+    @Override
+    Iterable<WorkerDetails> findAll();
 }

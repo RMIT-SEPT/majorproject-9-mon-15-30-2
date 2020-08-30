@@ -125,4 +125,16 @@ public class BookingService {
             throw new BookingException("Cannot create a booking");
         }
     }
+
+    public List<String> getAllServices() {
+        List<String> serviceList = adminDetailsRepository.getAllServices();
+        if(serviceList.size() == 0) {
+            throw new BookingException("No service to display");
+        }
+        return serviceList;
+    }
+
+    public Iterable<WorkerDetails> getAllWorkers() {
+        return workerDetailsRepository.findAll();
+    }
 }

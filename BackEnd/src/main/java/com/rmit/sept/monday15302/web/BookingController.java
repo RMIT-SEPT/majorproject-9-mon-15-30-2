@@ -48,13 +48,23 @@ public class BookingController {
     }
 
     @PostMapping("makebooking/create")
-    public ResponseEntity<?> createNewBooking(@Valid @RequestBody Booking booking, BindingResult result){
+    public ResponseEntity<?> createNewBooking(@Valid @RequestBody Booking booking, BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
 
         Booking newBooking = bookingService.saveOrUpdateBooking(booking);
         return new ResponseEntity<Booking>(newBooking, HttpStatus.CREATED);
+    }
+
+    @GetMapping("makebooking/allservices")
+    public ResponseEntity<?> getAllServices() {
+        return new ResponseEntity<List<String>>(bookingService.getAllServices(), HttpStatus.OK);
+    }
+
+    @GetMapping("makebooking/allworkers")
+    public ResponseEntity<?> getAllWorkers() {
+        return new ResponseEntity<Iterable<WorkerDetails>>(bookingService.getAllWorkers(), HttpStatus.OK);
     }
 
 }
