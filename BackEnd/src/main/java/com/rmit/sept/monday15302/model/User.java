@@ -10,7 +10,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private Long id;
+    private String id;
 
     @NotBlank(message = "User name is required")
     @Size(max = 21)
@@ -37,5 +37,15 @@ public class User {
     public User() {
 
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserName() { return userName; }
+
+    public String getPassword() { return password; }
+
+    public UserType getType() { return type; }
 
 }
