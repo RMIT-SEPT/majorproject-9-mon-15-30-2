@@ -1,0 +1,13 @@
+package com.rmit.sept.monday15302.Repositories;
+
+import com.rmit.sept.monday15302.model.WorkingHours;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface WorkingHoursRepository extends CrudRepository<WorkingHours, String> {
+
+    @Query("select hours from WorkingHours hours where hours.admin_id.id = :admin_id and hours.day = :day")
+    WorkingHours findByAdmin_idAndDay(String admin_id, int day);
+}

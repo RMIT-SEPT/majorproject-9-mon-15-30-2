@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class BookingController {
 
     @GetMapping("makebooking/byworker/{workerId}")
     public ResponseEntity<?> getServiceByWorker(@PathVariable("workerId") String workerId) {
-        String service = bookingService.getServiceFromWorker(workerId);
+        String service = bookingService.getServiceByWorker(workerId);
         return new ResponseEntity<String>(service, HttpStatus.OK);
     }
 
@@ -64,7 +65,15 @@ public class BookingController {
 
     @GetMapping("makebooking/allworkers")
     public ResponseEntity<?> getAllWorkers() {
-        return new ResponseEntity<Iterable<WorkerDetails>>(bookingService.getAllWorkers(), HttpStatus.OK);
+        return new ResponseEntity<Iterable<WorkerDetails>>(bookingService.getAllWorkers(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("makebooking/allsessions/{workerId}/{date}")
+    public ResponseEntity<?> getAllSessions(@PathVariable("workerId") String workerId,
+                                            @PathVariable("date") String date) throws ParseException {
+        return new ResponseEntity<List<Date>>(bookingService.getAvailableSessions(workerId, date),
+                HttpStatus.OK);
     }
 
 }

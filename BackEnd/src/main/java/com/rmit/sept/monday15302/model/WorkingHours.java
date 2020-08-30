@@ -1,6 +1,6 @@
 package com.rmit.sept.monday15302.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -19,28 +19,26 @@ public class WorkingHours {
     @JoinColumn(name="admin_id", referencedColumnName="user_id")
     private AdminDetails admin_id;
 
-    // 1 for Sunday and 7 for Saturday, 2-6 for Monday-Friday
+    // 1 for Sunday, 2-6 for Monday-Friday
     @NotBlank
     @Min(1)
     @Max(7)
     @Column(name = "day")
     private int day;
 
-    @NotBlank
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    @Column(name="notified_date")
+    @Column(name="notified_date", nullable = false)
     private Date date;
 
-    @NotBlank
-    @DateTimeFormat(pattern="hh:mm:ss")
+    @JsonFormat(pattern="HH:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column(name="start_time")
+    @Column(name="start_time", nullable = false)
     private Date startTime;
 
-    @NotBlank
-    @DateTimeFormat(pattern="hh:mm:ss")
+    @JsonFormat(pattern="HH:mm:ss")
     @Temporal(TemporalType.TIME)
-    @Column(name="end_time")
+    @Column(name="end_time", nullable = false)
     private Date endTime;
 
     public String getId() { return id; }
