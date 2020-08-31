@@ -41,6 +41,13 @@ public class WorkerDetails {
 
     }
 
+    public WorkerDetails(String id, String fName, String lName, AdminDetails admin) {
+        this.id = id;
+        this.fName = fName;
+        this.lName = lName;
+        this.admin = admin;
+    }
+
     public String getId() { return id; }
 
     public String getfName() { return fName; }

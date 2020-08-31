@@ -69,10 +69,17 @@ public class BookingController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("makebooking/allsessions/{workerId}/{date}")
-    public ResponseEntity<?> getAllSessions(@PathVariable("workerId") String workerId,
+    @GetMapping("makebooking/openinghours/{workerId}/{date}")
+    public ResponseEntity<?> getOpeningHours(@PathVariable("workerId") String workerId,
                                             @PathVariable("date") String date) throws ParseException {
-        return new ResponseEntity<List<Date>>(bookingService.getAvailableSessions(workerId, date),
+        return new ResponseEntity<List<Date>>(bookingService.getOpeningHours(workerId, date),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("makebooking/unavailablesessions/{workerId}/{date}")
+    public ResponseEntity<?> getUnavailableSessions(@PathVariable("workerId") String workerId,
+                                            @PathVariable("date") String date) throws ParseException {
+        return new ResponseEntity<List<Booking>>(bookingService.getUnavailableSessions(workerId, date),
                 HttpStatus.OK);
     }
 

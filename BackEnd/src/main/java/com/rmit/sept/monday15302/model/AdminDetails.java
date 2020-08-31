@@ -41,6 +41,12 @@ public class AdminDetails {
 
     }
 
+    public AdminDetails(String id, String name, String service) {
+        this.id = id;
+        this.adminName = name;
+        this.service = service;
+    }
+
     public String getId() { return id; }
 
     public String getAdminName() { return adminName; }
