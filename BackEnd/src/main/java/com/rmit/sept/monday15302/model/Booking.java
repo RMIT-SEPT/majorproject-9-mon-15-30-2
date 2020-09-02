@@ -47,6 +47,15 @@ public class Booking {
 
     public Booking() {}
 
+    public Booking(String i, CustomerDetails c, WorkerDetails w, BookingStatus bs, String s)
+    {
+        id = i;
+        customer = c;
+        worker = w;
+        status = bs;
+        service = s;
+    }
+
     public String getId() { return id; }
 
     public CustomerDetails getCustomer() {
