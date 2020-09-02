@@ -48,7 +48,7 @@ public class BookingServiceTest {
         CustomerDetails customer = new CustomerDetails();
         customer.setId("123");
         booking.setCustomer(customer);
-        booking.setDate("2020-09-02");
+        booking.setDate("2021-09-02");
         booking.setStartTime("17:00:00");
         booking.setEndTime("18:00:00");
         List<Booking> bookingList = new ArrayList<>();
