@@ -73,4 +73,8 @@ public class CustomerDetails {
 
     public String getEmail() { return email; }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

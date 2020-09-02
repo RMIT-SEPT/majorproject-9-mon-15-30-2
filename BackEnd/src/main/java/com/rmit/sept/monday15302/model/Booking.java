@@ -86,4 +86,7 @@ public class Booking {
         return service;
     }
 
+    public void setCustomer(CustomerDetails customer) {
+        this.customer = customer;
+    }
 }
