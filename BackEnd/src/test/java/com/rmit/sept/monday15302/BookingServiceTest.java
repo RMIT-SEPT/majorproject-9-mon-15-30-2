@@ -40,9 +40,9 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void findPastBookings_returnOne_ifOneBookingIsFound() {
+    public void findPastBookings_returnTrue_ifOneBookingIsFound() {
         String customerId = "123";
-
         assert(bookingService.getAllPastBookings(customerId).size() == 1);
     }
+
 }

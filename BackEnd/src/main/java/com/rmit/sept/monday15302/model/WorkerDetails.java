@@ -55,4 +55,24 @@ public class WorkerDetails {
     public String getlName() { return lName; }
 
     public AdminDetails getAdmin() { return admin; }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAdmin(AdminDetails admin) {
+        this.admin = admin;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setfName(String fname) {
+        this.fName = fname;
+    }
+
+    public void setlName(String lname) {
+        this.lName = lname;
+    }
 }

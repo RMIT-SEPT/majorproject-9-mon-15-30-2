@@ -53,4 +53,19 @@ public class AdminDetails {
 
     public String getService() { return service; }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAdminName(String name) {
+        this.adminName = name;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
 }

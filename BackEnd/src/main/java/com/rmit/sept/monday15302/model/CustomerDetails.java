@@ -77,4 +77,27 @@ public class CustomerDetails {
         this.id = id;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setfName(String fname) {
+        this.fName = fname;
+    }
+
+    public void setlName(String lname) {
+        this.lName = lname;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
