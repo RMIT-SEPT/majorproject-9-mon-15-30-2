@@ -34,9 +34,10 @@ public class CustomerDetails {
     @Column(name="address")
     private String address;
 
+    @NotBlank(message = "Phone number is required")
     @Size(min = 8, max = 15)
     @Column(name="phone_number")
-    private int phoneNumber;
+    private String phoneNumber;
 
     @NotBlank(message = "Email is required")
     @Column(name = "email")
@@ -50,6 +51,16 @@ public class CustomerDetails {
 
     }
 
+    public CustomerDetails(String id, String fname, String lname, String address,
+                           String phoneNumber, String email) {
+        this.id = id;
+        this.fName = fname;
+        this.lName = lname;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
     public String getId() { return id; }
 
     public String getfName() { return fName; }
@@ -58,8 +69,35 @@ public class CustomerDetails {
 
     public String getAddress() { return address; }
 
-    public int getPhoneNumber() { return phoneNumber; }
+    public String getPhoneNumber() { return phoneNumber; }
 
     public String getEmail() { return email; }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setfName(String fname) {
+        this.fName = fname;
+    }
+
+    public void setlName(String lname) {
+        this.lName = lname;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

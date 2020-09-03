@@ -18,4 +18,7 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
 
     @Override
     Iterable<WorkerDetails> findAll();
+
+    @Query("select worker from WorkerDetails worker where worker.id = :id")
+    WorkerDetails findByWorkerId(String id);
 }

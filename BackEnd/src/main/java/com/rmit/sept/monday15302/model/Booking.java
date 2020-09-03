@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -47,6 +49,15 @@ public class Booking {
 
     public Booking() {}
 
+    public Booking(String i, CustomerDetails c, WorkerDetails w, BookingStatus bs, String s)
+    {
+        id = i;
+        customer = c;
+        worker = w;
+        status = bs;
+        service = s;
+    }
+
     public String getId() { return id; }
 
     public CustomerDetails getCustomer() {
@@ -77,4 +88,37 @@ public class Booking {
         return service;
     }
 
+    public void setCustomer(CustomerDetails customer) {
+        this.customer = customer;
+    }
+
+    public void setWorker(WorkerDetails worker) {
+        this.worker = worker;
+    }
+
+    public void setStatus(BookingStatus status) {
+        this.status = status;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public void setDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date newDate = sdf.parse(date);
+        this.date = newDate;
+    }
+
+    public void setStartTime(String startTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date newTime = sdf.parse(startTime);
+        this.startTime = newTime;
+    }
+
+    public void setEndTime(String startTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date newTime = sdf.parse(startTime);
+        this.endTime = newTime;
+    }
 }

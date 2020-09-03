@@ -41,10 +41,31 @@ public class AdminDetails {
 
     }
 
+    public AdminDetails(String id, String name, String service) {
+        this.id = id;
+        this.adminName = name;
+        this.service = service;
+    }
+
     public String getId() { return id; }
 
     public String getAdminName() { return adminName; }
 
     public String getService() { return service; }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setAdminName(String name) {
+        this.adminName = name;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
 }

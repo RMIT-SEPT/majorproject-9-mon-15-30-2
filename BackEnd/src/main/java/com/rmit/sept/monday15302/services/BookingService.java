@@ -144,7 +144,7 @@ public class BookingService {
         return workerDetailsRepository.findAll();
     }
 
-    public List<Date> getAvailableSessions(String workerId, String date) throws ParseException {
+    public List<Date> getOpeningHours(String workerId, String date) throws ParseException {
 
         // Convert date to day
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -169,19 +169,20 @@ public class BookingService {
             throw new BookingException("No working hours found");
         }
 
-        List<Booking> unavailable = bookingRepository.findNewBookingByWorkerAndDate(workerId, converted);
-
         List<Date> sessionsList = new ArrayList<>();
         sessionsList.add(toReturn.getStartTime());
         sessionsList.add(toReturn.getEndTime());
 
-        if(unavailable.size() != 0) {
-            for(Booking booking : unavailable) {
-                sessionsList.add(booking.getStartTime());
-                sessionsList.add(booking.getEndTime());
-            }
-        }
-
         return sessionsList;
+    }
+
+    public List<Booking> getUnavailableSessions(String workerId, String date) throws ParseException {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date converted = dateFormatter.parse(date);
+        List<Booking> unavailable = bookingRepository.findNewBookingByWorkerAndDate(workerId, converted);
+        if(unavailable.size() == 0) {
+            throw new BookingException("Worker has no current bookings");
+        }
+        return unavailable;
     }
 }

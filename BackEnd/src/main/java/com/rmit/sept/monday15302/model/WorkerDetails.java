@@ -41,6 +41,13 @@ public class WorkerDetails {
 
     }
 
+    public WorkerDetails(String id, String fName, String lName, AdminDetails admin) {
+        this.id = id;
+        this.fName = fName;
+        this.lName = lName;
+        this.admin = admin;
+    }
+
     public String getId() { return id; }
 
     public String getfName() { return fName; }
@@ -48,4 +55,24 @@ public class WorkerDetails {
     public String getlName() { return lName; }
 
     public AdminDetails getAdmin() { return admin; }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAdmin(AdminDetails admin) {
+        this.admin = admin;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setfName(String fname) {
+        this.fName = fname;
+    }
+
+    public void setlName(String lname) {
+        this.lName = lname;
+    }
 }
