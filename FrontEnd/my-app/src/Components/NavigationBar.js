@@ -35,12 +35,12 @@ class NavigationBar extends Component {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/employee">
+                                    <a className="nav-link" href="/employee" hidden>
                                         View Employee
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/addemployee">
+                                    <a className="nav-link" href="/addemployee" hidden>
                                         Add New Employee
                                     </a>
                                 </li>
