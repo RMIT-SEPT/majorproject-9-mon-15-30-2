@@ -68,4 +68,9 @@ public class AdminDetails {
     public void setService(String service) {
         this.service = service;
     }
+
+    public void addWorkingHours(WorkingHours hours)
+    {
+        workingHoursList.add(hours);
+    }
 }

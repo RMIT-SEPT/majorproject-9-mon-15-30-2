@@ -6,6 +6,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -52,4 +55,37 @@ public class WorkingHours {
     public Date getStartTime() { return startTime; }
 
     public Date getEndTime() { return endTime; }
+
+    public void setDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date newDate = sdf.parse(date);
+        this.date = newDate;
+    }
+
+    public void setStartTime(String startTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date newTime = sdf.parse(startTime);
+        this.startTime = newTime;
+    }
+
+    public void setEndTime(String startTime) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        Date newTime = sdf.parse(startTime);
+        this.endTime = newTime;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public void setAdminId(AdminDetails id)
+    {
+        admin_id = id;
+    }
+
+    public void setDay(int day)
+    {
+        this.day = day;
+    }
 }
