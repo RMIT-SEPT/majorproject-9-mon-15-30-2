@@ -18,4 +18,12 @@ public class WorkerDetailsService {
         }
         return worker;
     }
+
+    public WorkerDetails getWorkerByFirstName(String workerFirstName){
+        WorkerDetails worker = workerDetailsRepository.findByWorkerFirstName(workerFirstName);
+        if (worker == null){
+            throw new BookingException("Worker not found in getWorkerByFirstName method");
+        }
+        return worker;
+    }
 }

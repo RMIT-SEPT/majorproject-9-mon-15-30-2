@@ -30,7 +30,7 @@ class NavigationBar extends Component {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="/availableworkers">
+                                    <a className="nav-link" href="/availableworkers" hidden>
                                         Available Workers
                                     </a>
                                 </li>
