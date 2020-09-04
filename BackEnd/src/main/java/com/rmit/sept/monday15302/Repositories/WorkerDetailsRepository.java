@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, String> {
@@ -14,10 +15,10 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
     Collection<WorkerDetails> findByAdminId(String adminId);
 
     @Query("select DISTINCT worker.admin.id from WorkerDetails worker where worker.id = :id")
-    String getAdminIdFromWorkerId(@Param("id") String id);
+    String getAdminIdByWorkerId(@Param("id") String id);
 
     @Override
-    Iterable<WorkerDetails> findAll();
+    List<WorkerDetails> findAll();
 
     @Query("select worker from WorkerDetails worker where worker.id = :id")
     WorkerDetails findByWorkerId(String id);

@@ -51,9 +51,9 @@ public class CustomerDetails {
 
     }
 
-    public CustomerDetails(String id, String fname, String lname, String address,
+    public CustomerDetails(User user, String fname, String lname, String address,
                            String phoneNumber, String email) {
-        this.id = id;
+        this.user = user;
         this.fName = fname;
         this.lName = lname;
         this.address = address;
@@ -99,5 +99,27 @@ public class CustomerDetails {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        CustomerDetails c = (CustomerDetails) o;
+        return id.equals(c.getId()) && fName.equals(c.getfName())
+                && lName.equals(c.getlName()) && address.equals(c.getAddress())
+                && phoneNumber.equals(c.getPhoneNumber())
+                && email.equals(c.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (fName != null ? fName.hashCode() : 0);
+        result = 31 * result + (lName != null ? lName.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+
+        return result;
     }
 }

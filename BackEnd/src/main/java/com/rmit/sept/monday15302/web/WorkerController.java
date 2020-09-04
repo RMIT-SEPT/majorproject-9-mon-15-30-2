@@ -1,6 +1,5 @@
 package com.rmit.sept.monday15302.web;
 
-import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,12 @@ public class WorkerController {
 
     @GetMapping(value="worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
-        return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
+        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("makebooking/allworkers")
+    public ResponseEntity<?> getAllWorkers() {
+        return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
+                HttpStatus.OK);
     }
 }
