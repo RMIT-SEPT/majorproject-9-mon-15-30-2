@@ -1,6 +1,7 @@
 package com.rmit.sept.monday15302.services;
 
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
+import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class WorkerDetailsService {
     public WorkerDetails getWorkerById(String id) {
         WorkerDetails worker = workerDetailsRepository.findByWorkerId(id);
         if(worker == null) {
-            throw new WorkerDetailsException("Worker with id " + id + " not found");
+            throw new BookingException("Worker not found");
         }
         return worker;
     }
@@ -45,5 +46,13 @@ public class WorkerDetailsService {
             throw new WorkerDetailsException("Admin for worker " + workerId + " not found");
         }
         return adminId;
+    }
+
+    public WorkerDetails getWorkerByFirstName(String workerFirstName){
+        WorkerDetails worker = workerDetailsRepository.findByWorkerFirstName(workerFirstName);
+        if (worker == null){
+            throw new BookingException("Worker not found in getWorkerByFirstName method");
+        }
+        return worker;
     }
 }

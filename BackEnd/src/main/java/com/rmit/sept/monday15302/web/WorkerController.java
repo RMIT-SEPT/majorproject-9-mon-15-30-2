@@ -24,4 +24,9 @@ public class WorkerController {
         return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
                 HttpStatus.OK);
     }
+
+    @GetMapping(value="worker/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getWorkerByFirstName(@PathVariable("fName") String fName) {
+        return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerByFirstName(fName), HttpStatus.OK);
+    }
 }
