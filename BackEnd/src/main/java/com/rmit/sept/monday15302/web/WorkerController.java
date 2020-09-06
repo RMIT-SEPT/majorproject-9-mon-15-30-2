@@ -1,6 +1,7 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
+import com.rmit.sept.monday15302.model.WorkerDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
