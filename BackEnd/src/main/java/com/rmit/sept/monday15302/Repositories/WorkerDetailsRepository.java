@@ -22,4 +22,7 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
 
     @Query("select worker from WorkerDetails worker where worker.id = :id")
     WorkerDetails findByWorkerId(String id);
+
+    @Query("select worker from WorkerDetails worker where worker.fName = :fName")
+    WorkerDetails findByWorkerFirstName(String fName);
 }
