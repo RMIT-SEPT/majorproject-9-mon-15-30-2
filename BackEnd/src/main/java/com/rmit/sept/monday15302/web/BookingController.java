@@ -31,15 +31,13 @@ public class BookingController {
     @Autowired
     private WorkingHoursService workingHoursService;
 
-    private static String workerId;
-
-    @GetMapping(value="/historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
         List<Booking> bookings = bookingService.getAllPastBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @GetMapping(value="/newbookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="newbookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNewBookings(@PathVariable("id") String id) throws ParseException {
         List<Booking> bookings = bookingService.getAllNewBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
@@ -50,19 +48,6 @@ public class BookingController {
         List<String> adminList = adminDetailsService.getAdminIdByService(service);
         List<WorkerDetails> workersList = workerDetailsService.getWorkerForAdmin(adminList);
         return new ResponseEntity<>(workersList, HttpStatus.OK);
-    }
-
-    @PostMapping("makebooking/selectedWorker")
-    public ResponseEntity<?> getSelectedWorker(String selectedWorkerId) {
-        workerId = selectedWorkerId;
-        return new ResponseEntity<>(workerId, HttpStatus.OK);
-    }
-
-    @GetMapping("makebooking/getServiceByWorker")
-    public ResponseEntity<?> getServiceBySelectedWorker() {
-        String adminId = workerDetailsService.getAdminIdByWorkerId(workerId);
-        String service = adminDetailsService.getServiceByAdminId(adminId);
-        return new ResponseEntity<>(service, HttpStatus.OK);
     }
 
     @GetMapping("makebooking/byworker/{workerId}")
