@@ -3,9 +3,9 @@ import Card from 'react-bootstrap/Card';
 import Button from "react-bootstrap/Button";
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
-import NewBookingImage from '/Users/chhayhykourn/Documents/RMIT/Year2/SoftwareEngineering-Process_and_Tools/majorproject-9-mon-15-30-2/FrontEnd/my-app/src/Components/image/newBooking.jpg';
-import AddEmployeeImage from '/Users/chhayhykourn/Documents/RMIT/Year2/SoftwareEngineering-Process_and_Tools/majorproject-9-mon-15-30-2/FrontEnd/my-app/src/Components/image/addEmployee.jpg';
-import BookingHistory from '/Users/chhayhykourn/Documents/RMIT/Year2/SoftwareEngineering-Process_and_Tools/majorproject-9-mon-15-30-2/FrontEnd/my-app/src/Components/image/bookingHistory.jpg';
+import NewBookingImage from './image/newBooking.jpg';
+import AddEmployeeImage from './image/addEmployee.jpg';
+import BookingHistory from './image/bookingHistory.jpg';
 
 class HomePage extends Component {
     render() {
