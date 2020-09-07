@@ -5,6 +5,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class CustomerDetails {
 
     @NotBlank(message = "Email is required")
     @Column(name = "email")
+    @Size(max = 50)
+    @Email
     private String email;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

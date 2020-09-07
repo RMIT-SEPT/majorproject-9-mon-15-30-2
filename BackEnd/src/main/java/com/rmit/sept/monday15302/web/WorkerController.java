@@ -1,7 +1,7 @@
 package com.rmit.sept.monday15302.web;
 
-import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ public class WorkerController {
     @Autowired
     WorkerDetailsService workerDetailsService;
 
-    @GetMapping(value="worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
         return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
     }
@@ -26,7 +26,7 @@ public class WorkerController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(value="worker/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="workerbyfName/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerByFirstName(@PathVariable("fName") String fName) {
         return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerByFirstName(fName), HttpStatus.OK);
     }
