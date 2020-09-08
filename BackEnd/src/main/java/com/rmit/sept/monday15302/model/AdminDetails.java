@@ -41,10 +41,10 @@ public class AdminDetails {
 
     }
 
-    public AdminDetails(String id, String name, String service) {
-        this.id = id;
+    public AdminDetails(String name, String service, User user) {
         this.adminName = name;
         this.service = service;
+        this.user = user;
     }
 
     public String getId() { return id; }
@@ -67,5 +67,22 @@ public class AdminDetails {
 
     public void setService(String service) {
         this.service = service;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        AdminDetails a = (AdminDetails) o;
+        return id.equals(a.getId()) && adminName.equals(a.getAdminName())
+                && service.equals(a.getService());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (adminName != null ? adminName.hashCode() : 0);
+        result = 31 * result + (service != null ? service.hashCode() : 0);
+
+        return result;
     }
 }

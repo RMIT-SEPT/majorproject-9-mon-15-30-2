@@ -15,12 +15,18 @@ public class WorkerController {
     @Autowired
     WorkerDetailsService workerDetailsService;
 
-    @GetMapping(value="worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
-        return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
+        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value="worker/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("makebooking/allworkers")
+    public ResponseEntity<?> getAllWorkers() {
+        return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
+                HttpStatus.OK);
+    }
+
+    @GetMapping(value="workerbyfName/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerByFirstName(@PathVariable("fName") String fName) {
         return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerByFirstName(fName), HttpStatus.OK);
     }

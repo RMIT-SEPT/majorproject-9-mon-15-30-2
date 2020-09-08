@@ -25,7 +25,7 @@ public interface BookingRepository extends CrudRepository<Booking, String> {
             "booking.customer.user.id = :customerId and " +
             "booking.status = com.rmit.sept.monday15302.model.BookingStatus.NEW_BOOKING " +
             "order by booking.date ASC")
-    Iterable<Booking> findNewBookingByCustomerID(@Param("customerId") String customerId);
+    List<Booking> findNewBookingByCustomerID(@Param("customerId") String customerId);
 
     @Modifying
     @Transactional

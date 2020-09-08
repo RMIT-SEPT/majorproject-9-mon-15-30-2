@@ -30,7 +30,7 @@ public class WorkerDetails {
     private String lName;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="admin_id", referencedColumnName="user_id")
+    @JoinColumn(name="admin_id", referencedColumnName="user_id", nullable = false)
     private AdminDetails admin;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -41,8 +41,8 @@ public class WorkerDetails {
 
     }
 
-    public WorkerDetails(String id, String fName, String lName, AdminDetails admin) {
-        this.id = id;
+    public WorkerDetails(User user, String fName, String lName, AdminDetails admin) {
+        this.user = user;
         this.fName = fName;
         this.lName = lName;
         this.admin = admin;
@@ -74,5 +74,23 @@ public class WorkerDetails {
 
     public void setlName(String lname) {
         this.lName = lname;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        WorkerDetails w = (WorkerDetails) o;
+        return id.equals(w.getId()) && fName.equals(w.getfName())
+                && lName.equals(w.getlName()) && admin.equals(w.getAdmin());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (fName != null ? fName.hashCode() : 0);
+        result = 31 * result + (lName != null ? lName.hashCode() : 0);
+        result = 31 * result + (admin != null ? admin.hashCode() : 0);
+
+        return result;
     }
 }

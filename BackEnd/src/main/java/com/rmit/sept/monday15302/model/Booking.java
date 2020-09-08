@@ -1,29 +1,34 @@
 package com.rmit.sept.monday15302.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rmit.sept.monday15302.utils.Utility;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
 @Table(name="booking")
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="booking_id")
     private String id;
 
+    @NotNull
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="customer_id", referencedColumnName="user_id")
+    @JoinColumn(name="customer_id", referencedColumnName="user_id", nullable = false)
     private CustomerDetails customer;
 
+    @NotNull
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="work_id", referencedColumnName="user_id")
+    @JoinColumn(name="work_id", referencedColumnName="user_id", nullable = false)
     private WorkerDetails worker;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name="booking_status")
     private BookingStatus status;
@@ -56,6 +61,31 @@ public class Booking {
         worker = w;
         status = bs;
         service = s;
+    }
+
+    public Booking(String s, CustomerDetails customer, WorkerDetails worker, BookingStatus status,
+                   String date, String startTime, String endTime, String service)
+                    throws ParseException {
+        id = s;
+        this.customer = customer;
+        this.worker = worker;
+        this.status = status;
+        this.setDate(date);
+        this.setStartTime(startTime);
+        this.setEndTime(endTime);
+        this.service = service;
+    }
+
+    public Booking(CustomerDetails customer, WorkerDetails worker, BookingStatus status,
+                   String date, String startTime, String endTime, String service)
+            throws ParseException {
+        this.customer = customer;
+        this.worker = worker;
+        this.status = status;
+        this.setDate(date);
+        this.setStartTime(startTime);
+        this.setEndTime(endTime);
+        this.service = service;
     }
 
     public String getId() { return id; }
@@ -105,20 +135,43 @@ public class Booking {
     }
 
     public void setDate(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date newDate = sdf.parse(date);
-        this.date = newDate;
+        this.date = Utility.convertStringToDate(date);
     }
 
     public void setStartTime(String startTime) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        Date newTime = sdf.parse(startTime);
-        this.startTime = newTime;
+        this.startTime = Utility.convertStringToTime(startTime);
     }
 
-    public void setEndTime(String startTime) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        Date newTime = sdf.parse(startTime);
-        this.endTime = newTime;
+    public void setEndTime(String endTime) throws ParseException {
+        this.endTime = Utility.convertStringToTime(endTime);
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        Booking b = (Booking) o;
+        return id.equals(b.getId()) && customer.equals(b.getCustomer())
+            && worker.equals(b.getWorker()) && status.equals(b.getStatus())
+            && date.getTime() == b.getDate().getTime() && service.equals(b.getService())
+            && startTime.getTime() == b.getStartTime().getTime()
+            && endTime.getTime() == b.getEndTime().getTime();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (customer != null ? customer.hashCode() : 0);
+        result = 31 * result + (worker != null ? worker.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (service != null ? service.hashCode() : 0);
+        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+
+        return result;
     }
 }

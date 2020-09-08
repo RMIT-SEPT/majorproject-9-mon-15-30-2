@@ -2,6 +2,7 @@ package com.rmit.sept.monday15302.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -21,6 +22,7 @@ public class User {
     @Column(name="password")
     private String password;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name="user_type")
     private UserType type;
@@ -36,6 +38,12 @@ public class User {
 
     public User() {
 
+    }
+
+    public User(String username, String password, UserType type) {
+        this.userName = username;
+        this.password = password;
+        this.type = type;
     }
 
     public String getId() {
