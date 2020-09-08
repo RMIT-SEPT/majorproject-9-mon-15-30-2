@@ -27,7 +27,7 @@ class CurrentBookings extends Component
         {
             return (
                 <div className="container">
-                    <Alert variant='danger'>
+                    <Alert className="alert" variant='danger'>
                         No Current Booking Available
                     </Alert>
                 </div>
@@ -45,15 +45,15 @@ class CurrentBookings extends Component
                         No Current Booking Available
                     </Alert>*/}
 
-                    <Table striped bordered hover size="sm">
+                    <Table className="table" striped bordered hover size="sm">
                         <thead>
                             <tr>
-                                <th>Booking ID</th>
-                                <th>Service</th>
-                                <th>Worker</th>
-                                <th>Date</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
+                                <th className="th">Booking ID</th>
+                                <th className="th">Service</th>
+                                <th className="th">Worker</th>
+                                <th className="th">Date</th>
+                                <th className="th">Start Time</th>
+                                <th className="th">End Time</th>
                             </tr>
                         </thead>
                         <tbody>
