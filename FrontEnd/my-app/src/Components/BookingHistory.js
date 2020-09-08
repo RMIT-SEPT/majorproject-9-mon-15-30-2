@@ -3,9 +3,9 @@ import Table from 'react-bootstrap/Table';
 import GetPastBookings from '../actions/HandleBookings.js';
 import Alert from 'react-bootstrap/Alert';
 import CustomerDashboard from './CustomerDashBoard';
-import Customer from '../actions/HandleCustomers';
 class BookingHistory extends Component 
 {
+    
     constructor(props) 
     {
         super(props)
@@ -17,11 +17,6 @@ class BookingHistory extends Component
 
     componentDidMount()
     {
-        // Customer.getUserIDByType("CUSTOMER").then((res) => {
-        //     this.setState({customer: res.data});
-        //     console.log(res.data);
-        // })
-
         GetPastBookings.getPastBookingById(3).then((res) => {
             this.setState({pastBookings: res.data});
             console.log(res.data);
@@ -31,7 +26,7 @@ class BookingHistory extends Component
 
     render() 
     {
-        if(this.state.pastBookings.empty)
+        if(this.state.pastBookings == "")
         {
             return (
                 <React.Fragment>
@@ -80,7 +75,11 @@ class BookingHistory extends Component
                                 }
                             </tbody>
                         </Table>
+
+                        
                     </div>
+
+
                 </React.Fragment>
                 
             )

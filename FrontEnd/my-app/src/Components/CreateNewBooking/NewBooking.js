@@ -3,6 +3,7 @@ import CreateBooking from '../../actions/HandleBookings';
 import Workers from '../../actions/HandleWorkers';
 import Services from '../../actions/HandleServices';
 import CustomerDashboard from '../CustomerDashBoard';
+import Booking from '../../actions/HandleBookings';
 
 
 
@@ -14,8 +15,7 @@ class NewBookings extends Component {
         this.state={
             allworker: [],
             allservices: [],
-            workerVal:"",
-            
+            availableSessions:[],
             customer: {
                 id: "",
                 fName: "",
@@ -46,36 +46,55 @@ class NewBookings extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleServiceChange = this.handleServiceChange.bind(this);
+        this.handleWorkerSelection = this.handleWorkerSelection.bind(this);
     }
 
 
     handleServiceChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
-        const workerVal = e.target.value;
-        const result = workerVal.substring(1, workerVal.length-1);
-        console.log("Service value selected: " + result);
+        const servicevalue = e.target.value;
 
-        Workers.getWorkerByService(result).then((res) => {
+        console.log("Service value selected: " + servicevalue);
+
+        Workers.getWorkerByService(servicevalue).then((res) => {
             if(!res.data.empty)
             {
                 console.log(res.data);
                 this.setState({ allworker: res.data});
-                
             }
             else{
                 console.log("Empty");
-                console.log(res.data);
             }
             
         });
     }
 
-    onChange(e)
+    handleWorkerSelection(e)
     {
         this.setState({[e.target.name]: e.target.value});
 
-        console.log("onChange");
+        const worker_id = e.target.value;
+        const servicevalue = this.state.service;
+        console.log("Selected worker id: " + worker_id);
+        console.log("Selected service: " + servicevalue);
+
+        Booking.getAvailableSessionsByWorkerAndService(worker_id, servicevalue).then((res) => {
+            if(!res.data.empty)
+            {
+                console.log(res.data);
+                this.setState({ availableSessions: res.data});
+            }
+            else
+            {
+                console.log("Empty");
+            }
+        })
+    }
+
+    onChange(e)
+    {
+        this.setState({[e.target.name]: e.target.value});
     }
 
     onSubmit(e){
@@ -110,7 +129,9 @@ class NewBookings extends Component {
             endTime: this.state.end_time + ":00",
             service: this.state.service
         }
-        
+        console.log("start date " + this.state.start_date);
+        console.log("start time " + this.state.start_time);
+        console.log("end time " + this.state.end_time);
         console.log(newbookings);
         CreateBooking.createBooking(newbookings).then(res => {
             alert("Booking successful");
@@ -120,7 +141,6 @@ class NewBookings extends Component {
 
     componentDidMount(){
         
-
         Services.getAllServices().then((res) => {
             this.setState({ allservices: res.data});
             console.log(res.data);
@@ -136,35 +156,31 @@ class NewBookings extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
-                            <h5 className="display-4 text-center">Create New Booking</h5>
-                            <hr />
-                            <form onSubmit={this.onSubmit}>
+                            <h5 className="display-4 text-center pb-5">Create New Booking</h5>
+                            
+                            <form onSubmit={this.onSubmit} >
 
+                                <h5>Select Service and Worker</h5>
+                                <hr/>
                                 <h6>Service</h6>
                                 <div className="form-group">
                                     <select id="inputState" className="form-control" name="service" value= {this.state.service} onChange = {this.handleServiceChange}  required>
-                                        <option value="unknown" defaultValue>Choose...</option>
+                                        <option value="unknown" defaultValue>Choose Service</option>
                                         {
                                             this.state.allservices.map(
                                                 allservices => 
-                                                <option key={allservices} value={JSON.stringify(allservices)}>{allservices}</option>
+                                                <option key={allservices} value={allservices}>{allservices}</option>
                                             )
                                         }
                                     </select>
                                 </div>
 
-                                <h6>Worker</h6>
-                                <div>
-                                    { this.state.allworker.map(allworker => (
-                                    <div key={allworker.id} style={{ margin: "10px" }}>
-                                        {allworker.fName}
-                                    
-                                    </div>
-                                    ))}
-                                </div>
+                                
+                                <h6>Staff</h6>
+                                
                                 <div className="form-group">
-                                    <select id="inputState" className="form-control" name="worker" value= {this.state.worker} onChange = {this.onChange}  required>
-                                        <option value="unknown" defaultValue>Choose...</option>
+                                    <select id="inputState" className="form-control" name="worker" value= {this.state.worker} onChange = {this.handleWorkerSelection}  required>
+                                        <option value="unknown" defaultValue>Choose Staff</option>
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
@@ -174,19 +190,42 @@ class NewBookings extends Component {
                                     </select>
                                 </div>
 
-                                <h6>Start Date</h6>
+                                <h6>Sessions</h6>
+
                                 <div className="form-group">
-                                    <input type="date" className="form-control form-control-lg" placeholder="YYYY-MM-dd" name="start_date"  value= {this.state.start_date} onChange = {this.onChange} required/>
+                                    <select id="inputState" className="form-control" name="start_date" value= {this.state.start_date} onChange = {this.onChange} required>
+                                        <option value="unknown" defaultValue>Choose Date</option>
+                                        {
+                                            this.state.availableSessions.map(
+                                                availableSessions => 
+                                                <option key={availableSessions.id} value={availableSessions.date}> {availableSessions.date}</option>
+                                            )
+                                        }
+                                    </select>
                                 </div>
 
-                                <h6>Start Time</h6>
                                 <div className="form-group">
-                                    <input type="time" className="form-control form-control-lg" placeholder="HH:mm" name="start_time"  value= {this.state.start_time} onChange = {this.onChange} required/>
+                                    <select id="inputState" className="form-control" name="start_time" value= {this.state.start_time} onChange = {this.onChange} required>
+                                        <option value="unknown" defaultValue>Choose Start Time</option>
+                                        {
+                                            this.state.availableSessions.map(
+                                                availableSessions => 
+                                                <option key={availableSessions.id} value={availableSessions.startTime}> {availableSessions.startTime}</option>
+                                            )
+                                        }
+                                    </select>
                                 </div>
 
-                                <h6>End Time</h6>
                                 <div className="form-group">
-                                    <input type="time" className="form-control form-control-lg" placeholder="HH:mm" name="end_time"  value= {this.state.end_time} onChange = {this.onChange} required/>
+                                    <select id="inputState" className="form-control" name="end_time" value= {this.state.end_time} onChange = {this.onChange} required>
+                                        <option value="unknown" defaultValue>Choose End Time</option>
+                                        {
+                                            this.state.availableSessions.map(
+                                                availableSessions => 
+                                                <option key={availableSessions.id} value={availableSessions.endTime}> {availableSessions.endTime}</option>
+                                            )
+                                        }
+                                    </select>
                                 </div>
 
                                 <input type="submit" className="btn btn-primary btn-block mt-4" />
