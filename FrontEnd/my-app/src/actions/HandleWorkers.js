@@ -12,5 +12,10 @@ class HandleWorkers
     return axios.get("http://localhost:8080/worker/" + worker_id);
   }
 
+  getWorkerByService(service)
+  {
+    return axios.get("http://localhost:8080/makebooking/byservice/" + service);
+  }
+
 }
 export default new HandleWorkers()
