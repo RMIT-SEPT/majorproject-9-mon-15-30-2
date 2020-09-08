@@ -1,7 +1,6 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.model.CustomerDetails;
-import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.services.CustomerDetailsService;
 import com.rmit.sept.monday15302.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
