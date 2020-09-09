@@ -29,7 +29,6 @@ class BookingHistory extends Component
         if(this.state.pastBookings == "")
         {
             return (
-<<<<<<< HEAD
                 <React.Fragment>
                     <CustomerDashboard/>
                     <div className="container">
@@ -38,13 +37,6 @@ class BookingHistory extends Component
                         </Alert>
                     </div>
                 </React.Fragment>
-=======
-                <div className="container">
-                    <Alert className="alert" variant='danger' >
-                        No Past Booking Available
-                    </Alert>
-                </div>
->>>>>>> viewTest
             )
         }
         else
@@ -55,7 +47,6 @@ class BookingHistory extends Component
 
                     <CustomerDashboard/>
 
-<<<<<<< HEAD
                     <div className="container">
                         <Table striped bordered hover size="sm">
                             <thead>
@@ -66,30 +57,6 @@ class BookingHistory extends Component
                                     <th>Date</th>
                                     <th>Start Time</th>
                                     <th>End Time</th>
-=======
-                <Table className="table" striped bordered hover size="sm">
-                    <thead>
-                        <tr>
-                            <th className="th">Booking ID</th>
-                            <th className="th">Service</th>
-                            <th className="th">Worker</th>
-                            <th className="th">Date</th>
-                            <th className="th">Start Time</th>
-                            <th className="th">End Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.pastBookings.map(
-                                pastBookings => 
-                                <tr key = {pastBookings.id}>
-                                    <td> {pastBookings.id}</td>
-                                    <td> {pastBookings.service}</td>
-                                    <td> {pastBookings.worker.fName}</td>
-                                    <td> {pastBookings.date}</td>   
-                                    <td> {pastBookings.startTime}</td>
-                                    <td> {pastBookings.endTime}</td>
->>>>>>> viewTest
                                 </tr>
                             </thead>
                             <tbody>
