@@ -169,7 +169,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.allservices.map(
                                                 allservices => 
-                                                <option key={allservices} value={allservices}>{allservices}</option>
+                                                <option className="service" key={allservices} value={allservices}>{allservices}</option>
                                             )
                                         }
                                     </select>
@@ -184,7 +184,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
-                                                <option key={allworker.id} value={allworker.id}> {allworker.fName}</option>
+                                                <option className="worker" key={allworker.id} value={allworker.id}> {allworker.fName}</option>
                                             )
                                         }
                                     </select>
@@ -198,7 +198,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option key={availableSessions.id} value={availableSessions.date}> {availableSessions.date}</option>
+                                                <option className="sessionDate" key={availableSessions.id} value={availableSessions.date}> {availableSessions.date}</option>
                                             )
                                         }
                                     </select>
@@ -210,7 +210,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option key={availableSessions.id} value={availableSessions.startTime}> {availableSessions.startTime}</option>
+                                                <option className="sessionStart" key={availableSessions.id} value={availableSessions.startTime}> {availableSessions.startTime}</option>
                                             )
                                         }
                                     </select>
