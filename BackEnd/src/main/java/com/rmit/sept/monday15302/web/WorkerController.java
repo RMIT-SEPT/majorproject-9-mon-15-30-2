@@ -1,7 +1,5 @@
 package com.rmit.sept.monday15302.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
@@ -77,23 +75,20 @@ public class WorkerController {
         return new ResponseEntity<>(newWorker, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/deleteWorker/{username}")
-    public ResponseEntity<?> deleteWorker(@PathVariable("username") String username) {
-        workerDetailsService.deleteWorker(username);
-        userService.deleteByUsername(username);
-        return new ResponseEntity<>("Deleted worker with username " + username, HttpStatus.OK);
+    @DeleteMapping("/deleteWorker/{id}")
+    public ResponseEntity<?> deleteWorker(@PathVariable("id") String id) {
+        workerDetailsService.deleteWorker(id);
+        userService.deleteById(id);
+        return new ResponseEntity<>("Deleted worker with id " + id, HttpStatus.OK);
     }
 
-    @PutMapping("/editWorker/{username}")
-    public ResponseEntity<?> updateWorker(@PathVariable("username") String username,
+    @PutMapping("/editWorker/{id}")
+    public ResponseEntity<?> updateWorker(@PathVariable("id") String id,
                               @Valid @RequestBody EditWorker worker,
-                              BindingResult result) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = objectMapper.writeValueAsString(worker);
-        System.out.println(jsonString);
+                              BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-        WorkerDetails updatedWorker = workerDetailsService.updateWorker(worker, username);
+        WorkerDetails updatedWorker = workerDetailsService.updateWorker(worker, id);
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 

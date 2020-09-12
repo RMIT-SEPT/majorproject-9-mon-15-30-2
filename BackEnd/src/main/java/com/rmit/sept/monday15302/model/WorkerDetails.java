@@ -96,7 +96,7 @@ public class WorkerDetails {
                 && phoneNumber.equals(w.getPhoneNumber());
     }
 
-    private String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 

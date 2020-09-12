@@ -31,4 +31,7 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
 
     @Query("select worker from WorkerDetails worker where worker.admin.id = :adminId")
     List<WorkerDetails> getWorkersByAdmin(String adminId);
+
+    @Query("select worker from WorkerDetails worker where worker.user.id = :id")
+    WorkerDetails getWorkerById(String id);
 }

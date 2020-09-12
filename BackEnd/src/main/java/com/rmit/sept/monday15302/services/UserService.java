@@ -28,16 +28,28 @@ public class UserService {
         }
     }
 
-    public void deleteByUsername(String username) {
-        User user = getUser(username);
-        if(user == null){
-            throw new UserException("Cannot delete user with username '"+username+"'. "
-                    + "This user does not exist");
-        }
+    public void deleteById(String id) {
+        User user = getUserById(id);
         userRepository.delete(user);
     }
 
     public User getUser(String username) {
         return userRepository.getUserByUsername(username);
+    }
+
+    public User getUserById(String id) {
+        User user = userRepository.getUserById(id);
+        if(user == null) {
+            throw new UserException("User with id " + id + " not found");
+        }
+        return user;
+    }
+
+    public void deleteByUsername(String username) {
+        User user = getUser(username);
+        if(user == null) {
+            throw new UserException("Cannot find user with username " + username);
+        }
+        userRepository.delete(user);
     }
 }
