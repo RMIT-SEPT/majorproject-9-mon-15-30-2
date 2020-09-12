@@ -1,6 +1,9 @@
 package com.rmit.sept.monday15302.controller;
 
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.AdminDetailsService;
+import com.rmit.sept.monday15302.services.MapValidationErrorService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import com.rmit.sept.monday15302.web.WorkerController;
 import org.junit.Test;
@@ -30,6 +33,15 @@ public class WorkerControllerTest {
 
     @MockBean
     private WorkerDetailsService service;
+
+    @MockBean
+    private MapValidationErrorService mapValidationErrorService;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private AdminDetailsService adminDetailsService;
 
     @Test
     public void givenWorkers_whenGetAllWorkers_thenReturnJsonArray()
