@@ -71,23 +71,22 @@ public class WorkerDetailsService {
         }
     }
 
-    public void deleteWorker(String username) {
-        WorkerDetails worker = workerDetailsRepository.getWorkerByUsername(username);
+    public void deleteWorker(String id) {
+        WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
         if(worker == null){
-            throw new WorkerDetailsException("Cannot delete worker with username '"+username+"'. "
+            throw new WorkerDetailsException("Cannot delete worker with id '"+id+"'. "
                     + "This worker does not exist");
         }
         workerDetailsRepository.delete(worker);
     }
 
-    public WorkerDetails updateWorker(EditWorker worker, String username) {
-        String newUsername = worker.getUsername();
-        WorkerDetails workerDetails = workerDetailsRepository.getWorkerByUsername(username);
-        User user = userService.getUser(username);
+    public WorkerDetails updateWorker(EditWorker worker, String id) {
+        WorkerDetails workerDetails = workerDetailsRepository.getWorkerById(id);
+        User user = userService.getUserById(id);
         if(workerDetails == null || user == null) {
-            throw new WorkerDetailsException("Worker with username '"+username+"' not found");
+            throw new WorkerDetailsException("Worker with id '"+id+"' not found");
         }
-        user.setUserName(newUsername);
+        user.setUserName(worker.getUsername());
         user.setPassword(worker.getPassword());
         userService.saveUser(user);
 
@@ -99,11 +98,18 @@ public class WorkerDetailsService {
         return workerDetailsRepository.save(workerDetails);
     }
 
-    public List<WorkerDetails> getWorkersByAdmin(String adminId) {
+    public List<EditWorker> getWorkersByAdmin(String adminId) {
         List<WorkerDetails> toReturn = workerDetailsRepository.getWorkersByAdmin(adminId);
+        List<EditWorker> workers = new ArrayList<>();
         if(toReturn.isEmpty()) {
             throw new WorkerDetailsException("Admin with id '"+adminId+"' has no employees");
         }
-        return toReturn;
+        for(WorkerDetails worker : toReturn) {
+            User user = userService.getUserById(worker.getId());
+            EditWorker newWorker = new EditWorker(user.getUserName(), user.getPassword(), worker.getfName(),
+                    worker.getlName(), worker.getPhoneNumber());
+            workers.add(newWorker);
+        }
+        return workers;
     }
 }
