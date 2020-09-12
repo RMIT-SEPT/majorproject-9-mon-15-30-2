@@ -2,15 +2,15 @@ import React from "react";
 import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import BookingHistory from "../BookingHistory.js";
+import CurrentBookings from "../Components/CurrentBookings.js";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('<BookingHistory /> Unit Test', () => 
+describe('<CurrentBooking /> Unit Test', () => 
 {
     it('renders container for no bookings', () => 
     {
-        const wrapper = shallow(<BookingHistory />);
+        const wrapper = shallow(<CurrentBookings />);
         expect(wrapper.find('.container')).toHaveLength(1);
         expect(wrapper.find('.alert')).toHaveLength(1);
     });
@@ -31,9 +31,9 @@ describe('<BookingHistory /> Unit Test', () =>
             startTime: "e",
             endTime: "f"
         };
-        const history = new BookingHistory();
-        history.state.pastBookings.push(props);
-        const wrapper = mount(history.render());
+        const current = new CurrentBookings();
+        current.state.currentBookings.push(props);
+        const wrapper = mount(current.render());
 
         expect(wrapper.find('.table')).toHaveLength(2);
         expect(wrapper.find('.th')).toHaveLength(6);

@@ -2,7 +2,7 @@ import React from "react";
 import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import BookingHistory from "../BookingHistory.js";
+import BookingHistory from "../Components/BookingHistory";
 
 Enzyme.configure({ adapter: new Adapter() });
 

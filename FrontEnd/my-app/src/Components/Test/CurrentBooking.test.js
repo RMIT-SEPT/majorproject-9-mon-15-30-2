@@ -11,7 +11,7 @@ describe('<CurrentBooking /> Unit Test', () =>
     it('renders container for no bookings', () => 
     {
         const wrapper = shallow(<CurrentBookings />);
-        expect(wrapper.hasClass('container')).toEqual(true);
+        expect(wrapper.find('.container')).toHaveLength(1);
         expect(wrapper.find('.alert')).toHaveLength(1);
     });
 
@@ -33,9 +33,9 @@ describe('<CurrentBooking /> Unit Test', () =>
         };
         const current = new CurrentBookings();
         current.state.currentBookings.push(props);
-        const wrapper = shallow(current.render());
+        const wrapper = mount(current.render());
 
-        expect(wrapper.find('.table')).toHaveLength(1);
+        expect(wrapper.find('.table')).toHaveLength(2);
         expect(wrapper.find('.th')).toHaveLength(6);
 
     });
