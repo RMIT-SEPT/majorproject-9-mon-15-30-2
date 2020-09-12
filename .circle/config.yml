@@ -14,14 +14,14 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "BackEnd/pom.xml" }}
 
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2S
-          key: circleci-demo-java-spring-{{ checksum "pom.xml" }}
+          key: circleci-demo-java-spring-{{ checksum "BackEnd/pom.xml" }}
 
       - run: mvn package
 
