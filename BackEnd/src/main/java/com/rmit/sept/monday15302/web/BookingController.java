@@ -70,12 +70,4 @@ public class BookingController {
         List<SessionReturn> toReturn = sessionService.getAvailableSession(workerId, service);
         return new ResponseEntity<>(toReturn, HttpStatus.OK);
     }
-
-//    @GetMapping("makebooking/openinghours/{workerId}/{date}")
-//    public ResponseEntity<?> getOpeningHours(@PathVariable("workerId") String workerId,
-//                                             @PathVariable("date") String date) throws ParseException {
-//        String adminId = workerDetailsService.getAdminIdByWorkerId(workerId);
-//        return new ResponseEntity<>(workingHoursService.getOpeningHours(adminId, date),
-//                HttpStatus.OK);
-//    }
 }

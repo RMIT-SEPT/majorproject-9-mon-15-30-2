@@ -107,12 +107,6 @@ public class BookingServiceTest {
         assert(bookingService.getUnavailableSessions(workerId, date).size() == 1);
     }
 
-    @Test(expected = BookingException.class)
-    public void getUnavailableSessions_throwException_ifNoSessionFound()
-            throws BookingException, ParseException {
-        bookingService.getUnavailableSessions("w3", "2020-10-15");
-    }
-
     @Test
     public void updateBookingStatus_returnTrue_ifStatusIsUpdatedFromNewToPast()
             throws ParseException {

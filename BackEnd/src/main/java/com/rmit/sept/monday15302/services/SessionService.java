@@ -29,10 +29,11 @@ public class SessionService {
         List<SessionReturn> toReturn = new ArrayList<>();
 
         // Get current date
+        Date currentDate = new Date();
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Australia/Sydney"));
-        cal.setTime(new Date());
+        cal.setTime(currentDate);
         int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
+        int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         // Loop from current date to the end of the month and convert session from day to date
