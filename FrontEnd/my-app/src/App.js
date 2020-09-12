@@ -13,6 +13,7 @@ import DefaultPage from './Components/DefaultPage';
 import CustomerDashboard from './Components/CustomerDashBoard';
 import NewBooking from './Components/CreateNewBooking/NewBooking';
 import AccountPage from './Components/Account';
+import AdminPage from './Components/Admin/AdminHomePage';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route exact path= "/employee" component={Employee} />
                 <Route exact path= "/register" component={Register} />
                 <Route exact path= "/account" component={AccountPage}/>
+                <Route exact path= "/adminhomepage" component={AdminPage}/>
 
                 <Route exact path= "/newbooking" component={NewBooking}/>
             </div>
