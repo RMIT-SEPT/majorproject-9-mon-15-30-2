@@ -6,6 +6,9 @@ import javax.validation.constraints.Size;
 
 public class EditWorker {
 
+    @NotBlank(message = "Id is required")
+    private String id;
+
     @NotBlank(message = "User name is required")
     @Size(max = 21)
     private String userName;
@@ -23,14 +26,17 @@ public class EditWorker {
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phoneNumber;
 
-    public EditWorker(String username, String password, String fName,
+    public EditWorker(String id, String username, String password, String fName,
                 String lName, String phoneNumber) {
+        this.id = id;
         this.userName = username;
         this.password = password;
         this.fName = fName;
         this.lName = lName;
         this.phoneNumber = phoneNumber;
     }
+
+    public String getId() { return id;}
 
     public String getUsername() {
         return userName;

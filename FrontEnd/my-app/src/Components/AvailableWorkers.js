@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
+import AdminDashboard from './Admin/AdminDashboard';
 
 class AvailableWorkers extends Component {
     render() {
         return (
-            <div className="container">
-                <Alert variant='danger'>
-                    No Avaible Workers At The Moment
-                </Alert>
-            </div>
+            <React.Fragment>
+                <AdminDashboard/>
+                <div className="container">
+                    <Alert variant='danger'>
+                        No Available Workers At The Moment
+                    </Alert>
+                </div>
+            </React.Fragment>
         )
     }
 }

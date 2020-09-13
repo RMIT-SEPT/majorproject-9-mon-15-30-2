@@ -18,17 +18,22 @@ class Employee extends Component
 
     deleteWorker(worker_id){
         WorkerAction.deleteWorker(worker_id).then( res => {
-            this.setState({allemployee: this.state.allemployee.filter(allemployee => allemployee.id !== allemployee)});
+            this.setState({
+                allemployee: this.state.allemployee.filter(
+                    allemployee => allemployee.id !== worker_id)});
+            alert("Delete successful");
+            this.props.history.push("/employee");
         });
     }
 
     editWorker(worker_id){
-        this.props.employee.push(`/editemployee/${worker_id}`);
+        this.props.history.push(`/editemployee/${worker_id}`);
     }
 
     componentDidMount()
     {
-        WorkerAction.getAllWorkers().then((res) => {
+        // WorkerAction.getAllWorkers().then((res) => {
+        WorkerAction.getWorkerByAdmin(1).then((res) => {
             this.setState({allemployee: res.data});
             console.log(res.data);
         });
@@ -64,8 +69,10 @@ class Employee extends Component
                                     <th className="th">First Name</th>
                                     <th className="th">Last Name</th>
                                     <th className="th">Phone Number</th>
-                                    <th className="th">Service</th>
-                                    <th className="th">Business Name</th>
+                                    {
+                                    // <th className="th">Service</th>
+                                    // <th className="th">Business Name</th>
+                                    }
                                     <th> Actions</th>
                                 </tr>
                             </thead>
@@ -77,9 +84,11 @@ class Employee extends Component
                                             <td> {allemployee.id}</td>
                                             <td> {allemployee.fName}</td>
                                             <td> {allemployee.lName}</td>
-                                            <td> {allemployee.phoneNumber}</td>   
-                                            <td> {allemployee.admin.service}</td>
-                                            <td> {allemployee.admin.adminName}</td>
+                                            <td> {allemployee.phoneNumber}</td>
+                                            {   
+                                            // <td> {allemployee.admin.service}</td>
+                                            // <td> {allemployee.admin.adminName}</td>
+                                            }
                                             <td>
                                                 <button style={{marginLeft: "10px"}} onClick={ () => this.editWorker(allemployee.id)} className="btn btn-info">Edit </button>
                                                 <button style={{marginLeft: "10px"}} onClick={ () => this.deleteWorker(allemployee.id)} className="btn btn-danger">Delete </button>

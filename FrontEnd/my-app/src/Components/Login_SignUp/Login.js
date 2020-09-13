@@ -24,10 +24,6 @@ class Login extends Component {
                         Login
                     </Button>
 
-                    <Button variant="secondary" type="submit" href="/adminhomepage">
-                        admin
-                    </Button>
-
                     <Form.Text>
                         Don't have an account? <a href="/register">Register</a> here
                     </Form.Text>

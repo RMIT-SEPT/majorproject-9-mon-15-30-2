@@ -106,7 +106,7 @@ public class WorkerDetailsService {
         }
         for(WorkerDetails worker : toReturn) {
             User user = userService.getUserById(worker.getId());
-            EditWorker newWorker = new EditWorker(user.getUserName(), user.getPassword(), worker.getfName(),
+            EditWorker newWorker = new EditWorker(user.getId(), user.getUserName(), user.getPassword(), worker.getfName(),
                     worker.getlName(), worker.getPhoneNumber());
             workers.add(newWorker);
         }

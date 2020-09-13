@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import WorkerAction from '../actions/HandleWorkers';
 import AdminDashboard from './Admin/AdminDashboard';
 
+
 class EditEmployee extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            // id: this.props.match.params.id,
-            id: "",
+            id: this.props.match.params.id,
             fName: "",
             lName: "",
             password: "",
             phoneNumber: "",
-            username: this.props.match.params.username,
+            username: "",
             adminId: ""
         }
         this.changeWorkerId = this.changeWorkerId.bind(this);
@@ -25,17 +25,16 @@ class EditEmployee extends Component {
     }
 
     componentDidMount(){
-        // WorkerAction.getWorkerByID(this.state.id).then( (res) => {
-        WorkerAction.getWorkerByfName(this.state.fName).them( (res) => {
-            let editemployee = res.data;
+        WorkerAction.getWorkerByID(this.state.id).then((res) => {
+            let editEmployee = res.data;
             this.setState({
-                id: editemployee.id,
-                fName: editemployee.fName,
-                lName: editemployee.lName,
-                password: editemployee.password,
-                phoneNumber: editemployee.phoneNumber,
-                username: editemployee.username,
-                adminId: editemployee.adminId
+                id: editEmployee.id,
+                fName: editEmployee.fName,
+                lName: editEmployee.lName,
+                password: editEmployee.password,
+                phoneNumber: editEmployee.phoneNumber,
+                username: editEmployee.username,
+                adminId: editEmployee.adminId
             });
         });
     }
@@ -49,10 +48,14 @@ class EditEmployee extends Component {
             password: this.state.password,
             phoneNumber: this.state.phoneNumber,
             username: this.state.username,
-            adminId: this.state.adminId
+            adminId: "1"
         };
-        WorkerAction.updateWorker(editEmployee, this.state.username).then( res => {
-            this.props.history.push('/employee');
+        console.log(editEmployee);
+        WorkerAction.updateWorker(editEmployee, this.state.id).then(res => {
+            this.state.history.push('/employee');
+            alert("update successful")
+        }).catch( err => {
+            console.log(err.response.data);
         });
     }
 
@@ -94,7 +97,7 @@ class EditEmployee extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input type="text" className="form-control form-control-lg " placeholder="Enter new Employee ID" 
+                                            <input readOnly="readonly" className="form-control form-control-lg " placeholder="Enter new Employee ID" 
                                             name="id" value= {this.state.id} onChange={this.changeWorkerId} required/>
                                         </div>
                                     </div>
@@ -124,7 +127,7 @@ class EditEmployee extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input type="date" className="form-control form-control-lg" placeholder="Enter new Phone Number" 
+                                            <input type="text" className="form-control form-control-lg" placeholder="Enter new Phone Number" 
                                             name="phoneNumber" value= {this.state.phoneNumber} onChange = {this.changeWorkerPhoneNumber} required/>
                                         </div>
                                     </div>

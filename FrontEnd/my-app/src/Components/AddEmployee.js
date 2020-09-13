@@ -36,9 +36,11 @@ class AddEmployee extends Component {
             adminId: "1"
         }
         console.log(newEmployee);
-        WorkerAction.createNewWorker(newEmployee).then(res => {
+        WorkerAction.createNewWorker(newEmployee).then( res => {
+            this.state.history.push('/employee');
             alert("Employee successfully created");
-            this.props.history.push("/employee");
+        }).catch(err => {
+            console.log(err.response.data);
         });
     }
     

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import GetPastBookings from '../actions/HandleBookings.js';
 import Alert from 'react-bootstrap/Alert';
-import CustomerDashboard from './CustomerDashBoard';
+import CustomerDashboard from './Customer/CustomerDashBoard';
 class BookingHistory extends Component 
 {
     

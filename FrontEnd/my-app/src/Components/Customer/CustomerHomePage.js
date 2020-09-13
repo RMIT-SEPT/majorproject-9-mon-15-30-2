@@ -4,8 +4,8 @@ import Button from "react-bootstrap/Button";
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import CustomerDashboard from './CustomerDashBoard';
-import NewBookingImage from '../Components/image/newBooking.jpg';
-import BookingHistory from '../Components/image/bookingHistory.jpg';
+import NewBookingImage from '../../Components/image/newBooking.jpg';
+import BookingHistory from '../../Components/image/bookingHistory.jpg';
 
 class HomePage extends Component {
     render() {
@@ -57,8 +57,8 @@ class HomePage extends Component {
                             <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" src={BookingHistory} />
                                 <Card.Body>
-                                    <Card.Title>Booking History</Card.Title>
-                                    <Button variant="dark" href="/bookinghistory">Booking History</Button>
+                                    <Card.Title>Admin Page</Card.Title>
+                                    <Button variant="dark" href="/adminhomepage">Admin Page</Button>
                                 </Card.Body>
                             </Card>
                         </div>

@@ -25,7 +25,7 @@ class AdminDashboard extends Component {
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/customer">
+                                <a className="nav-link" href="/customer"  hidden>
                                     View Customer
                                 </a>
                             </li>
@@ -37,6 +37,11 @@ class AdminDashboard extends Component {
                         </ul>
 
                         <ul className="navbar-nav ml-auto">
+                            <li className="nav-item">
+                                <a className="nav-link" >
+                                    Admin
+                                </a>
+                            </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="/">
                                     Logout

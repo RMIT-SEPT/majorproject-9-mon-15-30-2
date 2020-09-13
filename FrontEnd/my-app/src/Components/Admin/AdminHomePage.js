@@ -6,7 +6,6 @@ import Container from 'react-bootstrap/Container';
 import AdminDashboard from './AdminDashboard';
 import NewBookingImage from '../../Components/image/newBooking.jpg';
 import BookingHistory from '../../Components/image/bookingHistory.jpg';
-import AddEmployeeImage from '../../Components/image/addEmployee.jpg';
 
 class AdminHomePage extends Component {
     render() {
@@ -46,26 +45,18 @@ class AdminHomePage extends Component {
                             <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" src={NewBookingImage} />
                                 <Card.Body>
-                                    <Card.Title>New Booking</Card.Title>
-                                    <Button variant="dark" href="/newbookings">New Booking</Button>
-                                </Card.Body>
-                            </Card>
-                        </div>
-                        <div className="col">
-                            <Card style={{ width: '18rem' }}>
-                            <Card.Img variant="top" src={AddEmployeeImage} />
-                                <Card.Body>
                                     <Card.Title>Add New Employee</Card.Title>
                                     <Button variant="dark" href="/addemployee">Add New Employee</Button>
                                 </Card.Body>
                             </Card>
                         </div>
+
                         <div className="col">
                             <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" src={BookingHistory} />
                                 <Card.Body>
-                                    <Card.Title>Booking History</Card.Title>
-                                    <Button variant="dark" href="/bookinghistory">Booking History</Button>
+                                    <Card.Title>Customer Page</Card.Title>
+                                    <Button variant="dark" href="/customerhomepage">Customer Page</Button>
                                 </Card.Body>
                             </Card>
                         </div>
