@@ -23,7 +23,7 @@ jobs:
             - ~/.m2S
           key: circleci-demo-java-spring-{{ checksum "BackEnd/pom.xml" }}
 
-      - run: mvn package
+      - run: mvn -f BackEnd/pom.xml package
 
       - store_test_results:
           path: target/surefire-reports
