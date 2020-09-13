@@ -26,7 +26,7 @@ jobs:
       - run: mvn -f BackEnd/pom.xml package
 
       - store_test_results:
-          path: target/surefire-reports
+          path: BackEnd/target/surefire-reports
 
       - store_artifacts:
-          path: target/demo-java-spring-0.0.1-SNAPSHOT.jar
+          path: BackEnd/target/demo-java-spring-0.0.1-SNAPSHOT.jar
