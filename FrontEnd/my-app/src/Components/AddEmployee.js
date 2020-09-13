@@ -37,10 +37,11 @@ class AddEmployee extends Component {
         }
         console.log(newEmployee);
         WorkerAction.createNewWorker(newEmployee).then( res => {
-            this.state.history.push('/employee');
+            this.props.history.push('/employee');
             alert("Employee successfully created");
-        }).catch(err => {
+        }, (err) => {
             console.log(err.response.data);
+            
         });
     }
     

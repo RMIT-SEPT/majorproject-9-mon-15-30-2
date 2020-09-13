@@ -26,7 +26,7 @@ public class WorkerDetailsService {
             throw new WorkerDetailsException("Worker with id " + id + " not found");
         }
         User user = userService.getUserById(id);
-        return new EditWorker(user.getUserName(), user.getPassword(), worker.getfName(),
+        return new EditWorker(id, user.getUserName(), user.getPassword(), worker.getfName(),
                 worker.getlName(), worker.getPhoneNumber());
     }
 
@@ -98,7 +98,7 @@ public class WorkerDetailsService {
         workerDetails.setUser(user);
 
         WorkerDetails updatedWorker = workerDetailsRepository.save(workerDetails);
-        return new EditWorker(updatedUser.getUserName(), updatedUser.getPassword(), updatedWorker.getfName(),
+        return new EditWorker(id, updatedUser.getUserName(), updatedUser.getPassword(), updatedWorker.getfName(),
                 updatedWorker.getlName(), updatedWorker.getPhoneNumber());
     }
 

@@ -20,7 +20,7 @@ class Login extends Component {
                         <Form.Control type="password" placeholder="Password" />
                     </Form.Group>
                     
-                    <Button variant="secondary" type="submit" href="/customerhomepage">
+                    <Button variant="secondary" type="submit" href="/adminhomepage">
                         Login
                     </Button>
 

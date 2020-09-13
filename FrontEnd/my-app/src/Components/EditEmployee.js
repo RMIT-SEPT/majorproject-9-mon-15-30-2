@@ -51,11 +51,11 @@ class EditEmployee extends Component {
             adminId: "1"
         };
         console.log(editEmployee);
-        WorkerAction.updateWorker(editEmployee, this.state.id).then(res => {
-            this.state.history.push('/employee');
-            alert("update successful")
-        }).catch( err => {
-            console.log(err.response.data);
+        WorkerAction.updateWorker(editEmployee, this.state.id).then((res) => { 
+            this.props.history.push('/employee');
+            alert("update successful");
+          }, (err) => {
+            console.error(err.response.data);
         });
     }
 

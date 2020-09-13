@@ -23,7 +23,7 @@ class HandleWorkers
   }
 
   updateWorker(worker, id){
-    return  axios.put("http://localhost:8080/editWorker/" + id, worker);
+      return axios.put("http://localhost:8080/editWorker/" + id, worker);
   }
 
 
