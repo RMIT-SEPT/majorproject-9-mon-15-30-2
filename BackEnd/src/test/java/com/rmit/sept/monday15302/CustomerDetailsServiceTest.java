@@ -1,8 +1,9 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.CustomerDetailsRepository;
 import com.rmit.sept.monday15302.exception.CustomerDetailsException;
 import com.rmit.sept.monday15302.model.CustomerDetails;
+import com.rmit.sept.monday15302.services.CustomerDetailsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

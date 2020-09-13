@@ -29,4 +29,4 @@ jobs:
           path: BackEnd/target/surefire-reports
 
       - store_artifacts:
-          path: BackEnd/target/demo-java-spring-0.0.1-SNAPSHOT.jar
+          path: BackEnd/target/monday-1530-2-0.0.1-SNAPSHOT.jar

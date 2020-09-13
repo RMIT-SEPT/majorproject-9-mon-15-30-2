@@ -1,9 +1,10 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.WorkingHoursRepository;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.WorkingHours;
+import com.rmit.sept.monday15302.services.WorkingHoursService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.model.*;
 import org.junit.Before;
 import org.junit.Test;

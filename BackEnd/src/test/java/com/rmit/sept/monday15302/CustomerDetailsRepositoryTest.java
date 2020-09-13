@@ -1,6 +1,7 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
 
+import com.rmit.sept.monday15302.Repositories.CustomerDetailsRepository;
 import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;

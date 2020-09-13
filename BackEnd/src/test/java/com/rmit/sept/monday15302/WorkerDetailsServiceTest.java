@@ -1,9 +1,10 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

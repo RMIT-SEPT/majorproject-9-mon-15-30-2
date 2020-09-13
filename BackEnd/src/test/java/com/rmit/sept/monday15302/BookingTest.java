@@ -1,5 +1,9 @@
-package com.rmit.sept.monday15302.model;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.model.Booking;
+import com.rmit.sept.monday15302.model.BookingStatus;
+import com.rmit.sept.monday15302.model.CustomerDetails;
+import com.rmit.sept.monday15302.model.WorkerDetails;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

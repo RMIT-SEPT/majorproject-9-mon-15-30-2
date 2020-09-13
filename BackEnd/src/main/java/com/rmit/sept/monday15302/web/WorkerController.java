@@ -1,7 +1,6 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
-import com.rmit.sept.monday15302.model.WorkerDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,10 +23,5 @@ public class WorkerController {
     public ResponseEntity<?> getAllWorkers() {
         return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
                 HttpStatus.OK);
-    }
-
-    @GetMapping(value="worker/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerByFirstName(@PathVariable("fName") String fName) {
-        return new ResponseEntity<WorkerDetails>(workerDetailsService.getWorkerByFirstName(fName), HttpStatus.OK);
     }
 }

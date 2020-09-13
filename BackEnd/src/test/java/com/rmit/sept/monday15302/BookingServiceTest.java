@@ -1,4 +1,4 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
@@ -6,6 +6,7 @@ import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.BookingStatus;
 import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.BookingService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

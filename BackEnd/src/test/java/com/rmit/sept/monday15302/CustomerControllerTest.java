@@ -1,8 +1,8 @@
-package com.rmit.sept.monday15302.controller;
+package com.rmit.sept.monday15302;
 
-import com.rmit.sept.monday15302.model.WorkerDetails;
-import com.rmit.sept.monday15302.services.WorkerDetailsService;
-import com.rmit.sept.monday15302.web.WorkerController;
+import com.rmit.sept.monday15302.model.CustomerDetails;
+import com.rmit.sept.monday15302.services.CustomerDetailsService;
+import com.rmit.sept.monday15302.web.CustomerController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,47 +23,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(WorkerController.class)
-public class WorkerControllerTest {
+@WebMvcTest(CustomerController.class)
+public class CustomerControllerTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private WorkerDetailsService service;
+    private CustomerDetailsService service;
 
     @Test
-    public void givenWorkers_whenGetAllWorkers_thenReturnJsonArray()
+    public void givenCustomers_whenGetAllCustomers_thenReturnJsonArray()
             throws Exception {
 
-        WorkerDetails worker1 = new WorkerDetails();
-        worker1.setId("w1");
-        WorkerDetails worker2 = new WorkerDetails();
-        worker2.setId("w2");
+        CustomerDetails customer1 = new CustomerDetails();
+        customer1.setId("c1");
+        CustomerDetails customer2 = new CustomerDetails();
+        customer2.setId("c2");
 
-        List<WorkerDetails> workers = new ArrayList<>();
-        workers.add(worker1);
-        workers.add(worker2);
+        List<CustomerDetails> customers = new ArrayList<>();
+        customers.add(customer1);
+        customers.add(customer2);
 
-        given(service.getAllWorkers()).willReturn(workers);
+        given(service.getAllCustomers()).willReturn(customers);
 
-        mvc.perform(get("/makebooking/allworkers")
+        mvc.perform(get("/customers")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(worker1.getId())))
-                .andExpect(jsonPath("$[1].id", is(worker2.getId())));
+                .andExpect(jsonPath("$[0].id", is(customer1.getId())))
+                .andExpect(jsonPath("$[1].id", is(customer2.getId())));
     }
 
     @Test
-    public void givenWorker_fetchOneWorkerById() throws Exception {
+    public void givenCustomer_fetchOneCustomerById() throws Exception {
 
-        WorkerDetails worker = new WorkerDetails();
-        String id = "w1";
-        worker.setId(id);
+        CustomerDetails customer = new CustomerDetails();
+        String id = "c1";
+        customer.setId(id);
 
-        given(service.getWorkerById(id)).willReturn(worker);
+        given(service.getCustomerById(id)).willReturn(customer);
 
-        mvc.perform(get("/worker/{id}", id)
+        mvc.perform(get("/customer/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(id)));

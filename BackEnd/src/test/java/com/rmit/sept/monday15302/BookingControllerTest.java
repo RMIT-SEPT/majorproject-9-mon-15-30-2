@@ -1,4 +1,4 @@
-package com.rmit.sept.monday15302.controller;
+package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
