@@ -88,7 +88,12 @@ public class WorkerController {
                               BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-        WorkerDetails updatedWorker = workerDetailsService.updateWorker(worker, id);
+        String username = worker.getUsername();
+        if(userService.existsByUsername(username)
+                && !username.equals(userService.getUserById(id).getUserName())) {
+            throw new UserException("Error: Username is already taken!");
+        }
+        EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id);
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 
