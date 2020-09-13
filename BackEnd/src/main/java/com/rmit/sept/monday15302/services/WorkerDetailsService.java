@@ -20,12 +20,14 @@ public class WorkerDetailsService {
     @Autowired
     private UserService userService;
 
-    public WorkerDetails getWorkerById(String id) {
+    public EditWorker getWorkerById(String id) {
         WorkerDetails worker = workerDetailsRepository.findByWorkerId(id);
         if(worker == null) {
             throw new WorkerDetailsException("Worker with id " + id + " not found");
         }
-        return worker;
+        User user = userService.getUserById(id);
+        return new EditWorker(user.getUserName(), user.getPassword(), worker.getfName(),
+                worker.getlName(), worker.getPhoneNumber());
     }
 
     public List<WorkerDetails> getWorkerForAdmin(List<String> adminList) {
@@ -80,7 +82,7 @@ public class WorkerDetailsService {
         workerDetailsRepository.delete(worker);
     }
 
-    public WorkerDetails updateWorker(EditWorker worker, String id) {
+    public EditWorker updateWorker(EditWorker worker, String id) {
         WorkerDetails workerDetails = workerDetailsRepository.getWorkerById(id);
         User user = userService.getUserById(id);
         if(workerDetails == null || user == null) {
@@ -88,14 +90,16 @@ public class WorkerDetailsService {
         }
         user.setUserName(worker.getUsername());
         user.setPassword(worker.getPassword());
-        userService.saveUser(user);
+        User updatedUser = userService.saveUser(user);
 
         workerDetails.setfName(worker.getfName());
         workerDetails.setlName(worker.getlName());
         workerDetails.setPhoneNumber(worker.getPhoneNumber());
         workerDetails.setUser(user);
 
-        return workerDetailsRepository.save(workerDetails);
+        WorkerDetails updatedWorker = workerDetailsRepository.save(workerDetails);
+        return new EditWorker(updatedUser.getUserName(), updatedUser.getPassword(), updatedWorker.getfName(),
+                updatedWorker.getlName(), updatedWorker.getPhoneNumber());
     }
 
     public List<EditWorker> getWorkersByAdmin(String adminId) {
