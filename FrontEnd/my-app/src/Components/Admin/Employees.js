@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
-import AdminDashboard from './Admin/AdminDashboard';
-import WorkerAction from '../actions/HandleWorkers';
+import AdminDashboard from './AdminDashboard';
+import WorkerAction from '../../actions/HandleWorkers';
 
 class Employees extends Component
 {

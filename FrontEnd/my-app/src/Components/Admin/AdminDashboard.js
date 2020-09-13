@@ -20,7 +20,7 @@ class AdminDashboard extends Component {
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/employee">
+                                <a className="nav-link" href="/employees">
                                     View Employee
                                 </a>
                             </li>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Alert from 'react-bootstrap/Alert';
-import AdminDashboard from './Admin/AdminDashboard';
+import AdminDashboard from './AdminDashboard';
 
 class AvailableWorkers extends Component {
     render() {

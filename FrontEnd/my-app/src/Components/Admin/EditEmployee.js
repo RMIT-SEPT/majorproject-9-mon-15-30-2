@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import WorkerAction from '../actions/HandleWorkers';
-import AdminDashboard from './Admin/AdminDashboard';
+import WorkerAction from '../../actions/HandleWorkers';
+import AdminDashboard from './AdminDashboard';
 
 
 class EditEmployee extends Component {
@@ -55,7 +55,8 @@ class EditEmployee extends Component {
             this.props.history.push('/employees');
             alert("update successful");
           }, (err) => {
-            console.error(err.response.data);
+            console.log(err.response.data.message);
+            this.setState({errorMessage: err.response.data.message});
         });
     }
 
@@ -91,7 +92,7 @@ class EditEmployee extends Component {
                     <div className="col-md-8 m-auto">
                             <h5 className="display-4 text-center">Update Employee</h5>
                             <hr />
-                            <form onSubmit={this.onSubmit}>
+                            <form onSubmit={this.updateEmployee}>
 
                                 <h6>Employees ID</h6>
                                 <div className="form-group">
@@ -135,6 +136,8 @@ class EditEmployee extends Component {
                                 </div>
 
                                 <h6>Username</h6>
+                                { this.state.errorMessage &&
+                                    <h6 className="text-danger"> { this.state.errorMessage } </h6> }
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
@@ -154,8 +157,7 @@ class EditEmployee extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                
-                                <button className="btn btn-success" onClick={this.updateEmployee}>save</button>
+                                <button className="btn btn-success" type="submit" >save</button>
                                 <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft: "10px"}}>Cancel</button>
                             </form>
                         </div>
