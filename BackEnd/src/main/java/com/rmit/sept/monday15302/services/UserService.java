@@ -12,7 +12,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public boolean existsByUsername(String username) {
-        User user = getUser(username);
+        User user = getUserByUsername(username);
         if(user == null) {
             return false;
         } else {
@@ -33,7 +33,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public User getUser(String username) {
+    public User getUserByUsername(String username) {
         return userRepository.getUserByUsername(username);
     }
 
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     public void deleteByUsername(String username) {
-        User user = getUser(username);
+        User user = getUserByUsername(username);
         if(user == null) {
             throw new UserException("Cannot find user with username " + username);
         }

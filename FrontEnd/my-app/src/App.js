@@ -11,7 +11,7 @@ import NewBooking from './Components/CreateNewBooking/NewBooking';
 import AddEmployee from './Components/AddEmployee';
 import EditEmployee from './Components/EditEmployee';
 import AvailableWorkers from './Components/AvailableWorkers';
-import Employee from './Components/Employee';
+import Employees from './Components/Employees';
 import DefaultPage from './Components/DefaultPage';
 import AccountPage from './Components/Account';
 import AdminPage from './Components/Admin/AdminHomePage';
@@ -29,7 +29,7 @@ function App() {
                 <Route exact path= "/addemployee" component={AddEmployee} />
                 <Route exact path= "/availableworkers" component={AvailableWorkers} />
                 <Route exact path= "/currentbookings" component={CurrentBookings} />
-                <Route exact path= "/employee" component={Employee} />
+                <Route exact path= "/employees" component={Employees} />
                 <Route exact path= "/register" component={Register} />
                 <Route exact path= "/account" component={AccountPage}/>
                 <Route exact path= "/adminhomepage" component={AdminPage}/>

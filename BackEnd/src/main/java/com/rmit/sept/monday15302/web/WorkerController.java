@@ -46,12 +46,6 @@ public class WorkerController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(value="workerbyfName/{fName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerByFirstName(@PathVariable("fName") String fName) {
-        return new ResponseEntity<>(workerDetailsService.getWorkerByFirstName(fName),
-                HttpStatus.OK);
-    }
-
     @PostMapping("/createWorker")
     public ResponseEntity<?> createNewWorker(@Valid @RequestBody WorkerSignup signupWorker,
                              BindingResult result) {

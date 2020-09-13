@@ -43,16 +43,16 @@ class EditEmployee extends Component {
         e.preventDefault();
         let editEmployee = {
             id: this.state.id,
+            password: this.state.password,
             fName: this.state.fName,
             lName: this.state.lName,
-            password: this.state.password,
             phoneNumber: this.state.phoneNumber,
             username: this.state.username,
-            adminId: "1"
+            adminId: "3"
         };
         console.log(editEmployee);
         WorkerAction.updateWorker(editEmployee, this.state.id).then((res) => { 
-            this.props.history.push('/employee');
+            this.props.history.push('/employees');
             alert("update successful");
           }, (err) => {
             console.error(err.response.data);
@@ -79,7 +79,7 @@ class EditEmployee extends Component {
     }
 
     cancel(){
-        this.props.history.push('/employee');
+        this.props.history.push('/employees');
     }
 
     render() {
@@ -89,15 +89,15 @@ class EditEmployee extends Component {
                 <div className="container">
                     <div className="row">
                     <div className="col-md-8 m-auto">
-                            <h5 className="display-4 text-center">Update Booking</h5>
+                            <h5 className="display-4 text-center">Update Employee</h5>
                             <hr />
                             <form onSubmit={this.onSubmit}>
 
-                                <h6>Employee ID</h6>
+                                <h6>Employees ID</h6>
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input readOnly="readonly" className="form-control form-control-lg " placeholder="Enter new Employee ID" 
+                                            <input readOnly="readonly" className="form-control form-control-lg " placeholder="Enter new Employees ID"
                                             name="id" value= {this.state.id} onChange={this.changeWorkerId} required/>
                                         </div>
                                     </div>
@@ -127,7 +127,8 @@ class EditEmployee extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input type="text" className="form-control form-control-lg" placeholder="Enter new Phone Number" 
+                                            <input type="tel" className="form-control form-control-lg" placeholder="Enter new Phone Number"
+                                            maxLength={10} minLength={10}
                                             name="phoneNumber" value= {this.state.phoneNumber} onChange = {this.changeWorkerPhoneNumber} required/>
                                         </div>
                                     </div>
@@ -137,8 +138,9 @@ class EditEmployee extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input type="text" className="form-control form-control-lg " placeholder="Enter new Username" 
-                                            name="username" value= {this.state.username} onChange={this.changeWorkerUserName} required/>
+                                            <input type="text" className="form-control form-control-lg " placeholder="Enter new Username"
+                                            name="username" value= {this.state.username} onChange={this.changeWorkerUserName} required
+                                            max={21} min={3}/>
                                         </div>
                                     </div>
                                 </div>
@@ -147,7 +149,7 @@ class EditEmployee extends Component {
                                 <div className="form-group">
                                     <div className="row">
                                         <div className="col">
-                                            <input type="text" className="form-control form-control-lg " placeholder="Enter new Password" 
+                                            <input type="password" className="form-control form-control-lg " placeholder="Enter new Password"
                                             name="password" value= {this.state.password} onChange={this.changeWorkerPassword} required/>
                                         </div>
                                     </div>

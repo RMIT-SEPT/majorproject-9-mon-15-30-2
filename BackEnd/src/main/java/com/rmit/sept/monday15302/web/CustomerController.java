@@ -1,7 +1,6 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.services.CustomerDetailsService;
-import com.rmit.sept.monday15302.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
     @Autowired
     CustomerDetailsService customerDetailsService;
-    UserService userService;
-
 
     @GetMapping(value="customers", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAllCustomers() {

@@ -4,7 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import AdminDashboard from './Admin/AdminDashboard';
 import WorkerAction from '../actions/HandleWorkers';
 
-class Employee extends Component 
+class Employees extends Component
 {
     constructor(props) 
     {
@@ -22,7 +22,7 @@ class Employee extends Component
                 allemployee: this.state.allemployee.filter(
                     allemployee => allemployee.id !== worker_id)});
             alert("Delete successful");
-            this.props.history.push("/employee");
+            this.props.history.push("/employees");
         });
     }
 
@@ -65,7 +65,7 @@ class Employee extends Component
                         <Table className="table" striped bordered hover size="sm">
                             <thead>
                                 <tr>
-                                    <th className="th">User ID</th>
+                                    <th className="th">Username</th>
                                     <th className="th">First Name</th>
                                     <th className="th">Last Name</th>
                                     <th className="th">Phone Number</th>
@@ -81,7 +81,7 @@ class Employee extends Component
                                     this.state.allemployee.map(
                                         allemployee => 
                                         <tr key = {allemployee.id}>
-                                            <td> {allemployee.id}</td>
+                                            <td> {allemployee.username}</td>
                                             <td> {allemployee.fName}</td>
                                             <td> {allemployee.lName}</td>
                                             <td> {allemployee.phoneNumber}</td>
@@ -105,4 +105,4 @@ class Employee extends Component
         }
     }
 }
-export default Employee;
+export default Employees;

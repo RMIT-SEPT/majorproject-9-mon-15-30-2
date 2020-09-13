@@ -10,7 +10,7 @@ public class EditWorker {
     private String id;
 
     @NotBlank(message = "User name is required")
-    @Size(max = 21)
+    @Size(max = 21, min = 3)
     private String userName;
 
     @NotBlank(message = "Password is required")

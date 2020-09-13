@@ -13,7 +13,7 @@ class AddEmployee extends Component {
         password: "",
         phoneNumber: "",
         username: "",
-        adminId: ""
+        adminId: "1"
 
     }; 
     this.onChange = this.onChange.bind(this);
@@ -37,8 +37,8 @@ class AddEmployee extends Component {
         }
         console.log(newEmployee);
         WorkerAction.createNewWorker(newEmployee).then( res => {
-            this.props.history.push('/employee');
-            alert("Employee successfully created");
+            this.props.history.push('/employees');
+            alert("Employees successfully created");
         }, (err) => {
             console.log(err.response.data);
             
@@ -72,7 +72,8 @@ class AddEmployee extends Component {
 
                                 <h6>Phone Number</h6>
                                 <div className="form-group">
-                                    <input type="text" className="form-control form-control-lg " placeholder="Phone Number" name="phoneNumber"
+                                    <input type="tel" className="form-control form-control-lg " placeholder="Phone Number" name="phoneNumber"
+                                    maxLength={10} minLength={10}
                                     value= {this.state.phoneNumber}
                                     onChange = {this.onChange} required/>
                                 </div>
@@ -80,13 +81,14 @@ class AddEmployee extends Component {
                                 <h6>Username</h6>
                                 <div className="form-group">
                                     <input type="text" className="form-control form-control-lg " placeholder="Username" name="username"
+                                    maxLength={21} minLength={3}
                                     value= {this.state.username}
                                     onChange = {this.onChange} required/>
                                 </div>
 
                                 <h6>Password</h6>
                                 <div className="form-group">
-                                    <input type="text" className="form-control form-control-lg " placeholder="Password" name="password"
+                                    <input type="password" className="form-control form-control-lg " placeholder="Password" name="password"
                                     value= {this.state.password}
                                     onChange = {this.onChange} required/>
                                 </div>

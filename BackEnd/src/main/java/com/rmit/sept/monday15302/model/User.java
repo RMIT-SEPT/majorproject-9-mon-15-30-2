@@ -14,7 +14,7 @@ public class User {
     private String id;
 
     @NotBlank(message = "User name is required")
-    @Size(max = 21)
+    @Size(max = 21, min = 3)
     @Column(name="user_name")
     private String userName;
 
