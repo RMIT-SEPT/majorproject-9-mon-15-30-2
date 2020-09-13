@@ -16,7 +16,7 @@ jobs:
       - restore_cache:
           key: circleci-demo-java-spring-{{ checksum "BackEnd/pom.xml" }}
 
-      - run: mvn -f ../BackEnd/pom.xml dependency:go-offline
+      - run: mvn -f BackEnd/pom.xml dependency:go-offline
 
       - save_cache:
           paths:
