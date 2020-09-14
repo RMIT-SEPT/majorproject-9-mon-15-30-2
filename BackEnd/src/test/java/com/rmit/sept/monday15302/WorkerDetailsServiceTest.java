@@ -66,7 +66,7 @@ public class WorkerDetailsServiceTest {
         Mockito.when(workerDetailsRepository.findAll())
                 .thenReturn(workers);
 
-        Mockito.when(workerDetailsRepository.getWorkersByAdminId(adminId))
+        Mockito.when(workerDetailsRepository.findByAdminId(adminId))
                 .thenReturn(workers);
 
         Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);

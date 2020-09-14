@@ -1,12 +1,15 @@
 package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.AdminDetailsRepository;
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.Repositories.SessionRepository;
+import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.model.Session;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.services.BookingService;
 import com.rmit.sept.monday15302.services.SessionService;
+import com.rmit.sept.monday15302.services.WorkingHoursService;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.junit.Before;
@@ -37,6 +40,15 @@ public class SessionServiceTest {
     @MockBean
     private BookingRepository bookingRepository;
 
+    @MockBean
+    private WorkingHoursService workingHoursService;
+
+    @MockBean
+    private AdminDetailsRepository adminDetailsRepository;
+
+    @MockBean
+    private WorkerDetailsRepository workerDetailsRepository;
+
     private static String workerId = "w1";
     private static String service = "Haircut";
 
@@ -50,7 +62,7 @@ public class SessionServiceTest {
         session.setEndTime("09:00:00");
         session.setService(service);
         List<Session> sessions = Arrays.asList(session);
-        Mockito.when(sessionRepository.getSessionByWorkerAndService(workerId, service))
+        Mockito.when(sessionRepository.findByWorkerIdAndService(workerId, service))
                 .thenReturn(sessions);
     }
 
