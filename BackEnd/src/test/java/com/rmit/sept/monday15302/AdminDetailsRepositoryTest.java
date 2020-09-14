@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.AdminDetailsRepository;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -44,28 +45,38 @@ public class AdminDetailsRepositoryTest {
     }
 
     @Test
-    public void getAllServices_returnTrue_ifServicesFound() {
+    public void getAllServices_returnServices_ifServicesFound() {
         List<String> services = adminDetailsRepository.getAllServices();
         assert(services.contains(service) && services.contains(service1));
     }
 
     @Test
-    public void getServiceByAdminId_returnTrue_ifServiceFound() {
+    public void getServiceByAdminId_returnOneService_ifServiceFound() {
         assert(adminDetailsRepository.getServiceByAdminId(admin.getId()).equals(service));
     }
 
     @Test
-    public void getServiceByAdminId_returnTrue_ifServiceNotFound() {
+    public void getServiceByAdminId_returnNull_ifServiceNotFound() {
         assert(adminDetailsRepository.getServiceByAdminId("1") == null);
     }
 
     @Test
-    public void getAdminIdByService_returnTrue_ifAdminFound() {
+    public void getAdminIdByService_returnAdminId_ifAdminFound() {
         assert(adminDetailsRepository.getAdminIdByService(service).contains(admin.getId()));
     }
 
     @Test
-    public void getAdminIdByService_returnTrue_ifServiceNotFound() {
+    public void getAdminIdByService_returnEmptyList_ifServiceNotFound() {
         assert(adminDetailsRepository.getAdminIdByService("Nails").isEmpty());
+    }
+
+    @Test
+    public void getAdminById_returnAdmin_ifAdminFound() {
+        assert(adminDetailsRepository.getAdminById(admin.getId()).equals(admin));
+    }
+
+    @Test
+    public void getAdminById_returnNull_ifNoAdminFound() {
+        assert(adminDetailsRepository.getAdminById("ADMIN123") == null);
     }
 }

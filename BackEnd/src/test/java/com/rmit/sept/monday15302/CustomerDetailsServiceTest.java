@@ -1,8 +1,9 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.CustomerDetailsRepository;
 import com.rmit.sept.monday15302.exception.CustomerDetailsException;
 import com.rmit.sept.monday15302.model.CustomerDetails;
+import com.rmit.sept.monday15302.services.CustomerDetailsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -32,9 +33,7 @@ public class CustomerDetailsServiceTest {
         CustomerDetails customer2 = new CustomerDetails();
         customer2.setId("c2");
 
-        List<CustomerDetails> customerList = new ArrayList<>();
-        customerList.add(customer1);
-        customerList.add(customer2);
+        List<CustomerDetails> customerList = Arrays.asList(customer1, customer2);
 
         Mockito.when(customerDetailsRepository.findAll())
                 .thenReturn(customerList);
@@ -43,7 +42,7 @@ public class CustomerDetailsServiceTest {
     }
 
     @Test
-    public void getAllCustomers_returnTrue_ifCustomersFound() {
+    public void getAllCustomers_returnCustomers_ifCustomersFound() {
         String id1 = "c1";
         String id2 = "c2";
         List<CustomerDetails> list = customerDetailsService.getAllCustomers();
@@ -52,7 +51,7 @@ public class CustomerDetailsServiceTest {
     }
 
     @Test
-    public void getCustomerById_returnTrue_ifCustomerFound() {
+    public void getCustomerById_returnCustomer_ifCustomerFound() {
         String id1 = "c1";
         CustomerDetails toCheck = customerDetailsService.getCustomerById(id1);
         assert(toCheck != null);

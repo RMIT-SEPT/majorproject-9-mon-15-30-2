@@ -1,6 +1,7 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
 
+import com.rmit.sept.monday15302.Repositories.CustomerDetailsRepository;
 import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -48,7 +49,7 @@ public class CustomerDetailsRepositoryTest {
     }
 
     @Test
-    public void findAll_returnTrue_ifCustomersFound() {
+    public void findAll_returnCustomers_ifCustomersFound() {
         List<CustomerDetails> customerList = customerDetailsRepository.findAll();
         boolean toReturn = customerList.size() == 2
                 && customerList.contains(customer) && customerList.contains(customer1);
@@ -56,12 +57,12 @@ public class CustomerDetailsRepositoryTest {
     }
 
     @Test
-    public void findByCustomerId_returnTrue_ifCustomerFound() {
+    public void findByCustomerId_returnCustomer_ifCustomerFound() {
         assert(customerDetailsRepository.findByCustomerId(customerId).equals(customer));
     }
 
     @Test
-    public void findByCustomerId_returnTrue_ifCustomerNotFound() {
+    public void findByCustomerId_returnNull_ifCustomerNotFound() {
         assert(customerDetailsRepository.findByCustomerId("0") == null);
     }
 }

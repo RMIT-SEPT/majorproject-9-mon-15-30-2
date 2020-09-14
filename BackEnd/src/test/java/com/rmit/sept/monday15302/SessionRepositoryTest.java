@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.SessionRepository;
 import com.rmit.sept.monday15302.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,13 +48,13 @@ public class SessionRepositoryTest {
     }
 
     @Test
-    public void findByWorkerId_returnTrue_ifSessionFound() {
+    public void findByWorkerIdAndService_returnSessions_ifSessionFound() {
         List<Session> sessions = sessionRepository.getSessionByWorkerAndService(workerId, service);
         assert(!sessions.isEmpty() && sessions.contains(session));
     }
 
     @Test
-    public void findByWorkerId_returnTrue_ifNoSessionFound() {
+    public void findByWorkerIdAndService_returnEmptyList_ifNoSessionFound() {
         List<Session> sessions = sessionRepository.getSessionByWorkerAndService(workerId, "Salon");
         assert(sessions.isEmpty());
     }

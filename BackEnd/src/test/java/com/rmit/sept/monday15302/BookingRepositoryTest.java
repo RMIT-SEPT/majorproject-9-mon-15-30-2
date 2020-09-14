@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,34 +66,34 @@ public class BookingRepositoryTest {
     }
 
     @Test
-    public void getPastBookingsByCustomerId_returnsTrue_ifNoBookingsFound() {
+    public void getPastBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findPastBookingByCustomerID("1").isEmpty());
     }
 
     @Test
-    public void getPastBookingsByCustomerId_returnsTrue_ifBookingsFound() {
+    public void getPastBookingsByCustomerId_returnBookings_ifBookingsFound() {
         List<Booking> list = bookingRepository.findPastBookingByCustomerID(customer.getId());
         assert(list.contains(pastBooking) && list.contains(cancelledBooking));
     }
 
     @Test
-    public void getNewBookingsByCustomerId_returnsTrue_ifBookingsFound() {
+    public void getNewBookingsByCustomerId_returnBookings_ifBookingsFound() {
         assert(bookingRepository.findNewBookingByCustomerID(customer.getId()).contains(newBooking));
     }
 
     @Test
-    public void getNewBookingsByCustomerId_returnsTrue_ifNoBookingsFound() {
+    public void getNewBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findNewBookingByCustomerID("1").isEmpty());
     }
 
     @Test
-    public void findNewBookingByWorkerAndDate_returnsTrue_ifBookingsFound() {
+    public void findNewBookingByWorkerAndDate_returnBookings_ifBookingsFound() {
         assert(bookingRepository.findNewBookingByWorkerAndDate(worker.getId(),
                 newBooking.getDate()).contains(newBooking));
     }
 
     @Test
-    public void findNewBookingByWorkerAndDate_returnsTrue_ifNoBookingsFound() {
+    public void findNewBookingByWorkerAndDate_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findNewBookingByWorkerAndDate("1",
                 newBooking.getDate()).isEmpty());
     }
