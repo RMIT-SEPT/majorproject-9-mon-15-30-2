@@ -81,10 +81,10 @@ class Employees extends Component
                                     this.state.allemployee.map(
                                         allemployee => 
                                         <tr key = {allemployee.id}>
-                                            <td> {allemployee.username}</td>
-                                            <td> {allemployee.fName}</td>
-                                            <td> {allemployee.lName}</td>
-                                            <td> {allemployee.phoneNumber}</td>
+                                            <td className="username"> {allemployee.username}</td>
+                                            <td className="fName"> {allemployee.fName}</td>
+                                            <td className="lName"> {allemployee.lName}</td>
+                                            <td className="phoneNumber"> {allemployee.phoneNumber}</td>
                                             {   
                                             // <td> {allemployee.admin.service}</td>
                                             // <td> {allemployee.admin.adminName}</td>
