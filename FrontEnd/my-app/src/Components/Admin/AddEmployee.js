@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import WorkerAction from '../actions/HandleWorkers';
-import AdminDashboard from './Admin/AdminDashboard';
+import WorkerAction from '../../actions/HandleWorkers';
+import AdminDashboard from './AdminDashboard';
 
 class AddEmployee extends Component {
     constructor(){
@@ -40,8 +40,8 @@ class AddEmployee extends Component {
             this.props.history.push('/employees');
             alert("Employees successfully created");
         }, (err) => {
-            console.log(err.response.data);
-            
+            console.log(err.response.data.message);
+            this.setState({errorMessage: err.response.data.message});
         });
     }
     
@@ -79,12 +79,15 @@ class AddEmployee extends Component {
                                 </div>
                                 
                                 <h6>Username</h6>
+                                { this.state.errorMessage &&
+                                    <h6 className="text-danger"> { this.state.errorMessage } </h6> }
                                 <div className="form-group">
                                     <input type="text" className="form-control form-control-lg " placeholder="Username" name="username"
                                     maxLength={21} minLength={3}
                                     value= {this.state.username}
                                     onChange = {this.onChange} required/>
                                 </div>
+                                
 
                                 <h6>Password</h6>
                                 <div className="form-group">
