@@ -32,17 +32,15 @@ jobs:
           path: BackEnd/target/monday-1530-2-0.0.1-SNAPSHOT.jar
 
 orbs:
-  react: thefrontside/react@0.2.0
-workflows:
-  push:
-    jobs:
-      - react/install
-      - react/eslint:
-          requires:
-            - react/install
-      - react/test:
-          requires:
-            - react/install
-      - react/coverage:
-          requires:
-            - react/install
+  node: circleci/node@4.0.0
+
+integration-test-override-ci:
+executor: node/default
+steps:
+  - checkout
+  - node/install-packages:
+      override-ci-command: npm install
+      cache-path: ~/FrontEnd/my-app/node_modules
+      cache-version: override-v3
+      app-dir: "~/FrontEnd/my-app"
+  - run: cd ~/FrontEnd/my-app && npm run test
