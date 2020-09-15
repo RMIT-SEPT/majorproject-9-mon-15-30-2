@@ -31,9 +31,6 @@ jobs1:
       - store_artifacts:
           path: BackEnd/target/monday-1530-2-0.0.1-SNAPSHOT.jar
 
-orbs:
-  node: circleci/node@4.0.0
-
 jobs: 
   test:
     executor: node/default
@@ -46,7 +43,5 @@ jobs:
           app-dir: "~/FrontEnd/my-app"
       - run: cd ~/FrontEnd/my-app && npm run test
 
-workflows:
-  test_app:
-    jobs:
-      - test
+orbs:
+  node: circleci/node@4.0.0
