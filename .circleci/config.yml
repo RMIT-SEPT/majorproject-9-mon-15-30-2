@@ -43,7 +43,7 @@ jobs:
           cache-path: ~/FrontEnd/my-app/node_modules
           cache-version: override-v3
           override-ci-command: npm install
-          app-dir: "~/FrontEnd/my-app/node_modules"
+          app-dir: "~/FrontEnd/my-app"
       - run: cd ~/FrontEnd/my-app && npm run test
 
 workflows:
