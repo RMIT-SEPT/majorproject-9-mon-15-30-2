@@ -41,7 +41,9 @@ jobs:
       - checkout
       - node/install-packages:
           cache-path: ~/FrontEnd/my-app/node_modules
+          cache-version: override-v3
           override-ci-command: npm install
+          app-dir: "~/FrontEnd/my-app/node_modules"
       - run: cd ~/FrontEnd/my-app && npm run test
 
 workflows:
