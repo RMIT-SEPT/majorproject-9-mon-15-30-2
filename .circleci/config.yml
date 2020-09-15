@@ -1,5 +1,5 @@
 version: 2.1 
-jobs:
+jobs1:
   build:
     working_directory: ~/BackEnd
     docker:
@@ -34,13 +34,17 @@ jobs:
 orbs:
   node: circleci/node@4.0.0
 
-integration-test-override-ci:
-executor: node/default
-steps:
-  - checkout
-  - node/install-packages:
-      override-ci-command: npm install
-      cache-path: ~/FrontEnd/my-app/node_modules
-      cache-version: override-v3
-      app-dir: "~/FrontEnd/my-app"
-  - run: cd ~/FrontEnd/my-app && npm run test
+jobs:
+  test:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages:
+          cache-path: ~/FrontEnd/my-app/node_modules
+          override-ci-command: npm install
+      - run: cd ~/FrontEnd/my-app && npm run test
+
+workflows:
+  test_my_app:
+    jobs:
+      - test
