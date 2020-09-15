@@ -1,5 +1,5 @@
 version: 2.1 
-jobs1:
+jobs:
   build:
     working_directory: ~/BackEnd
     docker:
