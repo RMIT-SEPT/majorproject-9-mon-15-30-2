@@ -31,15 +31,18 @@ jobs1:
       - store_artifacts:
           path: BackEnd/target/monday-1530-2-0.0.1-SNAPSHOT.jar
 
-jobs: 
-  test:
-    executor: node/default
-    steps:
-      - checkout
-      - node/install-packages:
-          override-ci-command: npm install
-          cache-path: ~/FrontEnd/my-app/node_modules
-          cache-version: override-v3
-          app-dir: "~/FrontEnd/my-app"
-      - run: cd ~/FrontEnd/my-app && npm run test
+integration-test-override-ci:
+  jobs: 
+    test:
+      executor: node/default
+      steps:
+        - checkout
+        - node/install-packages:
+            override-ci-command: npm install
+            cache-path: ~/FrontEnd/my-app/node_modules
+            cache-version: override-v3
+            app-dir: "~/FrontEnd/my-app"
+        - run: cd ~/FrontEnd/my-app && npm run test
+  orbs:
+  node: circleci/node@4.0.0
 
