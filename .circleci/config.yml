@@ -43,9 +43,3 @@ jobs:
           app-dir: "~/FrontEnd/my-app"
       - run: cd ~/FrontEnd/my-app && npm run test
 
-orbs:
-  node: circleci/node@4.0.0
-workflows:
-  test_my_app:
-    jobs:
-      - test
