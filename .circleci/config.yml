@@ -33,16 +33,24 @@ jobs:
 
 integration-test-override-ci:
   jobs: 
-    test:
-      executor: node/default
-      steps:
-        - checkout
-        - node/install-packages:
-            override-ci-command: npm install
-            cache-path: ~/FrontEnd/my-app/node_modules
-            cache-version: override-v3
-            app-dir: "~/FrontEnd/my-app"
-        - run: cd ~/FrontEnd/my-app && npm run test
+    build:
+      working_directory: ~/FrontEnd
+      docker:
+        - image: circleci/openjdk:8-jdk-stretch
+        - image: circleci/postgres:9.6.3-alpine
+          environment:
+            POSTGRES_USER: root
+            POSTGRES_DB: circle_test
+      test:
+        executor: node/default
+        steps:
+          - checkout
+          - node/install-packages:
+              override-ci-command: npm install
+              cache-path: ~/FrontEnd/my-app/node_modules
+              cache-version: override-v3
+              app-dir: "~/FrontEnd/my-app"
+          - run: cd ~/FrontEnd/my-app && npm run test
   orbs:
     node: circleci/node@4.0.0
   workflows:
