@@ -36,6 +36,8 @@ public class EditWorker {
         this.phoneNumber = phoneNumber;
     }
 
+    public EditWorker() {}
+
     public String getId() { return id;}
 
     public String getUsername() {
@@ -56,6 +58,14 @@ public class EditWorker {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUsername(String s) {
+        this.userName = s;
     }
 }
 

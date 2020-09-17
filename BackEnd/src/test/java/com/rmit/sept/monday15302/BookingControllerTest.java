@@ -1,4 +1,4 @@
-package com.rmit.sept.monday15302.controller;
+package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
@@ -45,9 +45,6 @@ public class BookingControllerTest {
 
     @MockBean
     private MapValidationErrorService mapValidationErrorService;
-
-    @MockBean
-    private WorkingHoursService workingHoursService;
 
     @MockBean
     private SessionService sessionService;
@@ -122,7 +119,7 @@ public class BookingControllerTest {
         workers.add(worker2);
 
         given(adminDetailsService.getAdminIdByService(service)).willReturn(adminList);
-        given(workerDetailsService.getWorkerForAdmin(adminList)).willReturn(workers);
+        given(workerDetailsService.getWorkerByAdminIds(adminList)).willReturn(workers);
 
         mvc.perform(get("/makebooking/byservice/{service}", service)
                 .contentType(MediaType.APPLICATION_JSON))

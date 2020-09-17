@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collection;
+import java.util.List;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
@@ -53,40 +54,28 @@ public class WorkerDetailsRepositoryTest {
     }
 
     @Test
-    public void findAllWorkers_returnTrue_ifWorkersFound() {
+    public void findAllWorkers_returnWorkers_ifWorkersFound() {
         assert(!workerDetailsRepository.findAll().isEmpty());
     }
 
     @Test
-    public void findByWorkerId_returnTrue_ifWorkerFound() {
-        assert(workerDetailsRepository.findByWorkerId(workerId).equals(worker));
+    public void findByWorkerId_returnWorkerDetails_ifWorkerFound() {
+        assert(workerDetailsRepository.getWorkerById(workerId).equals(worker));
     }
 
     @Test
-    public void findByWorkerId_returnTrue_ifWorkerNotFound() {
-        assert(workerDetailsRepository.findByWorkerId("1") == null);
+    public void findByWorkerId_returnNull_ifWorkerNotFound() {
+        assert(workerDetailsRepository.getWorkerById("1") == null);
     }
 
     @Test
-    public void getAdminIdByWorkerId_returnTrue_ifAdminIdFound() {
-        assert(workerDetailsRepository.getAdminIdByWorkerId(workerId).equals(adminId));
+    public void getWorkersByAdminId_returnWorkerDetails_ifWorkersFound() {
+        List<WorkerDetails> workers = workerDetailsRepository.getWorkersByAdminId(adminId);
+        assert(workers.size() == 2 && workers.contains(worker) && workers.contains(worker1));
     }
 
     @Test
-    public void getAdminIdByWorkerId_returnTrue_ifAdminIdNotFound() {
-        assert(workerDetailsRepository.getAdminIdByWorkerId("1") == null);
-    }
-
-    @Test
-    public void findByAdminId_returnTrue_ifWorkersFound() {
-        Collection<WorkerDetails> workersList = workerDetailsRepository.findByAdminId(adminId);
-        boolean correct = workersList.size() == 2 && workersList.contains(worker)
-                && workersList.contains(worker1);
-        assert(correct);
-    }
-
-    @Test
-    public void findByAdminId_returnTrue_ifNoWorkersFound() {
-        assert(workerDetailsRepository.findByAdminId("1").isEmpty());
+    public void getWorkersByAdminId_returnNull_ifNoWorkersFound() {
+        assert(workerDetailsRepository.getWorkersByAdminId("adminadmin").isEmpty());
     }
 }

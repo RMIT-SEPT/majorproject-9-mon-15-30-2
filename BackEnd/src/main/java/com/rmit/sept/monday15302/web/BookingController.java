@@ -33,9 +33,6 @@ public class BookingController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @Autowired
-    private WorkingHoursService workingHoursService;
-
     @GetMapping(value="historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
         List<Booking> bookings = bookingService.getAllPastBookingsByCustomerId(id);
@@ -51,7 +48,7 @@ public class BookingController {
     @GetMapping("makebooking/byservice/{service}")
     public ResponseEntity<?> getWorkerByService(@PathVariable("service") String service) {
         List<String> adminList = adminDetailsService.getAdminIdByService(service);
-        List<WorkerDetails> workersList = workerDetailsService.getWorkerForAdmin(adminList);
+        List<WorkerDetails> workersList = workerDetailsService.getWorkerByAdminIds(adminList);
         return new ResponseEntity<>(workersList, HttpStatus.OK);
     }
 

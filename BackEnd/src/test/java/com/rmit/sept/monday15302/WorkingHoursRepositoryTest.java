@@ -1,5 +1,6 @@
-package com.rmit.sept.monday15302.Repositories;
+package com.rmit.sept.monday15302;
 
+import com.rmit.sept.monday15302.Repositories.WorkingHoursRepository;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -53,12 +54,12 @@ public class WorkingHoursRepositoryTest {
     }
 
     @Test
-    public void getWorkingHoursByAdminIdAndDay_returnTrue_ifNotFound() {
+    public void getWorkingHoursByAdminIdAndDay_returnNull_ifNotFound() {
         assert(workingHoursRepository.findByAdmin_idAndDay(adminID, 3) == null);
     }
 
     @Test
-    public void getWorkingHoursByAdminIdAndDay_returnTrue_ifHoursFound() {
+    public void getWorkingHoursByAdminIdAndDay_returnHour_ifHoursFound() {
         WorkingHours found = workingHoursRepository.findByAdmin_idAndDay(adminID, 4);
         assert(found.equals(workingHours));
     }

@@ -1,6 +1,7 @@
 package com.rmit.sept.monday15302.services;
 
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
+import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.WorkerDetails;
@@ -19,6 +20,10 @@ public class WorkerDetailsService {
     @Autowired
     private UserService userService;
 
+    public List<WorkerDetails> getAllWorkers() {
+        return workerDetailsRepository.findAll();
+    }
+
     public EditWorker getWorkerById(String id) {
         WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
         if(worker == null) {
@@ -29,10 +34,10 @@ public class WorkerDetailsService {
                 worker.getlName(), worker.getPhoneNumber());
     }
 
-    public List<WorkerDetails> getWorkerForAdmin(List<String> adminList) {
+    public List<WorkerDetails> getWorkerByAdminIds(List<String> adminList) {
         List<WorkerDetails> workersList = new ArrayList<>();
         for (String adminId : adminList) {
-            workersList.addAll(workerDetailsRepository.findByAdminId(adminId));
+            workersList.addAll(workerDetailsRepository.getWorkersByAdminId(adminId));
         }
 
         if(workersList.size() == 0) {
@@ -40,18 +45,6 @@ public class WorkerDetailsService {
         }
 
         return workersList;
-    }
-
-    public List<WorkerDetails> getAllWorkers() {
-        return workerDetailsRepository.findAll();
-    }
-
-    public String getAdminIdByWorkerId(String workerId) {
-        String adminId = workerDetailsRepository.getAdminIdByWorkerId(workerId);
-        if(adminId == null) {
-            throw new WorkerDetailsException("Admin for worker " + workerId + " not found");
-        }
-        return adminId;
     }
 
     public WorkerDetails saveWorker(WorkerDetails worker, String username) {
@@ -74,6 +67,11 @@ public class WorkerDetailsService {
     }
 
     public EditWorker updateWorker(EditWorker worker, String id) {
+        String username = worker.getUsername();
+        if(userService.existsByUsername(username)
+                && !username.equals(userService.getUserById(id).getUserName())) {
+            throw new UserException("Error: Username is already taken!");
+        }
         WorkerDetails workerDetails = workerDetailsRepository.getWorkerById(id);
         User user = userService.getUserById(id);
         if(workerDetails == null || user == null) {
@@ -93,8 +91,8 @@ public class WorkerDetailsService {
                 updatedWorker.getlName(), updatedWorker.getPhoneNumber());
     }
 
-    public List<EditWorker> getWorkersByAdmin(String adminId) {
-        List<WorkerDetails> toReturn = workerDetailsRepository.getWorkersByAdmin(adminId);
+    public List<EditWorker> getWorkersByAdminId(String adminId) {
+        List<WorkerDetails> toReturn = workerDetailsRepository.getWorkersByAdminId(adminId);
         List<EditWorker> workers = new ArrayList<>();
         if(toReturn.isEmpty()) {
             throw new WorkerDetailsException("Admin with id '"+adminId+"' has no employees");

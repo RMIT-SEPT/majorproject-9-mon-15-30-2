@@ -1,9 +1,10 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.WorkingHoursRepository;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.WorkingHours;
+import com.rmit.sept.monday15302.services.WorkingHoursService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ public class WorkingHoursServiceTest {
     }
 
     @Test
-    public void getOpeningHours_ReturnTrue_IfHoursFound() throws ParseException {
+    public void getOpeningHours_ReturnHour_IfHoursFound() throws ParseException {
         String adminId = "a1";
         String date = "2020-09-15";
         assert(workingHoursService.getOpeningHours(adminId, date).size() == 2);

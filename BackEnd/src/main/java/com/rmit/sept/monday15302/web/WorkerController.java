@@ -35,15 +35,15 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
-    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
-    }
-
     @GetMapping("makebooking/allworkers")
     public ResponseEntity<?> getAllWorkers() {
         return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
                 HttpStatus.OK);
+    }
+
+    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
     }
 
     @PostMapping("/createWorker")
@@ -82,17 +82,12 @@ public class WorkerController {
                               BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-        String username = worker.getUsername();
-        if(userService.existsByUsername(username)
-                && !username.equals(userService.getUserById(id).getUserName())) {
-            throw new UserException("Error: Username is already taken!");
-        }
         EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id);
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 
     @GetMapping("/workers/{adminId}")
     public ResponseEntity<?> getWorkersByAdmin(@PathVariable("adminId") String adminId) {
-        return new ResponseEntity<>(workerDetailsService.getWorkersByAdmin(adminId), HttpStatus.OK);
+        return new ResponseEntity<>(workerDetailsService.getWorkersByAdminId(adminId), HttpStatus.OK);
     }
 }

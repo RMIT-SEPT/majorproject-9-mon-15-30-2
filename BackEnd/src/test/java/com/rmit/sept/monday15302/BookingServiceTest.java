@@ -1,4 +1,4 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
@@ -6,6 +6,7 @@ import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.BookingStatus;
 import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.BookingService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -49,9 +51,7 @@ public class BookingServiceTest {
         booking3.setCustomer(customer);
         booking3.setStatus(BookingStatus.CANCELLED_BOOKING);
 
-        List<Booking> pastBookingList = new ArrayList<>();
-        pastBookingList.add(booking1);
-        pastBookingList.add(booking3);
+        List<Booking> pastBookingList = Arrays.asList(booking1, booking3);
 
         Mockito.when(bookingRepository.findPastBookingByCustomerID(customerId))
                 .thenReturn(pastBookingList);
@@ -61,8 +61,7 @@ public class BookingServiceTest {
         booking2.setStatus(BookingStatus.NEW_BOOKING);
         booking2.setDate("2030-10-15");
 
-        List<Booking> newBookingList = new ArrayList<>();
-        newBookingList.add(booking2);
+        List<Booking> newBookingList = Arrays.asList(booking2);
 
         Mockito.when(bookingRepository.findNewBookingByCustomerID(customerId))
                 .thenReturn(newBookingList);
@@ -83,7 +82,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void findPastBookingsByCustomerId_returnTrue_ifPastBookingsFound() {
+    public void findPastBookingsByCustomerId_returnBookings_ifPastBookingsFound() {
         String customerId = "123";
         assert(bookingService.getAllPastBookingsByCustomerId(customerId).size() == 2);
     }
@@ -95,13 +94,13 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void findNewBookingByCustomerID_returnTrue_ifOneBookingIsFound() throws ParseException {
+    public void findNewBookingByCustomerID_returnBooking_ifOneBookingIsFound() throws ParseException {
         String customerId = "123";
         assert(bookingService.getAllNewBookingsByCustomerId(customerId).size() == 1);
     }
 
     @Test
-    public void getUnavailableSessions_returnTrue_ifSessionFound() throws ParseException {
+    public void testGetUnavailableSessions() throws ParseException {
         String workerId = "w1";
         String date = "2030-10-15";
         assert(bookingService.getUnavailableSessions(workerId, date).size() == 1);
@@ -127,7 +126,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void createNewBooking_returnTrue_ifBookingAdded() throws ParseException {
+    public void createNewBooking_returnBooking_ifBookingAdded() throws ParseException {
         CustomerDetails customer = new CustomerDetails();
         WorkerDetails worker = new WorkerDetails();
         Booking booking = new Booking("b1", customer, worker, status, date, startTime, endTime, service);

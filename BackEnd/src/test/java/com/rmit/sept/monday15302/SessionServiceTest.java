@@ -1,10 +1,12 @@
-package com.rmit.sept.monday15302.services;
+package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.Repositories.SessionRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.model.Session;
 import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.services.BookingService;
+import com.rmit.sept.monday15302.services.SessionService;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.junit.Before;
