@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CreateBooking from '../../actions/HandleBookings';
 import Workers from '../../actions/HandleWorkers';
 import Services from '../../actions/HandleServices';
-import CustomerDashboard from '../CustomerDashBoard';
+import CustomerDashboard from '../Customer/CustomerDashBoard';
 import Booking from '../../actions/HandleBookings';
 
 

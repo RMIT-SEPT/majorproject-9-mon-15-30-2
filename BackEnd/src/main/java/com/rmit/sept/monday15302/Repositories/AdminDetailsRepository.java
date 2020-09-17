@@ -19,4 +19,7 @@ public interface AdminDetailsRepository extends CrudRepository<AdminDetails, Str
 
     @Query("select DISTINCT admin.service from AdminDetails admin")
     List<String> getAllServices();
+
+    @Query("select admin from AdminDetails admin where admin.id = :adminId")
+    AdminDetails getAdminById(String adminId);
 }

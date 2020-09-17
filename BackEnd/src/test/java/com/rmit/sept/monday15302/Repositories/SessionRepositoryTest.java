@@ -36,7 +36,7 @@ public class SessionRepositoryTest {
         AdminDetails admin = new AdminDetails("Melbourne Salon", "Haircut", user2);
         entityManager.persist(admin);
 
-        worker = new WorkerDetails(user2, "John", "Smith", admin);
+        worker = new WorkerDetails(user2, "John", "Smith", admin, "0123445556");
         entityManager.persist(worker);
 
         session = new Session(worker, 2, "08:00:00", "09:00:00", service);

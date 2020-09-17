@@ -161,7 +161,8 @@ public class BookingControllerTest {
         CustomerDetails customer = new CustomerDetails(user1, "John", "Smith",
                 "Melbourne", "0123456789", "john@mail.com");
         customer.setId(user1.getId());
-        WorkerDetails worker = new WorkerDetails(user3, "Julia", "Baker", admin);
+        WorkerDetails worker = new WorkerDetails(user3, "Julia", "Baker",
+                admin, "0123445556");
         worker.setId(user3.getId());
         Booking booking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
                 "2021-09-02", "8:00:00", "9:00:00", "Haircut");

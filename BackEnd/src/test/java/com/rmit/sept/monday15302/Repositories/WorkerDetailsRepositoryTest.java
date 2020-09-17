@@ -41,10 +41,10 @@ public class WorkerDetailsRepositoryTest {
         AdminDetails admin = new AdminDetails("Melbourne Salon", "Haircut", user);
         entityManager.persist(admin);
 
-        worker = new WorkerDetails(user2, "John", "Smith", admin);
+        worker = new WorkerDetails(user2, "John", "Smith", admin, "0123445556");
         entityManager.persist(worker);
 
-        worker1 = new WorkerDetails(user3, "Michael", "Smith", admin);
+        worker1 = new WorkerDetails(user3, "Michael", "Smith", admin, "0123445556");
         entityManager.persist(worker1);
         entityManager.flush();
 

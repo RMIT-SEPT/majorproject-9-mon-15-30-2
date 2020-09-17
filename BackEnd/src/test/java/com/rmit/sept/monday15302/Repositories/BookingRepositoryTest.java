@@ -47,7 +47,8 @@ public class BookingRepositoryTest {
         admin = new AdminDetails("Haircut", "Business", user3);
         entityManager.persist(admin);
 
-        worker = new WorkerDetails(user2, "Alex", "Abc", admin);
+        worker = new WorkerDetails(user2, "Alex", "Abc", admin,
+                "0123445556");
         entityManager.persist(worker);
 
         pastBooking = new Booking(customer, worker, BookingStatus.PAST_BOOKING,

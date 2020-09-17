@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import CustomerDashboard from './CustomerDashBoard';
+import CustomerDashboard from './Customer/CustomerDashBoard';
 import { Container, Alert } from 'react-bootstrap';
 
 class Account extends Component
