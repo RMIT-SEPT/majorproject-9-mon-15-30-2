@@ -33,7 +33,7 @@ jobs:
 
 integration-test-override-ci:
   jobs: 
-    build:
+    build-front:
       working_directory: ~/FrontEnd
       docker:
         - image: circleci/openjdk:8-jdk-stretch
