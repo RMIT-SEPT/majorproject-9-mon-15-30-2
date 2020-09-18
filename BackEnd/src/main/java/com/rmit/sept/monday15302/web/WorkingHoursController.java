@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class WorkingHoursController {
+
     @Autowired
     WorkingHoursService workingHoursService;
 
@@ -17,6 +18,12 @@ public class WorkingHoursController {
     public ResponseEntity<?> getOpeningHours(@PathVariable("adminId") String adminId,
                                              @PathVariable("day") int day) {
         return new ResponseEntity<>(workingHoursService.getOpeningHoursByDayAndAdmin(day, adminId),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/openinghours/{adminId}")
+    public ResponseEntity<?> getOpeningHoursByAdminID(@PathVariable("adminId") String adminId){
+        return new ResponseEntity<>(workingHoursService.getOpeningHoursByAdmin(adminId),
                 HttpStatus.OK);
     }
 
