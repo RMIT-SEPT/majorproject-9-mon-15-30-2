@@ -15,6 +15,7 @@ import Employees from './Components/Admin/Employees';
 import DefaultPage from './Components/DefaultPage';
 import AccountPage from './Components/Account';
 import AdminPage from './Components/Admin/AdminHomePage';
+import CreateSession from './Components/Admin/CreateSession';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                 <Route exact path= "/adminhomepage" component={AdminPage}/>
                 <Route exact path= "/editemployee/:id" component={EditEmployee}/>
                 <Route exact path= "/newbooking" component={NewBooking}/>
+                <Route exact path= "/createsession" component={CreateSession}/>
             </div>
         </Router>
     );
