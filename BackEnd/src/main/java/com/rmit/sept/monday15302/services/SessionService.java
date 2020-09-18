@@ -153,7 +153,8 @@ public class SessionService {
                 Date startTime = session.getStartTime();
                 Date endTime = session.getEndTime();
                 if(isWithinRange(newStartTime, startTime, endTime)
-                        || isWithinRange(newEndTime, startTime, endTime)) {
+                        || isWithinRange(newEndTime, startTime, endTime)
+                        || (newStartTime.getTime() < startTime.getTime() && newEndTime.getTime() > endTime.getTime())) {
                     if(!newEndTime.equals(startTime) && !newStartTime.equals(endTime)) {
                         throw new AdminDetailsException("New session is collapsed with session "
                                 + Utility.getTimeAsString(startTime) + "-" + Utility.getTimeAsString(endTime));
@@ -163,7 +164,7 @@ public class SessionService {
         }
     }
 
-    boolean isWithinRange(Date actual, Date start, Date end) {
+    public boolean isWithinRange(Date actual, Date start, Date end) {
         return actual.getTime() >= start.getTime() && actual.getTime() <= end.getTime();
     }
 

@@ -15,8 +15,8 @@ public class WorkingHoursController {
     WorkingHoursService workingHoursService;
 
     @GetMapping("/openinghours/{adminId}/{day}")
-    public ResponseEntity<?> getOpeningHours(@PathVariable("adminId") String adminId,
-                                             @PathVariable("day") int day) {
+    public ResponseEntity<?> getOpeningHoursByAdminIdAndDay(@PathVariable("adminId") String adminId,
+                                                            @PathVariable("day") int day) {
         return new ResponseEntity<>(workingHoursService.getOpeningHoursByDayAndAdmin(day, adminId),
                 HttpStatus.OK);
     }
