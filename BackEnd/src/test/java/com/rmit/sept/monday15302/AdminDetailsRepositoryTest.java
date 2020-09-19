@@ -70,13 +70,4 @@ public class AdminDetailsRepositoryTest {
         assert(adminDetailsRepository.getAdminIdByService("Nails").isEmpty());
     }
 
-    @Test
-    public void getAdminById_returnAdmin_ifAdminFound() {
-        assert(adminDetailsRepository.getAdminById(admin.getId()).equals(admin));
-    }
-
-    @Test
-    public void getAdminById_returnNull_ifNoAdminFound() {
-        assert(adminDetailsRepository.getAdminById("ADMIN123") == null);
-    }
 }

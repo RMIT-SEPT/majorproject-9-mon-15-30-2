@@ -66,7 +66,7 @@ public class WorkerDetailsServiceTest {
         Mockito.when(workerDetailsRepository.findAll())
                 .thenReturn(workers);
 
-        Mockito.when(workerDetailsRepository.getWorkersByAdminId(adminId))
+        Mockito.when(workerDetailsRepository.findByAdminId(adminId))
                 .thenReturn(workers);
 
         Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);
@@ -123,6 +123,12 @@ public class WorkerDetailsServiceTest {
         workerDetailsService.deleteWorker(workerId_1);
         // then
         Mockito.verify(workerDetailsRepository, times(1)).delete(worker1);
+    }
+
+    @Test(expected = WorkerDetailsException.class)
+    public void deleteWorker_throwException_ifNoWorkerFound()
+            throws WorkerDetailsException {
+        workerDetailsService.deleteWorker("Sale");
     }
 
     @Test

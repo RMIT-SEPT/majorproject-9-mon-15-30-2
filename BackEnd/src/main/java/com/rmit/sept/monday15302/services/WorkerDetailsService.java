@@ -37,7 +37,7 @@ public class WorkerDetailsService {
     public List<WorkerDetails> getWorkerByAdminIds(List<String> adminList) {
         List<WorkerDetails> workersList = new ArrayList<>();
         for (String adminId : adminList) {
-            workersList.addAll(workerDetailsRepository.getWorkersByAdminId(adminId));
+            workersList.addAll(workerDetailsRepository.findByAdminId(adminId));
         }
 
         if(workersList.size() == 0) {
@@ -92,7 +92,7 @@ public class WorkerDetailsService {
     }
 
     public List<EditWorker> getWorkersByAdminId(String adminId) {
-        List<WorkerDetails> toReturn = workerDetailsRepository.getWorkersByAdminId(adminId);
+        List<WorkerDetails> toReturn = workerDetailsRepository.findByAdminId(adminId);
         List<EditWorker> workers = new ArrayList<>();
         if(toReturn.isEmpty()) {
             throw new WorkerDetailsException("Admin with id '"+adminId+"' has no employees");

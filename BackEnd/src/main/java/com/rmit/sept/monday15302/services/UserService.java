@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public User getUserByUsername(String username) {
-        return userRepository.getUserByUsername(username);
+        return userRepository.findByUserName(username);
     }
 
     public User getUserById(String id) {

@@ -13,8 +13,7 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
     @Override
     List<WorkerDetails> findAll();
     
-    @Query("select worker from WorkerDetails worker where worker.admin.id = :adminId")
-    List<WorkerDetails> getWorkersByAdminId(String adminId);
+    List<WorkerDetails> findByAdminId(String adminId);
 
     @Query("select worker from WorkerDetails worker where worker.user.id = :id")
     WorkerDetails getWorkerById(String id);
