@@ -40,7 +40,7 @@ class Employees extends Component
 
     }
     render() {
-        if(this.state.allemployee == 0)
+        if(this.state.allemployee <= 0)
         {
             return (
                 <React.Fragment>
