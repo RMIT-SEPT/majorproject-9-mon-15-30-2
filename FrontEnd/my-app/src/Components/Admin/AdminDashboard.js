@@ -34,6 +34,11 @@ class AdminDashboard extends Component {
                                     Add New Employee
                                 </a>
                             </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/createsession">
+                                    Create New Session
+                                </a>
+                            </li>
                         </ul>
 
                         <ul className="navbar-nav ml-auto">

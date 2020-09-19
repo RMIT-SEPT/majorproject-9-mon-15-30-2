@@ -34,7 +34,7 @@ public class UserServiceTest {
         user = new User(username, "*", UserType.ADMIN);
         user.setId(userId);
 
-        Mockito.when(userRepository.getUserByUsername(username)).thenReturn(user);
+        Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         Mockito.when(userRepository.getUserById(userId)).thenReturn(user);
     }
 
@@ -71,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void existsByUsername_returnNull_ifUserNotFound() {
+    public void getUserByUsername_returnNull_ifUserNotFound() {
         assert(userService.getUserByUsername("worker") == null);
     }
 
@@ -88,7 +88,7 @@ public class UserServiceTest {
     
     @Test
     public void testDeleteUserByUsername() {
-        Mockito.when(userRepository.getUserByUsername(username)).thenReturn(user);
+        Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         // when
         userService.deleteByUsername(username);
         // then
