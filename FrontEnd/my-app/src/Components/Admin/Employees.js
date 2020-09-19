@@ -17,12 +17,15 @@ class Employees extends Component
     }
 
     deleteWorker(worker_id){
-        WorkerAction.deleteWorker(worker_id).then( res => {
+        WorkerAction.deleteWorker(worker_id).then((res) => { 
             this.setState({
                 allemployee: this.state.allemployee.filter(
                     allemployee => allemployee.id !== worker_id)});
+            this.props.history.push('/employees');
             alert("Delete successful");
-            this.props.history.push("/employees");
+          }, (err) => {
+            console.log(err.response.data.message);
+            this.setState({errorMessage: err.response.data.message});
         });
     }
 
@@ -40,7 +43,7 @@ class Employees extends Component
 
     }
     render() {
-        if(this.state.allemployee == 0)
+        if(this.state.allemployee <= 0)
         {
             return (
                 <React.Fragment>

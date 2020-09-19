@@ -25,7 +25,7 @@ class CurrentBookings extends Component
 
     render() 
     {
-        if(this.state.currentBookings === 0)
+        if(this.state.currentBookings <= 0)
         {
             return (
                 <React.Fragment>
