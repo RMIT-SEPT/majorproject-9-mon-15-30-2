@@ -16,5 +16,10 @@ class HandleSessions
         return axios.get("http://localhost:8080/openinghours/" + admin_id);
     }
 
+    getAvailableSessionByAdmin_id(admin_id)
+    {
+        return axios.get("http://localhost:8080/sessions/" + admin_id);
+    }
+
 }
 export default new HandleSessions()

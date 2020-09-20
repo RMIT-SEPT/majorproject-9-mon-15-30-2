@@ -184,7 +184,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
-                                                <option className="worker" key={allworker.id} value={allworker.id}> {allworker.fName}</option>
+                                                <option className="worker" key={allworker.id} value={allworker.id}> {allworker.fName} {allworker.lName}</option>
                                             )
                                         }
                                     </select>
