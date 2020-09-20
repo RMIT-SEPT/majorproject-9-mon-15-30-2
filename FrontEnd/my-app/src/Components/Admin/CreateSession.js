@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Workers from '../../actions/HandleWorkers';
 import HandleSession from '../../actions/HandleSessions';
 import AdminDashboard from '../Admin/AdminDashboard';
+import Table from 'react-bootstrap/Table';
 
 class CreateSession extends Component {
 
@@ -9,6 +10,7 @@ class CreateSession extends Component {
         super();
 
         this.state={
+            allavailablesessions:[],
             allopeninghours:[],
             allworker:[],
             day : "",
@@ -27,20 +29,25 @@ class CreateSession extends Component {
 
     onSubmit(e){
         e.preventDefault();
-        
-        const newsession = {
+        try {
+            const newsession = {
             day : this.state.day,
             startTime : this.state.startTime,
             endTime : this.state.endTime,
             workerId : this.state.workerId
+            }
+            
+            console.log(newsession);
+
+            HandleSession.createNewSession(newsession).then (res => {
+                this.props.history.push('/adminhomepage');
+                alert("New session is created");
+            });
+        } catch (error) {
+            console.log(error);
+            alert("Failed to create new session");
         }
         
-        console.log(newsession);
-
-        HandleSession.createNewSession(newsession).then (res => {
-            this.props.history.push('/adminhomepage');
-            alert("New session is created");
-        });
     }
 
     componentDidMount(){
@@ -51,20 +58,36 @@ class CreateSession extends Component {
         });
 
         HandleSession.getOpeningHoursByAdmin("1").then((res) => {
-            if(!res.data.empty)
-            {
-                this.setState({allopeninghours: res.data});
-                console.log(res.data);
-            }
-            else
-            {
-                console.log("Empty");
-            }
+        if(!res.data.empty)
+        {
+            console.log(res.data);
+            this.setState({allopeninghours: res.data});
+        }
+        else
+        {
+            console.log("Empty");
+        }
+        });
+
+        HandleSession.getAvailableSessionByAdmin_id("1").then((res) => {
+        if(!res.data.empty)
+        {
+            console.log(res.data);
+            this.setState({ allavailablesessions: res.data});
+        }
+        else
+        {
+            console.log("Empty");
+        }
         });
     }
 
     render() {
 
+        if(this.state.error)
+        {
+            return <h1>Error</h1>
+        }
         return (
             <React.Fragment>
                 <AdminDashboard/>
@@ -75,8 +98,53 @@ class CreateSession extends Component {
                             
                             <form onSubmit={this.onSubmit} >
 
-                                <h5>Select Service and Worker</h5>
-                                <hr/>
+                                <h5>Service</h5>
+                                <div>
+                                {
+                                    this.state.allopeninghours.map 
+                                    (
+                                        allopeninghours =>
+                                        <p>{allopeninghours.admin_id.service}</p>
+                                    )
+                                }
+                                </div>
+
+                                <h5>Opening Hours</h5>
+                                <div>
+                                {
+                                    this.state.allopeninghours.map 
+                                    (
+                                        allopeninghours =>
+                                        <p> {allopeninghours.startTime} - {allopeninghours.endTime}</p>
+                                    )
+                                }
+                                </div>
+
+                                <h5>Available Sessions</h5>
+                                
+                                <Table className="table pb-4" striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th className="th">Day</th>
+                                            <th className="th">Start Time</th>
+                                            <th className="th">End Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            this.state.allavailablesessions.map(
+                                                allavailablesessions => 
+                                                <tr key = {allavailablesessions.id}>
+                                                    <td> {allavailablesessions.day}</td>
+                                                    <td> {allavailablesessions.startTime}</td>   
+                                                    <td> {allavailablesessions.endTime}</td>
+                                                    
+                                                </tr>
+                                            )
+                                        }
+                                    </tbody>
+                                </Table>
+                  
 
                                 <h6>Choose Worker</h6>
                                 <div className="form-group">
@@ -85,29 +153,12 @@ class CreateSession extends Component {
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
-                                                <option className="workerId" key={allworker.id} value={allworker.id}> {allworker.fName}</option>
+                                                <option className="workerId" key={allworker.id} value={allworker.id}> {allworker.fName} {allworker.lName}</option>
                                             )
                                         }
                                     </select>
                                     
                                 </div>
-
-                                
-                                {
-                                    /*
-                                    <h6>Opening Hours</h6>
-                                    <div className="form-group">
-                                {
-                                    Object.keys(this.state.allopeninghours).map (
-                                        allopeninghours => 
-                                        <div className="allopeninghours" key={allopeninghours.day}>
-                                            {allopeninghours.startTime}
-                                        </div>
-                                    )
-                                }
-                                </div>
-                                    */
-                                }
 
                                 <h6>Day</h6>
                                 <div className="form-group">
@@ -124,6 +175,8 @@ class CreateSession extends Component {
                                             
                                     </select>
                                 </div>
+
+
 
                                 <h6>Start Time </h6>
                                 <div className="form-group">
