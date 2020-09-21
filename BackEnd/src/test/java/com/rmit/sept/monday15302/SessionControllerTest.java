@@ -28,7 +28,6 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SessionController.class)
@@ -72,15 +71,23 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void testGetSessionsByAdminId() throws Exception {
-        String adminId = "a1";
+    public void testGetSessionsByWorkerAndDay() throws Exception {
+        String workerId = "1";
+        int day = 4;
+        WorkerDetails worker = new WorkerDetails();
+        worker.setId(workerId);
+
+        Session session = new Session(worker, day, "08:00:00",
+                "09:00:00", "Haircut");
         List<Session> sessions = Arrays.asList(session);
-        given(service.getSessionsByAdminId(adminId)).willReturn(sessions);
-        mvc.perform(get("/sessions/{adminId}", adminId)
+        given(service.getSessionsByWorkerIdAndDay(workerId, day))
+                .willReturn(sessions);
+        mvc.perform(get("/sessions/{workerId}/{day}", workerId, day)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].day", is(1)))
+                .andExpect(jsonPath("$[0].day", is(day)))
                 .andExpect(jsonPath("$[0].startTime", is("08:00:00")));
     }
+
 }

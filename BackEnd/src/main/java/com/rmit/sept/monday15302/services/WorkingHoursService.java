@@ -5,8 +5,6 @@ import com.rmit.sept.monday15302.model.WorkingHours;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class WorkingHoursService {
     @Autowired
@@ -15,9 +13,4 @@ public class WorkingHoursService {
     public WorkingHours getOpeningHoursByDayAndAdmin(int day, String adminId) {
         return workingHoursRepository.findByAdmin_idAndDay(adminId, day);
     }
-
-    public List<WorkingHours> getOpeningHoursByAdmin(String adminId) {
-        return workingHoursRepository.findByAdmin_id(adminId);
-    }
-
 }

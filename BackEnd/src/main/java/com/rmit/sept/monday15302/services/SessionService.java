@@ -170,21 +170,6 @@ public class SessionService {
         return actual.getTime() >= start.getTime() && actual.getTime() <= end.getTime();
     }
 
-    public List<Session> getSessionsByAdminId(String adminId) {
-        List<WorkerDetails> workers = workerDetailsRepository.findByAdminId(adminId);
-        if(workers.isEmpty()) {
-            throw new AdminDetailsException("No workers found for admin id " + adminId);
-        }
-        List<Session> sessions = new ArrayList<>();
-        for(WorkerDetails worker : workers) {
-            sessions.addAll(sessionRepository.findByWorkerId(worker.getId()));
-        }
-        if(sessions.isEmpty()) {
-            throw new AdminDetailsException("No sessions found for admin id " + adminId);
-        }
-        return sessions;
-    }
-
     public List<Session> getSessionsByWorkerIdAndDay(String workerId, int day) {
         List<Session> sessions = sessionRepository.findByWorkerIdAndDay(workerId, day);
         if(sessions.isEmpty()) {

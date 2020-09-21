@@ -30,11 +30,6 @@ public class SessionController {
         return new ResponseEntity<>(sessionService.saveSession(session), HttpStatus.CREATED);
     }
 
-    @GetMapping("/sessions/{adminId}")
-    public ResponseEntity<?> getSessionsByAdminId(@PathVariable("adminId") String adminId) {
-        return new ResponseEntity<>(sessionService.getSessionsByAdminId(adminId), HttpStatus.OK);
-    }
-
     @GetMapping("/sessions/{workerId}/{day}")
     public ResponseEntity<?> getSessionsByWorkerIdAndDay(@PathVariable("workerId") String workerId,
                                                   @PathVariable("day") int day) {

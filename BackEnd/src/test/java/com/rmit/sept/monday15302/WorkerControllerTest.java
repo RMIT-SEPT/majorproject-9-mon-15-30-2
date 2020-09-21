@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -52,29 +51,6 @@ public class WorkerControllerTest {
     private AdminDetailsService adminDetailsService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    @Test
-    public void givenWorkers_whenGetAllWorkers_thenReturnJsonArray()
-            throws Exception {
-
-        WorkerDetails worker1 = new WorkerDetails();
-        worker1.setId("w1");
-        WorkerDetails worker2 = new WorkerDetails();
-        worker2.setId("w2");
-
-        List<WorkerDetails> workers = new ArrayList<>();
-        workers.add(worker1);
-        workers.add(worker2);
-
-        given(service.getAllWorkers()).willReturn(workers);
-
-        mvc.perform(get("/makebooking/allworkers")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(worker1.getId())))
-                .andExpect(jsonPath("$[1].id", is(worker2.getId())));
-    }
 
     @Test
     public void givenWorker_fetchOneWorkerById() throws Exception {

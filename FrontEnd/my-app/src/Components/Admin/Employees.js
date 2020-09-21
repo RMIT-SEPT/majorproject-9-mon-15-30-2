@@ -36,7 +36,7 @@ class Employees extends Component
     componentDidMount()
     {
         // WorkerAction.getAllWorkers().then((res) => {
-        WorkerAction.getWorkerByAdmin(1).then((res) => {
+        WorkerAction.getWorkerByAdmin(4).then((res) => {
             this.setState({allemployee: res.data});
             console.log(res.data);
         });
@@ -88,10 +88,6 @@ class Employees extends Component
                                             <td className="fName"> {allemployee.fName}</td>
                                             <td className="lName"> {allemployee.lName}</td>
                                             <td className="phoneNumber"> {allemployee.phoneNumber}</td>
-                                            {   
-                                            // <td> {allemployee.admin.service}</td>
-                                            // <td> {allemployee.admin.adminName}</td>
-                                            }
                                             <td>
                                                 <button style={{marginLeft: "10px"}} onClick={ () => this.editWorker(allemployee.id)} className="btn btn-info">Edit </button>
                                                 <button style={{marginLeft: "10px"}} onClick={ () => this.deleteWorker(allemployee.id)} className="btn btn-danger">Delete </button>

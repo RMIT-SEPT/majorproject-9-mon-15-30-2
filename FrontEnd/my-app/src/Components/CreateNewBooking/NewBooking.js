@@ -4,9 +4,6 @@ import Workers from '../../actions/HandleWorkers';
 import Services from '../../actions/HandleServices';
 import CustomerDashboard from '../Customer/CustomerDashBoard';
 import Booking from '../../actions/HandleBookings';
-import Table from 'react-bootstrap/Table';
-
-
 
 class NewBookings extends Component {
 
@@ -97,14 +94,14 @@ class NewBookings extends Component {
     {
         e.preventDefault();
 
-        const newbookings = {
+        const newbooking = {
             customer: {
                 id: "3",
-                fName: "customer",
-                lName: "one",
-                address: "Phnom Penh",
-                phoneNumber: 1234567,
-                email: "customer1@gmail.com",
+                fName: "Tom",
+                lName: "Hall",
+                address: "77 Latrobe St, Melbourne, Australia",
+                phoneNumber: 1117788890,
+                email: "tomHall@gmail.com",
                 hibernateLazyInitializer: {}
             },
             worker: {
@@ -120,17 +117,18 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.selectedSession.substring(0,10),
-            startTime: this.state.selectedSession.substring(10,18),
-            endTime: this.state.selectedSession.substring(18,27),
+            date: this.state.selectedSession.substring(6,16),
+            startTime: this.state.selectedSession.substring(17,25),
+            endTime: this.state.selectedSession.substring(26,34),
             service: this.state.service
         }
-        console.log(newbookings);
-        CreateBooking.createBooking(newbookings).then(res => {
+        console.log(newbooking);
+        CreateBooking.createBooking(newbooking).then(res => {
             alert("Booking successful");
             this.props.history.push("/currentbookings");
         }).catch(err => {
-            alert("Booking unsuccessful");
+            this.setState({errorMessage: err.response.data.message});
+            alert(err.response.data.message);
             this.props.history.push("/newbooking");
         });
     }
@@ -138,7 +136,7 @@ class NewBookings extends Component {
     componentDidMount(){
         
         Services.getAllServices().then((res) => {
-            this.setState({ allservices: res.data});
+            this.setState({allservices: res.data});
             console.log(res.data);
         });
 
@@ -192,7 +190,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option value={availableSessions.id}>Date:{availableSessions.date}{"     "}Start Time:{availableSessions.startTime}    End Time:{availableSessions.endTime}</option>
+                                                <option value={availableSessions.id}>Date: {availableSessions.date} {availableSessions.startTime}-{availableSessions.endTime}</option>
                                             )
                                         }
                                     </select>

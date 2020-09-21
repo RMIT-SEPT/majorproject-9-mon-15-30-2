@@ -119,7 +119,7 @@ public class BookingControllerTest {
         workers.add(worker2);
 
         given(adminDetailsService.getAdminIdByService(service)).willReturn(adminList);
-        given(workerDetailsService.getWorkerByAdminIds(adminList)).willReturn(workers);
+        given(workerDetailsService.getWorkersByAdminIds(adminList)).willReturn(workers);
 
         mvc.perform(get("/makebooking/byservice/{service}", service)
                 .contentType(MediaType.APPLICATION_JSON))

@@ -6,11 +6,5 @@ class HandleServices
   {
     return axios.get("http://localhost:8080/makebooking/allservices");
   }
-
-  getServiceByWorker(worker_id)
-  {
-    return axios.get("http://localhost:8080/makebooking/byworker/" + worker_id);
-  }
-
 }
 export default new HandleServices()

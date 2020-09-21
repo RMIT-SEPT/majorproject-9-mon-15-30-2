@@ -50,8 +50,7 @@ public class BookingService {
         for (Booking booking : bookings) {
             int toCompare = actualDate.compareTo(booking.getDate());
             if (toCompare == 0) {
-                Date d2 = Utility.convertStringToTime(booking.getEndTime().toString());
-                long elapsed = actualTime.getTime() - d2.getTime();
+                long elapsed = actualTime.getTime() - booking.getEndTime().getTime();
                 if (elapsed > 0) {
                     try {
                         bookingRepository.updateBookingStatus(booking.getId(),
@@ -81,7 +80,7 @@ public class BookingService {
     public Booking saveOrUpdateBooking(Booking booking) {
         try {
             return bookingRepository.save(booking);
-        } catch (Exception e) {
+        } catch (BookingException e) {
             throw new BookingException("Cannot create a booking");
         }
     }

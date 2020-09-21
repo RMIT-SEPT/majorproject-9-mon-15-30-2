@@ -46,9 +46,9 @@ public class BookingController {
     }
 
     @GetMapping("makebooking/byservice/{service}")
-    public ResponseEntity<?> getWorkerByService(@PathVariable("service") String service) {
+    public ResponseEntity<?> getWorkersByService(@PathVariable("service") String service) {
         List<String> adminList = adminDetailsService.getAdminIdByService(service);
-        List<WorkerDetails> workersList = workerDetailsService.getWorkerByAdminIds(adminList);
+        List<WorkerDetails> workersList = workerDetailsService.getWorkersByAdminIds(adminList);
         return new ResponseEntity<>(workersList, HttpStatus.OK);
     }
 

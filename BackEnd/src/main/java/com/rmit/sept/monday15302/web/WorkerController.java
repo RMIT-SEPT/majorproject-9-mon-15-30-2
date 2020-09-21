@@ -35,12 +35,6 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
-    @GetMapping("makebooking/allworkers")
-    public ResponseEntity<?> getAllWorkers() {
-        return new ResponseEntity<>(workerDetailsService.getAllWorkers(),
-                HttpStatus.OK);
-    }
-
     @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
         return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);

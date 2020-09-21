@@ -50,10 +50,18 @@ public class UserServiceTest {
 
     @Test
     public void createUser_returnTrue_ifUserAdded() {
-        User user = new User(username, "*", UserType.CUSTOMER);
         userService.saveUser(user);
         Mockito.verify(userRepository,
                 times(1)).save(user);
+    }
+
+    @Test(expected = UserException.class)
+    public void createUser_throwException_ifUserNotAdded()
+            throws UserException {
+        Mockito.doThrow(new UserException("Cannot create a user"))
+                .when(userRepository)
+                .save(user);
+        userService.saveUser(user);
     }
 
     @Test

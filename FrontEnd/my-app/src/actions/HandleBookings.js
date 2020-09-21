@@ -2,9 +2,9 @@ import axios from "axios";
 
 class HandleBookings 
 {
-    createBooking(booking_id) 
+    createBooking(booking)
     {
-      return axios.post("http://localhost:8080/makebooking/create", booking_id, {withCredentials: false},
+      return axios.post("http://localhost:8080/makebooking/create", booking, {withCredentials: false},
         { 
           headers: 
           {

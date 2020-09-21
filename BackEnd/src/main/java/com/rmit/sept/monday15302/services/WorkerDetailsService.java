@@ -20,10 +20,6 @@ public class WorkerDetailsService {
     @Autowired
     private UserService userService;
 
-    public List<WorkerDetails> getAllWorkers() {
-        return workerDetailsRepository.findAll();
-    }
-
     public EditWorker getWorkerById(String id) {
         WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
         if(worker == null) {
@@ -34,7 +30,7 @@ public class WorkerDetailsService {
                 worker.getlName(), worker.getPhoneNumber());
     }
 
-    public List<WorkerDetails> getWorkerByAdminIds(List<String> adminList) {
+    public List<WorkerDetails> getWorkersByAdminIds(List<String> adminList) {
         List<WorkerDetails> workersList = new ArrayList<>();
         for (String adminId : adminList) {
             workersList.addAll(workerDetailsRepository.findByAdminId(adminId));
