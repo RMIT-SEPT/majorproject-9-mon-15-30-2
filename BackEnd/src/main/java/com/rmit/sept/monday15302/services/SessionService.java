@@ -100,6 +100,7 @@ public class SessionService {
         for(int i = 0; i != toReturn.size(); i++) {
             toReturn.get(i).setId(i);
         }
+
         return toReturn;
     }
 

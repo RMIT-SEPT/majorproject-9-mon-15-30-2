@@ -16,11 +16,11 @@ public class SessionReturn {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     @Temporal(TemporalType.TIME)
     private Date startTime;
 
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     @Temporal(TemporalType.TIME)
     private Date endTime;
 
