@@ -5,6 +5,7 @@ import com.rmit.sept.monday15302.Repositories.SessionRepository;
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.exception.AdminDetailsException;
 import com.rmit.sept.monday15302.exception.BookingException;
+import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.Session;
@@ -179,6 +180,14 @@ public class SessionService {
         }
         if(sessions.isEmpty()) {
             throw new AdminDetailsException("No sessions found for admin id " + adminId);
+        }
+        return sessions;
+    }
+
+    public List<Session> getSessionsByWorkerIdAndDay(String workerId, int day) {
+        List<Session> sessions = sessionRepository.findByWorkerIdAndDay(workerId, day);
+        if(sessions.isEmpty()) {
+            throw new WorkerDetailsException("No sessions found");
         }
         return sessions;
     }
