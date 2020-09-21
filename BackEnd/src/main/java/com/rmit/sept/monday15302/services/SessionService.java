@@ -5,6 +5,7 @@ import com.rmit.sept.monday15302.Repositories.SessionRepository;
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.exception.AdminDetailsException;
 import com.rmit.sept.monday15302.exception.BookingException;
+import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.Session;
@@ -96,6 +97,10 @@ public class SessionService {
             throw new BookingException("Worker id " + workerId + " has no available sessions");
         }
 
+        for(int i = 0; i != toReturn.size(); i++) {
+            toReturn.get(i).setId(i);
+        }
+
         return toReturn;
     }
 
@@ -104,9 +109,6 @@ public class SessionService {
         String adminId = worker.getAdmin().getId();
         String service = adminDetailsRepository.getServiceByAdminId(adminId);
 
-        if(worker == null || service == null) {
-            throw new NullPointerException("Worker or service not found");
-        }
         Session newSession = new Session(worker, session.getDay(), session.getStartTime(),
                 session.getEndTime(), service);
         // Validate hours
@@ -179,6 +181,14 @@ public class SessionService {
         }
         if(sessions.isEmpty()) {
             throw new AdminDetailsException("No sessions found for admin id " + adminId);
+        }
+        return sessions;
+    }
+
+    public List<Session> getSessionsByWorkerIdAndDay(String workerId, int day) {
+        List<Session> sessions = sessionRepository.findByWorkerIdAndDay(workerId, day);
+        if(sessions.isEmpty()) {
+            throw new WorkerDetailsException("No sessions found");
         }
         return sessions;
     }

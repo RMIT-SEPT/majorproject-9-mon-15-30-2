@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Workers from '../../actions/HandleWorkers';
 import HandleSession from '../../actions/HandleSessions';
 import AdminDashboard from '../Admin/AdminDashboard';
+import Table from 'react-bootstrap/Table';
 
 class CreateSession extends Component {
 
@@ -9,20 +10,46 @@ class CreateSession extends Component {
         super();
 
         this.state={
-            allopeninghours:[],
+            openinghours:"",
+            allavailablesessions:[],
             allworker:[],
             day : "",
             startTime :"",
             endTime :"",
-            workerId :""
+            workerId :"",
+            errorMessage:""
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleDaySelection = this.handleDaySelection.bind(this);
     }
 
     onChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
+    }
+
+    handleDaySelection(e)
+    {
+        this.setState({[e.target.name]: e.target.value});
+        const selectedDay = e.target.value;
+        const selectedworker_id = this.state.workerId;
+
+        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay).then((res) => {
+            this.setState({allavailablesessions: res.data});
+        }).catch(err => {
+            console.log(err.response.data.message);
+            this.setState({allavailablesessions: null});
+        });
+        
+        HandleSession.getOpeningHoursByAdminAndDay("1", selectedDay).then((res) =>
+        {
+            this.setState({openinghours: res.data});
+        }).catch(err => {
+            this.setState({openinghours: null});
+            console.log(err.response.data.message);
+        })
+        
     }
 
     onSubmit(e){
@@ -33,14 +60,15 @@ class CreateSession extends Component {
             startTime : this.state.startTime,
             endTime : this.state.endTime,
             workerId : this.state.workerId
-        }
-        
+        } 
         console.log(newsession);
-
         HandleSession.createNewSession(newsession).then (res => {
             this.props.history.push('/adminhomepage');
-            alert("New session is created");
+            alert("New session is created successfully");
+        }).catch(err => {
+            alert("New session is created unsuccessfully");
         });
+       
     }
 
     componentDidMount(){
@@ -49,22 +77,14 @@ class CreateSession extends Component {
             this.setState({ allworker: res.data});
             console.log(res.data);
         });
-
-        HandleSession.getOpeningHoursByAdmin("1").then((res) => {
-            if(!res.data.empty)
-            {
-                this.setState({allopeninghours: res.data});
-                console.log(res.data);
-            }
-            else
-            {
-                console.log("Empty");
-            }
-        });
     }
 
     render() {
 
+        if(this.state.error)
+        {
+            return <h1>Error</h1>
+        }
         return (
             <React.Fragment>
                 <AdminDashboard/>
@@ -75,8 +95,9 @@ class CreateSession extends Component {
                             
                             <form onSubmit={this.onSubmit} >
 
-                                <h5>Select Service and Worker</h5>
-                                <hr/>
+                                {/*Hardcode because no admin value*/}
+                                <h5>Service</h5>
+                                <p>Haircut</p>
 
                                 <h6>Choose Worker</h6>
                                 <div className="form-group">
@@ -85,33 +106,16 @@ class CreateSession extends Component {
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
-                                                <option className="workerId" key={allworker.id} value={allworker.id}> {allworker.fName}</option>
+                                                <option className="workerId" key={allworker.id} value={allworker.id}> {allworker.fName} {allworker.lName}</option>
                                             )
                                         }
                                     </select>
                                     
                                 </div>
 
-                                
-                                {
-                                    /*
-                                    <h6>Opening Hours</h6>
-                                    <div className="form-group">
-                                {
-                                    Object.keys(this.state.allopeninghours).map (
-                                        allopeninghours => 
-                                        <div className="allopeninghours" key={allopeninghours.day}>
-                                            {allopeninghours.startTime}
-                                        </div>
-                                    )
-                                }
-                                </div>
-                                    */
-                                }
-
                                 <h6>Day</h6>
                                 <div className="form-group">
-                                    <select id="inputState" className="form-control" name="day" value= {this.state.day} onChange = {this.onChange}  required>
+                                    <select id="inputState" className="form-control" name="day" value= {this.state.day} onChange = {this.handleDaySelection}  required>
                                         <option value="unknown" defaultValue>Choose Day</option>
                                         
                                         <option value="1">Sunday</option>
@@ -125,6 +129,41 @@ class CreateSession extends Component {
                                     </select>
                                 </div>
 
+                                {
+                                    this.state.openinghours &&
+                                    <div>
+                                    <h5>Opening Hours</h5>
+                                        <p>{this.state.openinghours.startTime} - {this.state.openinghours.endTime}</p>
+                                    </div>
+                                }
+                                
+                                {
+                                    this.state.allavailablesessions &&
+                                    <div>
+                                        <h5>Available Sessions</h5>
+                                        <Table className="table pb-4" striped bordered hover size="sm">
+                                        <thead>
+                                            <tr>
+                                                <th className="th">Start Time</th>
+                                                <th className="th">End Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                this.state.allavailablesessions.map(
+                                                    allavailablesessions => 
+                                                    <tr key = {allavailablesessions.id}>
+                                                        <td> {allavailablesessions.startTime}</td>   
+                                                        <td> {allavailablesessions.endTime}</td>
+                                                    </tr>
+                                                )
+                                            }
+                                        </tbody>
+                                        </Table>
+                                    </div>
+                                    
+                                }
+                                
                                 <h6>Start Time </h6>
                                 <div className="form-group">
                                     <input type="time" className="form-control form-control-lg" placeholder="HH:mm:ss" name="startTime" value={this.state.startTime} onChange={this.onChange} required/>

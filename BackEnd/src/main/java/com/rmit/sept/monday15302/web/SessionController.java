@@ -34,4 +34,10 @@ public class SessionController {
     public ResponseEntity<?> getSessionsByAdminId(@PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(sessionService.getSessionsByAdminId(adminId), HttpStatus.OK);
     }
+
+    @GetMapping("/sessions/{workerId}/{day}")
+    public ResponseEntity<?> getSessionsByWorkerIdAndDay(@PathVariable("workerId") String workerId,
+                                                  @PathVariable("day") int day) {
+        return new ResponseEntity<>(sessionService.getSessionsByWorkerIdAndDay(workerId, day), HttpStatus.OK);
+    }
 }
