@@ -97,7 +97,6 @@ public class SessionService {
             throw new BookingException("Worker id " + workerId + " has no available sessions");
         }
 
-
         for(int i = 0; i != toReturn.size(); i++) {
             toReturn.get(i).setId(i);
         }
