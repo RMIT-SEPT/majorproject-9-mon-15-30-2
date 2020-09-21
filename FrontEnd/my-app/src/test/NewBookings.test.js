@@ -65,20 +65,4 @@ describe('<NewBookings /> Unit Test', () =>
         expect(wrapper.find('.sessionStart')).toHaveLength(1);
     });
 
-    it('handleServiceChange', () =>
-    {
-        const newBookings = new NewBookings();
-        const target1 = {
-            name: "n",
-            value: "v"
-        };
-        const e1 = {
-            target: target1
-        };
-        newBookings.handleServiceChange(e1);
-        
-        expect(newBookings.state.allworker).toHaveLength(1);
-        
-    });
-
 })
