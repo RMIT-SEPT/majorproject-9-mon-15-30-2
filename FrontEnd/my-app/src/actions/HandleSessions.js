@@ -16,9 +16,21 @@ class HandleSessions
         return axios.get("http://localhost:8080/openinghours/" + admin_id);
     }
 
+    getOpeningHoursByAdminAndDay(admin_id, day)
+    {
+        console.log("http://localhost:8080/openinghours/"+ admin_id + "/" + day);
+        return axios.get("http://localhost:8080/openinghours/"+ admin_id + "/" + day);
+    }
+
     getAvailableSessionByAdmin_id(admin_id)
     {
         return axios.get("http://localhost:8080/sessions/" + admin_id);
+    }
+
+    getAvailableSessionByWorkerIdAndDay(worker_id, day)
+    {
+        return axios.get("http://localhost:8080/sessions/" +
+        worker_id + "/" + day);
     }
 
 }

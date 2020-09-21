@@ -4,6 +4,7 @@ import Workers from '../../actions/HandleWorkers';
 import Services from '../../actions/HandleServices';
 import CustomerDashboard from '../Customer/CustomerDashBoard';
 import Booking from '../../actions/HandleBookings';
+import Table from 'react-bootstrap/Table';
 
 
 
@@ -13,6 +14,7 @@ class NewBookings extends Component {
         super();
 
         this.state={
+            selectedSession:[],
             allworker: [],
             allservices: [],
             availableSessions:[],
@@ -92,9 +94,11 @@ class NewBookings extends Component {
         })
     }
 
+    
     onChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
+        console.log(e.target.value);
     }
 
     onSubmit(e){
@@ -124,14 +128,17 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.start_date,
-            startTime: this.state.start_time + ":00",
-            endTime: this.state.end_time + ":00",
+            date: this.state.selectedSession.date,
+            startTime: this.state.selectedSession.startTime,
+            endTime: this.state.selectedSession.endTime,
             service: this.state.service
         }
-        console.log("start date " + this.state.start_date);
-        console.log("start time " + this.state.start_time);
-        console.log("end time " + this.state.end_time);
+        // console.log("start date " + this.state.start_date);
+        // console.log("start time " + this.state.start_time);
+        // console.log("end time " + this.state.end_time);
+        console.log("start date: " + this.state.selectedSession[0]);
+        console.log("start time: " + this.state.selectedSession[1]);
+        console.log("end time: " + this.state.selectedSession[2]);
         console.log(newbookings);
         CreateBooking.createBooking(newbookings).then(res => {
             alert("Booking successful");
@@ -193,16 +200,41 @@ class NewBookings extends Component {
                                 <h6>Sessions</h6>
 
                                 <div className="form-group">
-                                    <select id="inputState" className="form-control" name="start_date" value= {this.state.start_date} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose Date</option>
+                                    <select id="inputState" className="form-control" name="selectedSession" value={this.state.selectedSession} onChange = {this.onChange} required>
+                                        <option value="unknown" defaultValue>Choose Session</option>
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option className="sessionDate" key={availableSessions.id} value={availableSessions.date}> {availableSessions.date}</option>
+                                                <option value={availableSessions}> {availableSessions.date}{availableSessions.startTime}{availableSessions.endTime}</option>
                                             )
                                         }
                                     </select>
                                 </div>
+                                
+                                
+
+                                {/*
+                                
+                                <Table className="table pb-2 " borderless>
+                                {
+
+                                    this.state.availableSessions.map(
+                                        availableSessions => 
+                                        <tbody>
+                                        <tr>
+                                            <td key={availableSessions.id} value={this.state.selectedSession} name="selectedSession" onChange={this.onChange}>
+                                            
+                                            <input type="radio" value={this.state.selectedSession} name="selectedSession"/>
+                                                {availableSessions.date}{availableSessions.startTime}{availableSessions.endTime}
+                                            </td>
+                                            
+                                        </tr>
+                                        </tbody>
+                                    )
+                                    
+                                }
+                                </Table>
+                                
 
                                 <div className="form-group">
                                     <select id="inputState" className="form-control" name="start_time" value= {this.state.start_time} onChange = {this.onChange} required>
@@ -227,6 +259,8 @@ class NewBookings extends Component {
                                         }
                                     </select>
                                 </div>
+                                */}
+                                
 
                                 <input type="submit" className="btn btn-primary btn-block mt-4" />
                             </form>

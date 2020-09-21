@@ -10,8 +10,9 @@ class CreateSession extends Component {
         super();
 
         this.state={
+            openinghours:"",
             allavailablesessions:[],
-            allopeninghours:[],
+            allservice:[],
             allworker:[],
             day : "",
             startTime :"",
@@ -21,6 +22,7 @@ class CreateSession extends Component {
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleDaySelection = this.handleDaySelection.bind(this);
     }
 
     onChange(e)
@@ -28,14 +30,37 @@ class CreateSession extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
+    handleDaySelection(e)
+    {
+        this.setState({[e.target.name]: e.target.value});
+        const selectedDay = e.target.value;
+        const selectedworker_id = this.state.workerId;
+        console.log("Selected worker Id: " + selectedworker_id);
+
+        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay).then((res) => {
+            this.setState({allavailablesessions: res.data});
+        }).catch(err => {
+            alert(err.response.data.message);
+            this.setState({allavailablesessions: null});
+        });
+        
+        HandleSession.getOpeningHoursByAdminAndDay("1", selectedDay).then((res) =>
+        {
+            this.setState({openinghours: res.data});
+        }).catch(err => {
+            this.setState({openinghours: null});
+        })
+        
+    }
+
     onSubmit(e){
         e.preventDefault();
         
         const newsession = {
-        day : this.state.day,
-        startTime : this.state.startTime,
-        endTime : this.state.endTime,
-        workerId : this.state.workerId
+            day : this.state.day,
+            startTime : this.state.startTime,
+            endTime : this.state.endTime,
+            workerId : this.state.workerId
         }
         
         console.log(newsession);
@@ -62,7 +87,7 @@ class CreateSession extends Component {
         if(!res.data.empty)
         {
             console.log(res.data);
-            this.setState({allopeninghours: res.data});
+            this.setState({allservice: res.data});
         }
         else
         {
@@ -70,21 +95,11 @@ class CreateSession extends Component {
         }
         });
 
-        HandleSession.getAvailableSessionByAdmin_id("1").then((res) => {
-        if(!res.data.empty)
-        {
-            console.log(res.data);
-            this.setState({ allavailablesessions: res.data});
-        }
-        else
-        {
-            console.log("Empty");
-        }
-        });
+
+        
     }
 
     render() {
-
 
         if(this.state.error)
         {
@@ -100,54 +115,9 @@ class CreateSession extends Component {
                             
                             <form onSubmit={this.onSubmit} >
 
+                                {/*Hardcode because no admin value*/}
                                 <h5>Service</h5>
-                                <div>
-                                {
-                                    this.state.allopeninghours.map 
-                                    (
-                                        allopeninghours =>
-                                        <p>{allopeninghours.admin_id.service}</p>
-                                    )
-                                    // <p>{this.state.allopeninghours[0].id}</p>
-                                }
-                                </div>
-
-                                <h5>Opening Hours</h5>
-                                <div>
-                                {
-                                    
-                                    this.state.allopeninghours.map 
-                                    (
-                                        allopeninghours =>
-                                        <p> {allopeninghours.startTime} - {allopeninghours.endTime}</p>
-                                    )
-                                }
-                                </div>
-
-                                <h5>Available Sessions</h5>
-                                
-                                <Table className="table pb-4" striped bordered hover size="sm">
-                                    <thead>
-                                        <tr>
-                                            <th className="th">Day</th>
-                                            <th className="th">Start Time</th>
-                                            <th className="th">End Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            this.state.allavailablesessions.map(
-                                                allavailablesessions => 
-                                                <tr key = {allavailablesessions.id}>
-                                                    <td> {allavailablesessions.day}</td>
-                                                    <td> {allavailablesessions.startTime}</td>   
-                                                    <td> {allavailablesessions.endTime}</td>
-                                                </tr>
-                                            )
-                                        }
-                                    </tbody>
-                                </Table>
-                  
+                                <p>Haircut</p>
 
                                 <h6>Choose Worker</h6>
                                 <div className="form-group">
@@ -165,7 +135,7 @@ class CreateSession extends Component {
 
                                 <h6>Day</h6>
                                 <div className="form-group">
-                                    <select id="inputState" className="form-control" name="day" value= {this.state.day} onChange = {this.onChange}  required>
+                                    <select id="inputState" className="form-control" name="day" value= {this.state.day} onChange = {this.handleDaySelection}  required>
                                         <option value="unknown" defaultValue>Choose Day</option>
                                         
                                         <option value="1">Sunday</option>
@@ -179,8 +149,44 @@ class CreateSession extends Component {
                                     </select>
                                 </div>
 
-
-
+                                
+                                {
+                                    this.state.openinghours &&
+                                    <div>
+                                    <h5>Opening Hours</h5>
+                                        <p>{this.state.openinghours.startTime} - {this.state.openinghours.endTime}</p>
+                                    </div>
+                                }
+                                
+                                
+                                {
+                                    this.state.allavailablesessions &&
+                                    
+                                    <div>
+                                        <h5>Available Sessions</h5>
+                                        <Table className="table pb-4" striped bordered hover size="sm">
+                                        <thead>
+                                            <tr>
+                                                <th className="th">Start Time</th>
+                                                <th className="th">End Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                this.state.allavailablesessions.map(
+                                                    allavailablesessions => 
+                                                    <tr key = {allavailablesessions.id}>
+                                                        <td> {allavailablesessions.startTime}</td>   
+                                                        <td> {allavailablesessions.endTime}</td>
+                                                    </tr>
+                                                )
+                                            }
+                                        </tbody>
+                                        </Table>
+                                    </div>
+                                    
+                                }
+                                
                                 <h6>Start Time </h6>
                                 <div className="form-group">
                                     <input type="time" className="form-control form-control-lg" placeholder="HH:mm:ss" name="startTime" value={this.state.startTime} onChange={this.onChange} required/>

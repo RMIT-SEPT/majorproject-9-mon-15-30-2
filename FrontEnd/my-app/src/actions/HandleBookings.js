@@ -21,8 +21,8 @@ class HandleBookings
   }
 
   getAvailableSessionsByWorkerAndService(worker_id, service){
-    console.log("http://localhost:8080//makebooking/sessions/" + worker_id + "/" + service);
-    return axios.get("http://localhost:8080//makebooking/sessions/" + worker_id + "/" + service);
+    console.log("http://localhost:8080/makebooking/sessions/" + worker_id + "/" + service);
+    return axios.get("http://localhost:8080/makebooking/sessions/" + worker_id + "/" + service);
     
   }
 

@@ -36,7 +36,7 @@ public class SessionController {
     }
 
     @GetMapping("/sessions/{workerId}/{day}")
-    public ResponseEntity<?> getSessionsByAdminId(@PathVariable("workerId") String workerId,
+    public ResponseEntity<?> getSessionsByWorkerIdAndDay(@PathVariable("workerId") String workerId,
                                                   @PathVariable("day") int day) {
         return new ResponseEntity<>(sessionService.getSessionsByWorkerIdAndDay(workerId, day), HttpStatus.OK);
     }
