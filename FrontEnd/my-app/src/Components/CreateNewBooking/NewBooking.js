@@ -10,7 +10,8 @@ import Table from 'react-bootstrap/Table';
 
 class NewBookings extends Component {
 
-    constructor(){
+    constructor()
+    {
         super();
 
         this.state={
@@ -51,13 +52,10 @@ class NewBookings extends Component {
         this.handleWorkerSelection = this.handleWorkerSelection.bind(this);
     }
 
-
     handleServiceChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
         const servicevalue = e.target.value;
-
-        console.log("Service value selected: " + servicevalue);
 
         Workers.getWorkerByService(servicevalue).then((res) => {
             if(!res.data.empty)
@@ -68,18 +66,14 @@ class NewBookings extends Component {
             else{
                 console.log("Empty");
             }
-            
         });
     }
 
     handleWorkerSelection(e)
     {
         this.setState({[e.target.name]: e.target.value});
-
         const worker_id = e.target.value;
         const servicevalue = this.state.service;
-        console.log("Selected worker id: " + worker_id);
-        console.log("Selected service: " + servicevalue);
 
         Booking.getAvailableSessionsByWorkerAndService(worker_id, servicevalue).then((res) => {
             if(!res.data.empty)
@@ -94,18 +88,16 @@ class NewBookings extends Component {
         })
     }
 
-    
     onChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
-        console.log(e.target.value);
     }
 
-    onSubmit(e){
+    onSubmit(e)
+    {
         e.preventDefault();
-        
-        const newbookings = {
 
+        const newbookings = {
             customer: {
                 id: "3",
                 fName: "customer",
@@ -128,21 +120,18 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.selectedSession.date,
-            startTime: this.state.selectedSession.startTime,
-            endTime: this.state.selectedSession.endTime,
+            date: this.state.selectedSession.substring(0,10),
+            startTime: this.state.selectedSession.substring(10,18),
+            endTime: this.state.selectedSession.substring(18,27),
             service: this.state.service
         }
-        // console.log("start date " + this.state.start_date);
-        // console.log("start time " + this.state.start_time);
-        // console.log("end time " + this.state.end_time);
-        console.log("start date: " + this.state.selectedSession[0]);
-        console.log("start time: " + this.state.selectedSession[1]);
-        console.log("end time: " + this.state.selectedSession[2]);
         console.log(newbookings);
         CreateBooking.createBooking(newbookings).then(res => {
             alert("Booking successful");
             this.props.history.push("/currentbookings");
+        }).catch(err => {
+            alert("Booking unsuccessful");
+            this.props.history.push("/newbooking");
         });
     }
 
@@ -184,7 +173,6 @@ class NewBookings extends Component {
 
                                 
                                 <h6>Staff</h6>
-                                
                                 <div className="form-group">
                                     <select id="inputState" className="form-control" name="worker" value= {this.state.worker} onChange = {this.handleWorkerSelection}  required>
                                         <option value="unknown" defaultValue>Choose Staff</option>
@@ -198,69 +186,17 @@ class NewBookings extends Component {
                                 </div>
 
                                 <h6>Sessions</h6>
-
                                 <div className="form-group">
                                     <select id="inputState" className="form-control" name="selectedSession" value={this.state.selectedSession} onChange = {this.onChange} required>
                                         <option value="unknown" defaultValue>Choose Session</option>
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option value={availableSessions}> {availableSessions.date}{availableSessions.startTime}{availableSessions.endTime}</option>
+                                                <option value={availableSessions.id}>Date:{availableSessions.date}{"     "}Start Time:{availableSessions.startTime}    End Time:{availableSessions.endTime}</option>
                                             )
                                         }
                                     </select>
                                 </div>
-                                
-                                
-
-                                {/*
-                                
-                                <Table className="table pb-2 " borderless>
-                                {
-
-                                    this.state.availableSessions.map(
-                                        availableSessions => 
-                                        <tbody>
-                                        <tr>
-                                            <td key={availableSessions.id} value={this.state.selectedSession} name="selectedSession" onChange={this.onChange}>
-                                            
-                                            <input type="radio" value={this.state.selectedSession} name="selectedSession"/>
-                                                {availableSessions.date}{availableSessions.startTime}{availableSessions.endTime}
-                                            </td>
-                                            
-                                        </tr>
-                                        </tbody>
-                                    )
-                                    
-                                }
-                                </Table>
-                                
-
-                                <div className="form-group">
-                                    <select id="inputState" className="form-control" name="start_time" value= {this.state.start_time} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose Start Time</option>
-                                        {
-                                            this.state.availableSessions.map(
-                                                availableSessions => 
-                                                <option className="sessionStart" key={availableSessions.id} value={availableSessions.startTime}> {availableSessions.startTime}</option>
-                                            )
-                                        }
-                                    </select>
-                                </div>
-
-                                <div className="form-group">
-                                    <select id="inputState" className="form-control" name="end_time" value= {this.state.end_time} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose End Time</option>
-                                        {
-                                            this.state.availableSessions.map(
-                                                availableSessions => 
-                                                <option key={availableSessions.id} value={availableSessions.endTime}> {availableSessions.endTime}</option>
-                                            )
-                                        }
-                                    </select>
-                                </div>
-                                */}
-                                
 
                                 <input type="submit" className="btn btn-primary btn-block mt-4" />
                             </form>

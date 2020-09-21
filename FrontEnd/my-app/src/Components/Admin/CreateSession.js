@@ -12,7 +12,6 @@ class CreateSession extends Component {
         this.state={
             openinghours:"",
             allavailablesessions:[],
-            allservice:[],
             allworker:[],
             day : "",
             startTime :"",
@@ -35,12 +34,11 @@ class CreateSession extends Component {
         this.setState({[e.target.name]: e.target.value});
         const selectedDay = e.target.value;
         const selectedworker_id = this.state.workerId;
-        console.log("Selected worker Id: " + selectedworker_id);
 
         HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay).then((res) => {
             this.setState({allavailablesessions: res.data});
         }).catch(err => {
-            alert(err.response.data.message);
+            console.log(err.response.data.message);
             this.setState({allavailablesessions: null});
         });
         
@@ -49,6 +47,7 @@ class CreateSession extends Component {
             this.setState({openinghours: res.data});
         }).catch(err => {
             this.setState({openinghours: null});
+            console.log(err.response.data.message);
         })
         
     }
@@ -61,19 +60,15 @@ class CreateSession extends Component {
             startTime : this.state.startTime,
             endTime : this.state.endTime,
             workerId : this.state.workerId
-        }
-        
+        } 
         console.log(newsession);
-
         HandleSession.createNewSession(newsession).then (res => {
             this.props.history.push('/adminhomepage');
-            alert("New session is created");
+            alert("New session is created successfully");
         }).catch(err => {
-            this.setState({errorMessage: err.message});
-            alert(err.message);
+            alert("New session is created unsuccessfully");
         });
        
-        
     }
 
     componentDidMount(){
@@ -82,21 +77,6 @@ class CreateSession extends Component {
             this.setState({ allworker: res.data});
             console.log(res.data);
         });
-
-        HandleSession.getOpeningHoursByAdmin("1").then((res) => {
-        if(!res.data.empty)
-        {
-            console.log(res.data);
-            this.setState({allservice: res.data});
-        }
-        else
-        {
-            console.log("Empty");
-        }
-        });
-
-
-        
     }
 
     render() {
@@ -149,7 +129,6 @@ class CreateSession extends Component {
                                     </select>
                                 </div>
 
-                                
                                 {
                                     this.state.openinghours &&
                                     <div>
@@ -158,10 +137,8 @@ class CreateSession extends Component {
                                     </div>
                                 }
                                 
-                                
                                 {
                                     this.state.allavailablesessions &&
-                                    
                                     <div>
                                         <h5>Available Sessions</h5>
                                         <Table className="table pb-4" striped bordered hover size="sm">
