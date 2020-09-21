@@ -97,6 +97,11 @@ public class SessionService {
             throw new BookingException("Worker id " + workerId + " has no available sessions");
         }
 
+
+        for(int i = 0; i != toReturn.size(); i++) {
+            toReturn.get(i).setId(i);
+        }
+
         return toReturn;
     }
 
@@ -105,9 +110,6 @@ public class SessionService {
         String adminId = worker.getAdmin().getId();
         String service = adminDetailsRepository.getServiceByAdminId(adminId);
 
-        if(worker == null || service == null) {
-            throw new NullPointerException("Worker or service not found");
-        }
         Session newSession = new Session(worker, session.getDay(), session.getStartTime(),
                 session.getEndTime(), service);
         // Validate hours

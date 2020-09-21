@@ -10,15 +10,17 @@ import java.util.Date;
 
 public class SessionReturn {
 
+    private int id;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     @Temporal(TemporalType.TIME)
     private Date startTime;
 
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern = "HH:mm:ss")
     @Temporal(TemporalType.TIME)
     private Date endTime;
 
@@ -50,4 +52,9 @@ public class SessionReturn {
 
     public void setEndTime(String endTime) throws ParseException {
         this.endTime = Utility.convertStringToTime(endTime);
-    }}
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+}
