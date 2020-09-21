@@ -120,6 +120,26 @@ public class WorkerControllerTest {
     }
 
     @Test
+    public void saveWorker_throwException_ifUserNameExists() throws Exception {
+        User user = new User("admin", "*", UserType.ADMIN);
+        String id = "a1";
+        AdminDetails admin = new AdminDetails("Haircut", "Business", user);
+        admin.setId(id);
+
+        WorkerSignup workerSignup = new WorkerSignup("worker", "**",
+                "John", "Smith", id, "0412345678");
+
+        String jsonString = objectMapper.writeValueAsString(workerSignup);
+
+        given(userService.existsByUsername(eq("worker"))).willReturn(true);
+
+        mvc.perform(post("/createWorker")
+                .content(jsonString)
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testDeleteWorker_itShouldReturnStatusOk() throws Exception {
         mvc.perform(delete("/deleteWorker/{id}", "11")
                 .contentType(MediaType.APPLICATION_JSON)

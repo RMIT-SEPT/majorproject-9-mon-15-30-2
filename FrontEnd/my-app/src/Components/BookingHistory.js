@@ -26,7 +26,7 @@ class BookingHistory extends Component
 
     render() 
     {
-        if(this.state.pastBookings == "")
+        if(this.state.pastBookings <= 0)
         {
             return (
                 <React.Fragment>

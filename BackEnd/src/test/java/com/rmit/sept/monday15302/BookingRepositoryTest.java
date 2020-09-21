@@ -83,7 +83,7 @@ public class BookingRepositoryTest {
 
     @Test
     public void getNewBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
-        assert(bookingRepository.findNewBookingByCustomerID("1").isEmpty());
+        assert(bookingRepository.findNewBookingByCustomerID("123").isEmpty());
     }
 
     @Test

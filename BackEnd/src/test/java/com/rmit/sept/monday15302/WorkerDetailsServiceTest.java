@@ -125,6 +125,12 @@ public class WorkerDetailsServiceTest {
         Mockito.verify(workerDetailsRepository, times(1)).delete(worker1);
     }
 
+    @Test(expected = WorkerDetailsException.class)
+    public void deleteWorker_throwException_ifNoWorkerFound()
+            throws WorkerDetailsException {
+        workerDetailsService.deleteWorker("Sale");
+    }
+
     @Test
     public void getWorkerByAdminId_returnWorkers_IfWorkersFound() {
         List<EditWorker> workers = workerDetailsService.getWorkersByAdminId(adminId);

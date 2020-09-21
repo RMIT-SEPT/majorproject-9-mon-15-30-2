@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class SessionController {
 
@@ -32,5 +33,11 @@ public class SessionController {
     @GetMapping("/sessions/{adminId}")
     public ResponseEntity<?> getSessionsByAdminId(@PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(sessionService.getSessionsByAdminId(adminId), HttpStatus.OK);
+    }
+
+    @GetMapping("/sessions/{workerId}/{day}")
+    public ResponseEntity<?> getSessionsByAdminId(@PathVariable("workerId") String workerId,
+                                                  @PathVariable("day") int day) {
+        return new ResponseEntity<>(sessionService.getSessionsByWorkerIdAndDay(workerId, day), HttpStatus.OK);
     }
 }

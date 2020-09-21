@@ -5,6 +5,7 @@ import com.rmit.sept.monday15302.Repositories.SessionRepository;
 import com.rmit.sept.monday15302.Repositories.WorkerDetailsRepository;
 import com.rmit.sept.monday15302.exception.AdminDetailsException;
 import com.rmit.sept.monday15302.exception.BookingException;
+import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.Session;
@@ -110,6 +111,7 @@ public class SessionService {
         Session newSession = new Session(worker, session.getDay(), session.getStartTime(),
                 session.getEndTime(), service);
         // Validate hours
+        validateStartAndEndTime(newSession);
         validateSessionByWorkingHours(newSession, adminId);
         validateSessionByTime(newSession);
         return sessionRepository.save(newSession);
@@ -132,6 +134,15 @@ public class SessionService {
         }
     }
 
+    public void validateStartAndEndTime(Session newSession) {
+        Date startTime = newSession.getStartTime();
+        Date endTime = newSession.getEndTime();
+        if(startTime.getTime() >= endTime.getTime()) {
+            throw new AdminDetailsException("Start time cannot happen at the " +
+                    "same time or before end time");
+        }
+    }
+
 
     public void validateSessionByTime(Session newSession) {
         List<Session> sessions = sessionRepository.findByWorkerIdAndDay(newSession
@@ -143,15 +154,18 @@ public class SessionService {
                 Date startTime = session.getStartTime();
                 Date endTime = session.getEndTime();
                 if(isWithinRange(newStartTime, startTime, endTime)
-                        || isWithinRange(newEndTime, startTime, endTime)) {
-                    throw new AdminDetailsException("New session is collapsed with session "
-                            + Utility.getTimeAsString(startTime) + "-" + Utility.getTimeAsString(endTime));
+                        || isWithinRange(newEndTime, startTime, endTime)
+                        || (newStartTime.getTime() < startTime.getTime() && newEndTime.getTime() > endTime.getTime())) {
+                    if(!newEndTime.equals(startTime) && !newStartTime.equals(endTime)) {
+                        throw new AdminDetailsException("New session is collapsed with session "
+                                + Utility.getTimeAsString(startTime) + "-" + Utility.getTimeAsString(endTime));
+                    }
                 }
             }
         }
     }
 
-    boolean isWithinRange(Date actual, Date start, Date end) {
+    public boolean isWithinRange(Date actual, Date start, Date end) {
         return actual.getTime() >= start.getTime() && actual.getTime() <= end.getTime();
     }
 
@@ -166,6 +180,14 @@ public class SessionService {
         }
         if(sessions.isEmpty()) {
             throw new AdminDetailsException("No sessions found for admin id " + adminId);
+        }
+        return sessions;
+    }
+
+    public List<Session> getSessionsByWorkerIdAndDay(String workerId, int day) {
+        List<Session> sessions = sessionRepository.findByWorkerIdAndDay(workerId, day);
+        if(sessions.isEmpty()) {
+            throw new WorkerDetailsException("No sessions found");
         }
         return sessions;
     }

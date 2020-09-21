@@ -71,7 +71,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void existsByUsername_returnNull_ifUserNotFound() {
+    public void getUserByUsername_returnNull_ifUserNotFound() {
         assert(userService.getUserByUsername("worker") == null);
     }
 
