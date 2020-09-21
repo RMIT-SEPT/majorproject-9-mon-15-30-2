@@ -16,7 +16,8 @@ class CreateSession extends Component {
             day : "",
             startTime :"",
             endTime :"",
-            workerId :""
+            workerId :"",
+            errorMessage:""
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -29,24 +30,24 @@ class CreateSession extends Component {
 
     onSubmit(e){
         e.preventDefault();
-        try {
-            const newsession = {
-            day : this.state.day,
-            startTime : this.state.startTime,
-            endTime : this.state.endTime,
-            workerId : this.state.workerId
-            }
-            
-            console.log(newsession);
-
-            HandleSession.createNewSession(newsession).then (res => {
-                this.props.history.push('/adminhomepage');
-                alert("New session is created");
-            });
-        } catch (error) {
-            console.log(error);
-            alert("Failed to create new session");
+        
+        const newsession = {
+        day : this.state.day,
+        startTime : this.state.startTime,
+        endTime : this.state.endTime,
+        workerId : this.state.workerId
         }
+        
+        console.log(newsession);
+
+        HandleSession.createNewSession(newsession).then (res => {
+            this.props.history.push('/adminhomepage');
+            alert("New session is created");
+        }).catch(err => {
+            this.setState({errorMessage: err.message});
+            alert(err.message);
+        });
+       
         
     }
 
@@ -84,6 +85,7 @@ class CreateSession extends Component {
 
     render() {
 
+
         if(this.state.error)
         {
             return <h1>Error</h1>
@@ -106,12 +108,14 @@ class CreateSession extends Component {
                                         allopeninghours =>
                                         <p>{allopeninghours.admin_id.service}</p>
                                     )
+                                    // <p>{this.state.allopeninghours[0].id}</p>
                                 }
                                 </div>
 
                                 <h5>Opening Hours</h5>
                                 <div>
                                 {
+                                    
                                     this.state.allopeninghours.map 
                                     (
                                         allopeninghours =>
@@ -138,7 +142,6 @@ class CreateSession extends Component {
                                                     <td> {allavailablesessions.day}</td>
                                                     <td> {allavailablesessions.startTime}</td>   
                                                     <td> {allavailablesessions.endTime}</td>
-                                                    
                                                 </tr>
                                             )
                                         }
