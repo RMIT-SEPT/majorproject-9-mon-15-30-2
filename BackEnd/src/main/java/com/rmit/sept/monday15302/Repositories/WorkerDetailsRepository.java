@@ -9,9 +9,6 @@ import java.util.List;
 
 @Repository
 public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, String> {
-
-    @Override
-    List<WorkerDetails> findAll();
     
     List<WorkerDetails> findByAdminId(String adminId);
 

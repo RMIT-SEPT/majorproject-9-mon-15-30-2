@@ -122,4 +122,8 @@ public class Session {
     public void setService(String s) {
         this.service = s;
     }
+
+    public void setId(String s1) {
+        this.session_id = s1;
+    }
 }

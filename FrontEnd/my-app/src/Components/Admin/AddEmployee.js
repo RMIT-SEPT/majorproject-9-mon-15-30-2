@@ -13,7 +13,7 @@ class AddEmployee extends Component {
         password: "",
         phoneNumber: "",
         username: "",
-        adminId: "1"
+        adminId: "4"
 
     }; 
     this.onChange = this.onChange.bind(this);
@@ -33,7 +33,7 @@ class AddEmployee extends Component {
             password: this.state.password,
             phoneNumber: this.state.phoneNumber,
             username: this.state.username,
-            adminId: "1"
+            adminId: "4"
         }
         console.log(newEmployee);
         WorkerAction.createNewWorker(newEmployee).then( res => {

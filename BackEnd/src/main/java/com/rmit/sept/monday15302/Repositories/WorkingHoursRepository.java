@@ -10,8 +10,4 @@ public interface WorkingHoursRepository extends CrudRepository<WorkingHours, Str
 
     @Query("select hours from WorkingHours hours where hours.admin_id.id = :admin_id and hours.day = :day")
     WorkingHours findByAdmin_idAndDay(String admin_id, int day);
-
-    @Query("select hours from WorkingHours hours where hours.admin_id.id = :admin_id")
-    WorkingHours findByAdmin_id(String admin_id);
-
 }

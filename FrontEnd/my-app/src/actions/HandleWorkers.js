@@ -1,13 +1,6 @@
 import axios from "axios";
 
-class HandleWorkers
-{
-  getAllWorkers(){
-    return axios.get("http://localhost:8080/makebooking/allworkers").catch(err => {
-      console.log(err.data.response)
-    });
-  }
-
+class HandleWorkers {
   getWorkerByAdmin(admin_id){
     return axios.get("http://localhost:8080/workers/" + admin_id);
   }

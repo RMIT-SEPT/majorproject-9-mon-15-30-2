@@ -13,9 +13,4 @@ public class WorkingHoursService {
     public WorkingHours getOpeningHoursByDayAndAdmin(int day, String adminId) {
         return workingHoursRepository.findByAdmin_idAndDay(adminId, day);
     }
-
-    public WorkingHours getOpeningHoursByAdmin(String adminId) {
-        return workingHoursRepository.findByAdmin_id(adminId);
-    }
-
 }

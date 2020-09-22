@@ -19,4 +19,6 @@ public class AdminController {
     public ResponseEntity<?> getAllServices() {
         return new ResponseEntity<>(adminDetailsService.getAllServices(), HttpStatus.OK);
     }
+
+
 }

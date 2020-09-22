@@ -48,7 +48,7 @@ class HomePage extends Component {
                             <Card.Img variant="top" src={NewBookingImage} />
                                 <Card.Body>
                                     <Card.Title>New Booking</Card.Title>
-                                    <Button variant="dark" href="/newbookings">New Booking</Button>
+                                    <Button variant="dark" href="/newbooking">New Booking</Button>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -57,8 +57,8 @@ class HomePage extends Component {
                             <Card style={{ width: '18rem' }}>
                             <Card.Img variant="top" src={BookingHistory} />
                                 <Card.Body>
-                                    <Card.Title>Admin Page</Card.Title>
-                                    <Button variant="dark" href="/adminhomepage">Admin Page</Button>
+                                    <Card.Title>View Current Booking</Card.Title>
+                                    <Button variant="dark" href="/currentbookings">View Current Booking</Button>
                                 </Card.Body>
                             </Card>
                         </div>

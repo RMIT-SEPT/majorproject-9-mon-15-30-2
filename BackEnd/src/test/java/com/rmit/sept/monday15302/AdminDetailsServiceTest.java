@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class AdminDetailsServiceTest {
 
     @MockBean
     private AdminDetailsRepository adminDetailsRepository;
+
+    private static List<String> serviceList;
 
     @Before
     public void setup() {
@@ -41,13 +44,10 @@ public class AdminDetailsServiceTest {
         admin3.setId("a3");
         admin3.setService(service);
 
-        List<String> serviceList = Arrays.asList(admin1.getService(), admin2.getService());
+        serviceList = Arrays.asList(admin1.getService(), admin2.getService());
 
         Mockito.when(adminDetailsRepository.getServiceByAdminId(admin1.getId()))
                 .thenReturn(admin1.getService());
-
-        Mockito.when(adminDetailsRepository.getAllServices())
-                .thenReturn(serviceList);
 
         List<String> adminIdList = Arrays.asList(admin1.getId(), admin3.getId());
 
@@ -88,10 +88,20 @@ public class AdminDetailsServiceTest {
 
     @Test
     public void getAllServices_returnServices_ifServicesFound() {
+        Mockito.when(adminDetailsRepository.getAllServices())
+                .thenReturn(serviceList);
         String service1 = "Massage";
         String service2 = "Haircut";
         List<String> serviceList = adminDetailsService.getAllServices();
         assert(serviceList.contains(service1) && serviceList.contains(service2));
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void getAllServices_throwException_ifNoServicesFound() throws AdminDetailsException {
+        List<String> services = new ArrayList<>();
+        Mockito.when(adminDetailsRepository.getAllServices())
+                .thenReturn(services);
+        adminDetailsService.getAllServices();
     }
 
     @Test

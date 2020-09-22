@@ -5,14 +5,14 @@ import Services from '../../actions/HandleServices';
 import CustomerDashboard from '../Customer/CustomerDashBoard';
 import Booking from '../../actions/HandleBookings';
 
-
-
 class NewBookings extends Component {
 
-    constructor(){
+    constructor()
+    {
         super();
 
         this.state={
+            selectedSession:[],
             allworker: [],
             allservices: [],
             availableSessions:[],
@@ -49,13 +49,10 @@ class NewBookings extends Component {
         this.handleWorkerSelection = this.handleWorkerSelection.bind(this);
     }
 
-
     handleServiceChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
         const servicevalue = e.target.value;
-
-        console.log("Service value selected: " + servicevalue);
 
         Workers.getWorkerByService(servicevalue).then((res) => {
             if(!res.data.empty)
@@ -66,18 +63,14 @@ class NewBookings extends Component {
             else{
                 console.log("Empty");
             }
-            
         });
     }
 
     handleWorkerSelection(e)
     {
         this.setState({[e.target.name]: e.target.value});
-
         const worker_id = e.target.value;
         const servicevalue = this.state.service;
-        console.log("Selected worker id: " + worker_id);
-        console.log("Selected service: " + servicevalue);
 
         Booking.getAvailableSessionsByWorkerAndService(worker_id, servicevalue).then((res) => {
             if(!res.data.empty)
@@ -97,18 +90,18 @@ class NewBookings extends Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    onSubmit(e){
+    onSubmit(e)
+    {
         e.preventDefault();
-        
-        const newbookings = {
 
+        const newbooking = {
             customer: {
                 id: "3",
-                fName: "customer",
-                lName: "one",
-                address: "Phnom Penh",
-                phoneNumber: 1234567,
-                email: "customer1@gmail.com",
+                fName: "Tom",
+                lName: "Hall",
+                address: "77 Latrobe St, Melbourne, Australia",
+                phoneNumber: 1117788890,
+                email: "tomHall@gmail.com",
                 hibernateLazyInitializer: {}
             },
             worker: {
@@ -124,25 +117,26 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.start_date,
-            startTime: this.state.start_time + ":00",
-            endTime: this.state.end_time + ":00",
+            date: this.state.selectedSession.substring(6,16),
+            startTime: this.state.selectedSession.substring(17,25),
+            endTime: this.state.selectedSession.substring(26,34),
             service: this.state.service
         }
-        console.log("start date " + this.state.start_date);
-        console.log("start time " + this.state.start_time);
-        console.log("end time " + this.state.end_time);
-        console.log(newbookings);
-        CreateBooking.createBooking(newbookings).then(res => {
+        console.log(newbooking);
+        CreateBooking.createBooking(newbooking).then(res => {
             alert("Booking successful");
             this.props.history.push("/currentbookings");
+        }).catch(err => {
+            this.setState({errorMessage: err.response.data.message});
+            alert(err.response.data.message);
+            this.props.history.push("/newbooking");
         });
     }
 
     componentDidMount(){
         
         Services.getAllServices().then((res) => {
-            this.setState({ allservices: res.data});
+            this.setState({allservices: res.data});
             console.log(res.data);
         });
 
@@ -177,52 +171,26 @@ class NewBookings extends Component {
 
                                 
                                 <h6>Staff</h6>
-                                
                                 <div className="form-group">
                                     <select id="inputState" className="form-control" name="worker" value= {this.state.worker} onChange = {this.handleWorkerSelection}  required>
                                         <option value="unknown" defaultValue>Choose Staff</option>
                                         {
                                             this.state.allworker.map(
                                                 allworker => 
-                                                <option className="worker" key={allworker.id} value={allworker.id}> {allworker.fName}</option>
+                                                <option className="worker" key={allworker.id} value={allworker.id}> {allworker.fName} {allworker.lName}</option>
                                             )
                                         }
                                     </select>
                                 </div>
 
                                 <h6>Sessions</h6>
-
                                 <div className="form-group">
-                                    <select id="inputState" className="form-control" name="start_date" value= {this.state.start_date} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose Date</option>
+                                    <select id="inputState" className="form-control" name="selectedSession" value={this.state.selectedSession} onChange = {this.onChange} required>
+                                        <option value="unknown" defaultValue>Choose Session</option>
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option className="sessionDate" key={availableSessions.id} value={availableSessions.date}> {availableSessions.date}</option>
-                                            )
-                                        }
-                                    </select>
-                                </div>
-
-                                <div className="form-group">
-                                    <select id="inputState" className="form-control" name="start_time" value= {this.state.start_time} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose Start Time</option>
-                                        {
-                                            this.state.availableSessions.map(
-                                                availableSessions => 
-                                                <option className="sessionStart" key={availableSessions.id} value={availableSessions.startTime}> {availableSessions.startTime}</option>
-                                            )
-                                        }
-                                    </select>
-                                </div>
-
-                                <div className="form-group">
-                                    <select id="inputState" className="form-control" name="end_time" value= {this.state.end_time} onChange = {this.onChange} required>
-                                        <option value="unknown" defaultValue>Choose End Time</option>
-                                        {
-                                            this.state.availableSessions.map(
-                                                availableSessions => 
-                                                <option key={availableSessions.id} value={availableSessions.endTime}> {availableSessions.endTime}</option>
+                                                <option value={availableSessions.id}>Date: {availableSessions.date} {availableSessions.startTime}-{availableSessions.endTime}</option>
                                             )
                                         }
                                     </select>

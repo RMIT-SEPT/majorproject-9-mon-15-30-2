@@ -48,7 +48,7 @@ class EditEmployee extends Component {
             lName: this.state.lName,
             phoneNumber: this.state.phoneNumber,
             username: this.state.username,
-            adminId: "3"
+            adminId: "4"
         };
         console.log(editEmployee);
         WorkerAction.updateWorker(editEmployee, this.state.id).then((res) => { 
@@ -129,7 +129,7 @@ class EditEmployee extends Component {
                                     <div className="row">
                                         <div className="col">
                                             <input type="tel" className="form-control form-control-lg" placeholder="Enter new Phone Number"
-                                            maxLength={10} minLength={10}
+                                            maxLength={10} minLength={10} pattern="[0-9]*"
                                             name="phoneNumber" value= {this.state.phoneNumber} onChange = {this.changeWorkerPhoneNumber} required/>
                                         </div>
                                     </div>

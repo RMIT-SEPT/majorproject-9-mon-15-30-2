@@ -25,7 +25,7 @@ public class Booking {
 
     @NotNull
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="work_id", referencedColumnName="user_id", nullable = false)
+    @JoinColumn(name="worker_id", referencedColumnName="user_id", nullable = false)
     private WorkerDetails worker;
 
     @NotNull

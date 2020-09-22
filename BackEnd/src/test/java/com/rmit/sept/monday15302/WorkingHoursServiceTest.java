@@ -1,12 +1,19 @@
 package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.WorkingHoursRepository;
+import com.rmit.sept.monday15302.model.AdminDetails;
+import com.rmit.sept.monday15302.model.WorkingHours;
 import com.rmit.sept.monday15302.services.WorkingHoursService;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.text.ParseException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,19 +25,28 @@ public class WorkingHoursServiceTest {
     @Autowired
     private WorkingHoursService workingHoursService;
 
-//    @Before
-//    public void setup() throws ParseException {
-//        AdminDetails admin = new AdminDetails();
-//        admin.setId("a1");
-//
-//        WorkingHours hours = new WorkingHours();
-//        hours.setAdminId(admin);
-//        hours.setDay(3);
-//        hours.setStartTime("8:00:00");
-//        hours.setEndTime("10:00:00");
-//
-//        Mockito.when(workingHoursRepository.findByAdmin_idAndDay(admin.getId(), hours.getDay()))
-//                .thenReturn(hours);
-//    }
+    private static WorkingHours hours;
+
+    @Before
+    public void setup() throws ParseException {
+        AdminDetails admin = new AdminDetails();
+        admin.setId("a1");
+
+        hours = new WorkingHours(admin, 3,
+                "08:00:00", "10:00:00", "2020-12-12");
+
+        Mockito.when(workingHoursRepository.findByAdmin_idAndDay(admin.getId(), hours.getDay()))
+                .thenReturn(hours);
+    }
+
+    @Test
+    public void getOpeningHoursByDayAndAdmin_returnHours_ifHoursFound() {
+        assert(workingHoursService.getOpeningHoursByDayAndAdmin(3,"a1").equals(hours));
+    }
+
+    @Test
+    public void getOpeningHoursByDayAndAdmin_returnNull_ifHoursNotFound() {
+        assert(workingHoursService.getOpeningHoursByDayAndAdmin(1, "a1") == null);
+    }
 
 }

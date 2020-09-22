@@ -45,13 +45,14 @@ public class WorkerDetailsServiceTest {
     private static final String adminId = "a1";
     private static WorkerDetails worker1;
     private static User user1;
+    private static String username = "worker";
 
     @Before
     public void setup() {
         User user = new User(adminId,"admin", "*", UserType.ADMIN);
         AdminDetails admin = new AdminDetails("Salon", "Massage", user);
 
-        user1 = new User(workerId_1, "worker", "*", UserType.WORKER);
+        user1 = new User(workerId_1, username, "*", UserType.WORKER);
         worker1 = new WorkerDetails(user1, "John",
                 "Smith", admin, "0123456789");
         worker1.setId(workerId_1);
@@ -77,13 +78,6 @@ public class WorkerDetailsServiceTest {
     }
 
     @Test
-    public void getAllWorkers_returnTrue_ifWorkersFound() {
-        List<WorkerDetails> list = workerDetailsService.getAllWorkers();
-        assert(list.size() == 2 && list.get(0).getId().equals(workerId_1)
-                    && list.get(1).getId().equals(workerId_2));
-    }
-
-    @Test
     public void getWorkerById_returnWorker_ifWorkerFound() {
         EditWorker toCheck = workerDetailsService.getWorkerById(workerId_1);
         assert(toCheck.getId().equals(workerId_1));
@@ -98,7 +92,7 @@ public class WorkerDetailsServiceTest {
     @Test
     public void getWorkerByAdminIds_returnWorkers_IfWorkersFound() {
         List<String> adminIds = Arrays.asList(adminId);
-        List<WorkerDetails> workerList = workerDetailsService.getWorkerByAdminIds(adminIds);
+        List<WorkerDetails> workerList = workerDetailsService.getWorkersByAdminIds(adminIds);
         assert(workerList.size() == 2);
     }
 
@@ -106,7 +100,7 @@ public class WorkerDetailsServiceTest {
     public void getWorkerByAdminIds_throwException_IfNoWorkersFound()
             throws WorkerDetailsException {
         List<String> adminIdList = Arrays.asList("a3", "a4");
-        workerDetailsService.getWorkerByAdminIds(adminIdList);
+        workerDetailsService.getWorkersByAdminIds(adminIdList);
     }
 
     @Test
@@ -116,13 +110,28 @@ public class WorkerDetailsServiceTest {
                 times(1)).save(worker1);
     }
 
+    @Test(expected = WorkerDetailsException.class)
+    public void createWorker_throwException_ifWorkerNotAdded()
+            throws WorkerDetailsException {
+        Mockito.doThrow(new WorkerDetailsException("Cannot create a worker"))
+                .when(workerDetailsRepository)
+                .save(worker1);
+        workerDetailsService.saveWorker(worker1, username);
+    }
+
     @Test
-    public void testDeleteWorker() {
+    public void deleteWorker_returnTrue_ifWorkerIdDeleted() {
         Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);
         // when
         workerDetailsService.deleteWorker(workerId_1);
         // then
         Mockito.verify(workerDetailsRepository, times(1)).delete(worker1);
+    }
+
+    @Test(expected = WorkerDetailsException.class)
+    public void deleteWorker_throwException_ifNoWorkerFound()
+            throws WorkerDetailsException {
+        workerDetailsService.deleteWorker("Sale");
     }
 
     @Test
