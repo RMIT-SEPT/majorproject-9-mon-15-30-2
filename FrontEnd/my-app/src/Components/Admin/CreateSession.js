@@ -138,13 +138,13 @@ class CreateSession extends Component {
                                     <select id="inputState" className="form-control" name="day" value= {this.state.day} onChange = {this.handleDaySelection}  required>
                                         <option value="unknown" defaultValue>Choose Day</option>
                                         
-                                        <option value="1">Sunday</option>
-                                        <option value="2">Monday</option>
-                                        <option value="3">Tuesday</option>
-                                        <option value="4">Wednesday</option>
-                                        <option value="5">Thursday</option>
-                                        <option value="6">Friday</option>
-                                        <option value="7">Saturday</option>
+                                        <option className="day" value="1">Sunday</option>
+                                        <option className="day"  value="2">Monday</option>
+                                        <option className="day"  value="3">Tuesday</option>
+                                        <option className="day"  value="4">Wednesday</option>
+                                        <option className="day"  value="5">Thursday</option>
+                                        <option className="day"  value="6">Friday</option>
+                                        <option className="day"  value="7">Saturday</option>
                                             
                                     </select>
                                 </div>
