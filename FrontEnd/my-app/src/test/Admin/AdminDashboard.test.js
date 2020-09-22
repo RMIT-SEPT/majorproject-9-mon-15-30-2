@@ -17,6 +17,6 @@ describe('<AdminDashboard /> Unit Test', () =>
     it('renders navbar', () => 
     {
         const wrapper = shallow(<AdminDashboard />);
-        expect(wrapper.find('.nav-item')).toHaveLength(5);
+        expect(wrapper.find('.nav-item')).toHaveLength(6);
     });
 })

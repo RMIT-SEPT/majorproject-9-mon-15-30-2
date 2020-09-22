@@ -190,7 +190,7 @@ class NewBookings extends Component {
                                         {
                                             this.state.availableSessions.map(
                                                 availableSessions => 
-                                                <option value={availableSessions.id}>Date: {availableSessions.date} {availableSessions.startTime}-{availableSessions.endTime}</option>
+                                                <option className="session" value={availableSessions.id}>Date: {availableSessions.date} {availableSessions.startTime}-{availableSessions.endTime}</option>
                                             )
                                         }
                                     </select>

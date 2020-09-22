@@ -20,10 +20,10 @@ describe('<NewBookings /> Unit Test', () =>
         expect(wrapper.find('.container')).toHaveLength(1);
     });
 
-    it('renders 5 form-groups', () =>
+    it('renders 3 form-groups', () =>
     {
         const wrapper = shallow(<NewBookings />);
-        expect(wrapper.find('.form-group')).toHaveLength(5);
+        expect(wrapper.find('.form-group')).toHaveLength(3);
         expect(wrapper.find('.service')).toHaveLength(0);
         expect(wrapper.find('.worker')).toHaveLength(0);
         expect(wrapper.find('.sessionDate')).toHaveLength(0);
@@ -61,8 +61,7 @@ describe('<NewBookings /> Unit Test', () =>
         
         expect(wrapper.find('.service')).toHaveLength(1);
         expect(wrapper.find('.worker')).toHaveLength(1);
-        expect(wrapper.find('.sessionDate')).toHaveLength(1);
-        expect(wrapper.find('.sessionStart')).toHaveLength(1);
+        expect(wrapper.find('.session')).toHaveLength(1);
     });
 
 })
