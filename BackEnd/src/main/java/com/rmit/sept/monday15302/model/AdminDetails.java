@@ -30,11 +30,11 @@ public class AdminDetails {
     private String service;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin", orphanRemoval = true)
     private List<WorkerDetails> workerList = new ArrayList<>();
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin_id")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "admin_id", orphanRemoval = true)
     private List<WorkingHours> workingHoursList = new ArrayList<>();
 
     public AdminDetails() {
@@ -59,10 +59,6 @@ public class AdminDetails {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void setAdminName(String name) {
-        this.adminName = name;
     }
 
     public void setService(String service) {

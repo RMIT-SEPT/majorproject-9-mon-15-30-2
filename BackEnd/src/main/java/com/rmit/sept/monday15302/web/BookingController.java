@@ -3,6 +3,7 @@ package com.rmit.sept.monday15302.web;
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,8 +15,12 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class BookingController {
+    @Autowired
+    private SessionService sessionService;
+
     @Autowired
     private BookingService bookingService;
 
@@ -27,9 +32,6 @@ public class BookingController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
-    @Autowired
-    private WorkingHoursService workingHoursService;
 
     @GetMapping(value="historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
@@ -44,17 +46,10 @@ public class BookingController {
     }
 
     @GetMapping("makebooking/byservice/{service}")
-    public ResponseEntity<?> getWorkerByService(@PathVariable("service") String service) {
+    public ResponseEntity<?> getWorkersByService(@PathVariable("service") String service) {
         List<String> adminList = adminDetailsService.getAdminIdByService(service);
-        List<WorkerDetails> workersList = workerDetailsService.getWorkerForAdmin(adminList);
+        List<WorkerDetails> workersList = workerDetailsService.getWorkersByAdminIds(adminList);
         return new ResponseEntity<>(workersList, HttpStatus.OK);
-    }
-
-    @GetMapping("makebooking/byworker/{workerId}")
-    public ResponseEntity<?> getServiceByWorker(@PathVariable("workerId") String workerId) {
-        String adminId = workerDetailsService.getAdminIdByWorkerId(workerId);
-        String service = adminDetailsService.getServiceByAdminId(adminId);
-        return new ResponseEntity<>(service, HttpStatus.OK);
     }
 
     @PostMapping("makebooking/create")
@@ -67,18 +62,10 @@ public class BookingController {
         return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
     }
 
-    @GetMapping("makebooking/openinghours/{workerId}/{date}")
-    public ResponseEntity<?> getOpeningHours(@PathVariable("workerId") String workerId,
-                                            @PathVariable("date") String date) throws ParseException {
-        String adminId = workerDetailsService.getAdminIdByWorkerId(workerId);
-        return new ResponseEntity<>(workingHoursService.getOpeningHours(adminId, date),
-                HttpStatus.OK);
-    }
-
-    @GetMapping("makebooking/unavailablesessions/{workerId}/{date}")
-    public ResponseEntity<?> getUnavailableSessions(@PathVariable("workerId") String workerId,
-                                            @PathVariable("date") String date) throws ParseException {
-        return new ResponseEntity<>(bookingService.getUnavailableSessions(workerId, date),
-                HttpStatus.OK);
+    @GetMapping("/makebooking/sessions/{workerId}/{service}")
+    public ResponseEntity<?> getAvailableSessions(@PathVariable("workerId") String workerId,
+                              @PathVariable("service") String service) throws ParseException {
+        List<SessionReturn> toReturn = sessionService.getAvailableSession(workerId, service);
+        return new ResponseEntity<>(toReturn, HttpStatus.OK);
     }
 }

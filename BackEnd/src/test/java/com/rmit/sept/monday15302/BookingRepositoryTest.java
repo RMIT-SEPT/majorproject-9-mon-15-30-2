@@ -48,7 +48,8 @@ public class BookingRepositoryTest {
         admin = new AdminDetails("Haircut", "Business", user3);
         entityManager.persist(admin);
 
-        worker = new WorkerDetails(user2, "Alex", "Abc", admin);
+        worker = new WorkerDetails(user2, "Alex", "Abc", admin,
+                "0123445556");
         entityManager.persist(worker);
 
         pastBooking = new Booking(customer, worker, BookingStatus.PAST_BOOKING,
@@ -65,34 +66,34 @@ public class BookingRepositoryTest {
     }
 
     @Test
-    public void getPastBookingsByCustomerId_returnsTrue_ifNoBookingsFound() {
+    public void getPastBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findPastBookingByCustomerID("1").isEmpty());
     }
 
     @Test
-    public void getPastBookingsByCustomerId_returnsTrue_ifBookingsFound() {
+    public void getPastBookingsByCustomerId_returnBookings_ifBookingsFound() {
         List<Booking> list = bookingRepository.findPastBookingByCustomerID(customer.getId());
         assert(list.contains(pastBooking) && list.contains(cancelledBooking));
     }
 
     @Test
-    public void getNewBookingsByCustomerId_returnsTrue_ifBookingsFound() {
+    public void getNewBookingsByCustomerId_returnBookings_ifBookingsFound() {
         assert(bookingRepository.findNewBookingByCustomerID(customer.getId()).contains(newBooking));
     }
 
     @Test
-    public void getNewBookingsByCustomerId_returnsTrue_ifNoBookingsFound() {
-        assert(bookingRepository.findNewBookingByCustomerID("1").isEmpty());
+    public void getNewBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
+        assert(bookingRepository.findNewBookingByCustomerID("123").isEmpty());
     }
 
     @Test
-    public void findNewBookingByWorkerAndDate_returnsTrue_ifBookingsFound() {
+    public void findNewBookingByWorkerAndDate_returnBookings_ifBookingsFound() {
         assert(bookingRepository.findNewBookingByWorkerAndDate(worker.getId(),
                 newBooking.getDate()).contains(newBooking));
     }
 
     @Test
-    public void findNewBookingByWorkerAndDate_returnsTrue_ifNoBookingsFound() {
+    public void findNewBookingByWorkerAndDate_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findNewBookingByWorkerAndDate("1",
                 newBooking.getDate()).isEmpty());
     }

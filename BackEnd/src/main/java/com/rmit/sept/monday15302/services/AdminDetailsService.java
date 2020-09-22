@@ -2,6 +2,7 @@ package com.rmit.sept.monday15302.services;
 
 import com.rmit.sept.monday15302.Repositories.AdminDetailsRepository;
 import com.rmit.sept.monday15302.exception.AdminDetailsException;
+import com.rmit.sept.monday15302.model.AdminDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,13 @@ public class AdminDetailsService {
             throw new AdminDetailsException("No admin which provides " + service);
         }
         return adminList;
+    }
+
+    public AdminDetails getAdminById(String adminId) {
+        AdminDetails admin = adminDetailsRepository.getAdminById(adminId);
+        if(admin == null) {
+            throw new AdminDetailsException("Admin not found");
+        }
+        return admin;
     }
 }

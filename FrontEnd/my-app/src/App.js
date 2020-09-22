@@ -1,42 +1,44 @@
 import React from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import HomePage from './Components/HomePage';
-import Login from './Components/Login/Login';
-import NavigationBar from './Components/NavigationBar';
-import NewBookings from './Components/NewBookings';
+import CustomerHomePage from './Components/Customer/CustomerHomePage';
+import CustomerDashboard from './Components/Customer/CustomerDashBoard';
+import Login from './Components/Login_SignUp/Login';
+import Register from './Components/Login_SignUp/Register';
 import BookingHistory from './Components/BookingHistory';
-import AddEmployee from './Components/AddEmployee';
-import AvailableWorkers from './Components/AvailableWorkers';
 import CurrentBookings from './Components/CurrentBookings';
-import Employee from './Components/Employee';
-import Register from './Components/Login/Register'
-
+import NewBooking from './Components/CreateNewBooking/NewBooking';
+import AddEmployee from './Components/Admin/AddEmployee';
+import EditEmployee from './Components/Admin/EditEmployee';
+import AvailableWorkers from './Components/Admin/AvailableWorkers';
+import Employees from './Components/Admin/Employees';
+import DefaultPage from './Components/DefaultPage';
+import AccountPage from './Components/Account';
+import AdminPage from './Components/Admin/AdminHomePage';
+import CreateSession from './Components/Admin/CreateSession';
 import {BrowserRouter as Router, Route} from "react-router-dom";
-// import {Provider} from "react-redux";
-// import store from './store';
 
 function App() {
     return (
-
-    
         <Router>
             <div>
-                <NavigationBar/>
-                
-                <Route exact path="/homepage" component={HomePage} />
+                <Route exact path= "/" component={DefaultPage}/>
+                <Route exact path ="/customerdashboard" component={CustomerDashboard}/>
+                <Route exact path= "/customerhomepage" component={CustomerHomePage}/>
                 <Route exact path= "/login" component={Login} />
-                <Route exact path= "/newbookings" component={NewBookings} />
                 <Route exact path= "/bookinghistory" component={BookingHistory} />
                 <Route exact path= "/addemployee" component={AddEmployee} />
                 <Route exact path= "/availableworkers" component={AvailableWorkers} />
                 <Route exact path= "/currentbookings" component={CurrentBookings} />
-                <Route exact path= "/employee" component={Employee} />
-                <Route exact path="/register" component={Register} />
-
+                <Route exact path= "/employees" component={Employees} />
+                <Route exact path= "/register" component={Register} />
+                <Route exact path= "/account" component={AccountPage}/>
+                <Route exact path= "/adminhomepage" component={AdminPage}/>
+                <Route exact path= "/editemployee/:id" component={EditEmployee}/>
+                <Route exact path= "/newbooking" component={NewBooking}/>
+                <Route exact path= "/createsession" component={CreateSession}/>
             </div>
         </Router>
-        
     );
 }
 
