@@ -28,8 +28,8 @@ public class BookingService {
     }
 
     public List<Booking> getAllNewBookingsByCustomerId(String customerId) throws ParseException {
-        List<Booking> bookings = bookingRepository.findNewBookingByCustomerID(customerId);
-        List<Booking> toReturn = sortBookings(bookings);
+        List<Booking> toReturn = sortBookings(bookingRepository.
+                findNewBookingByCustomerID(customerId));
         if(toReturn.size() == 0) {
             throw new BookingException("No new bookings found for customer with id " + customerId);
         }
@@ -50,14 +50,13 @@ public class BookingService {
         for (Booking booking : bookings) {
             int toCompare = actualDate.compareTo(booking.getDate());
             if (toCompare == 0) {
-                Date d2 = Utility.convertStringToTime(booking.getEndTime().toString());
-                long elapsed = actualTime.getTime() - d2.getTime();
+                long elapsed = actualTime.getTime() - booking.getEndTime().getTime();
                 if (elapsed > 0) {
                     try {
                         bookingRepository.updateBookingStatus(booking.getId(),
                                 BookingStatus.PAST_BOOKING);
-                    } catch (Exception e) {
-                        throw new BookingException("Cannot update booking status " +
+                    } catch (BookingException e) {
+                        System.out.println("Cannot update booking status " +
                                 "for booking with id " + booking.getId());
                     }
                 } else {
@@ -67,8 +66,8 @@ public class BookingService {
                 try {
                     bookingRepository.updateBookingStatus(booking.getId(),
                             BookingStatus.PAST_BOOKING);
-                } catch (Exception e) {
-                    throw new BookingException("Cannot update booking status " +
+                } catch (BookingException e) {
+                    System.out.println("Cannot update booking status " +
                             "for booking with id " + booking.getId());
                 }
             } else {
@@ -81,19 +80,14 @@ public class BookingService {
     public Booking saveOrUpdateBooking(Booking booking) {
         try {
             return bookingRepository.save(booking);
-        } catch (Exception e) {
+        } catch (BookingException e) {
             throw new BookingException("Cannot create a booking");
         }
     }
 
     public List<Booking> getUnavailableSessions(String workerId, String date) throws ParseException {
-        Date converted = Utility.convertStringToDate(date);
-        List<Booking> unavailable = bookingRepository.findNewBookingByWorkerAndDate(workerId, converted);
-        List<Booking> toReturn = sortBookings(unavailable);
-        if(toReturn.size() == 0) {
-            throw new BookingException("Worker with id " + workerId + " has no current bookings on "
-                        + date);
-        }
-        return toReturn;
+        List<Booking> unavailable = bookingRepository.
+                findNewBookingByWorkerAndDate(workerId, Utility.convertStringToDate(date));
+        return sortBookings(unavailable);
     }
 }

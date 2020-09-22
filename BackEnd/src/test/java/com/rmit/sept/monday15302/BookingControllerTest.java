@@ -3,6 +3,8 @@ package com.rmit.sept.monday15302;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.utils.Response.SessionReturn;
+import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.BookingController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -46,7 +47,7 @@ public class BookingControllerTest {
     private MapValidationErrorService mapValidationErrorService;
 
     @MockBean
-    private WorkingHoursService workingHoursService;
+    private SessionService sessionService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -118,7 +119,7 @@ public class BookingControllerTest {
         workers.add(worker2);
 
         given(adminDetailsService.getAdminIdByService(service)).willReturn(adminList);
-        given(workerDetailsService.getWorkerForAdmin(adminList)).willReturn(workers);
+        given(workerDetailsService.getWorkersByAdminIds(adminList)).willReturn(workers);
 
         mvc.perform(get("/makebooking/byservice/{service}", service)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -129,70 +130,19 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void givenWorkersWithService_fetchServiceByWorker() throws Exception {
-        String workerId = "w1";
+    public void fetchAvailableSessionsByWorkerAndService() throws Exception {
         String service = "Haircut";
-        String adminId = "a1";
-
-        WorkerDetails worker = new WorkerDetails();
-        worker.setId(workerId);
-
-        given(workerDetailsService.getAdminIdByWorkerId(workerId)).willReturn(adminId);
-        given(adminDetailsService.getServiceByAdminId(adminId)).willReturn(service);
-
-        mvc.perform(get("/makebooking/byworker/{workerId}", workerId)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Haircut"));
-    }
-
-    @Test
-    public void fetchWorkingHoursByWorkerIdAndDate() throws Exception {
-        String adminId = "a1";
         String workerId = "w1";
-        String date = "2020-09-04";
-
-        WorkingHours workingHours = new WorkingHours();
-        workingHours.setStartTime("8:00:00");
-        workingHours.setEndTime("17:00:00");
-
-        List<Date> hours = new ArrayList<>();
-        hours.add(workingHours.getStartTime());
-        hours.add(workingHours.getEndTime());
-
-        given(workerDetailsService.getAdminIdByWorkerId(workerId)).willReturn(adminId);
-        given(workingHoursService.getOpeningHours(adminId, date)).willReturn(hours);
-
-        mvc.perform(get("/makebooking/openinghours/{workerId}/{date}", workerId, date)
+        SessionReturn session1 = new SessionReturn("2020-09-12",
+                "08:00:00", "09:00:00");
+        List<SessionReturn> sessions = Arrays.asList(session1);
+        given(sessionService.getAvailableSession(workerId, service)).willReturn(sessions);
+        mvc.perform(get("/makebooking/sessions/{workerId}/{service}", workerId, service)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
-    }
-
-    @Test
-    public void fetchUnavailableSessionByWorkerIdAndDate() throws Exception {
-        String workerId = "w1";
-        String date = "2020-09-04";
-
-        String bookingId1 = "b1";
-        String bookingId2 = "b2";
-        Booking booking1 = new Booking();
-        booking1.setId(bookingId1);
-        Booking booking2 = new Booking();
-        booking2.setId(bookingId2);
-
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(booking1);
-        bookings.add(booking2);
-
-        given(service.getUnavailableSessions(workerId, date)).willReturn(bookings);
-
-        mvc.perform(get("/makebooking/unavailablesessions/{workerId}/{date}", workerId, date)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(bookingId1)))
-                .andExpect(jsonPath("$[1].id", is(bookingId2)));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].date", is(Utility.getDateAsString(session1.getDate()))))
+                .andExpect(jsonPath("$[0].startTime", is(Utility.getTimeAsString(session1.getStartTime()))));
     }
 
     @Test
@@ -208,7 +158,8 @@ public class BookingControllerTest {
         CustomerDetails customer = new CustomerDetails(user1, "John", "Smith",
                 "Melbourne", "0123456789", "john@mail.com");
         customer.setId(user1.getId());
-        WorkerDetails worker = new WorkerDetails(user3, "Julia", "Baker", admin);
+        WorkerDetails worker = new WorkerDetails(user3, "Julia", "Baker",
+                admin, "0123445556");
         worker.setId(user3.getId());
         Booking booking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
                 "2021-09-02", "8:00:00", "9:00:00", "Haircut");

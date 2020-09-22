@@ -5,7 +5,9 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +37,18 @@ public class CustomerDetails {
     private String address;
 
     @NotBlank(message = "Phone number is required")
-    @Size(min = 8, max = 15)
+    @Pattern(regexp="(^$|[0-9]{10})")
     @Column(name="phone_number")
     private String phoneNumber;
 
     @NotBlank(message = "Email is required")
     @Column(name = "email")
+    @Size(max = 50)
+    @Email
     private String email;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", orphanRemoval = true)
     private List<Booking> bookingLists = new ArrayList<>();
 
     public CustomerDetails() {

@@ -14,7 +14,7 @@ public class User {
     private String id;
 
     @NotBlank(message = "User name is required")
-    @Size(max = 21)
+    @Size(max = 21, min = 3)
     @Column(name="user_name")
     private String userName;
 
@@ -41,6 +41,13 @@ public class User {
     }
 
     public User(String username, String password, UserType type) {
+        this.userName = username;
+        this.password = password;
+        this.type = type;
+    }
+
+    public User(String id, String username, String password, UserType type) {
+        this.id = id;
         this.userName = username;
         this.password = password;
         this.type = type;
