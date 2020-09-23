@@ -4,7 +4,7 @@ class HandleSessions
 {
     createNewSession (session) 
     {
-        return axios.post("http://localhost:8080/createSession", session, {withCredentials: false}, 
+        return axios.post("http://localhost:8080/admin/createSession", session, {withCredentials: false},
         {
             headers: 
             {
@@ -16,12 +16,12 @@ class HandleSessions
 
     getOpeningHoursByAdminAndDay(admin_id, day)
     {
-        return axios.get("http://localhost:8080/openinghours/"+ admin_id + "/" + day);
+        return axios.get("http://localhost:8080/admin/openinghours/"+ admin_id + "/" + day);
     }
 
     getAvailableSessionByWorkerIdAndDay(worker_id, day)
     {
-        return axios.get("http://localhost:8080/sessions/" +
+        return axios.get("http://localhost:8080/admin/sessions/" +
         worker_id + "/" + day);
     }
 }

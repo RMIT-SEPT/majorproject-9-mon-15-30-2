@@ -31,7 +31,7 @@ public class UserServiceTest {
 
     @Before
     public void setup() {
-        user = new User(username, "*", UserType.ADMIN);
+        user = new User(username, "*", UserType.ROLE_ADMIN);
         user.setId(userId);
 
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);

@@ -69,18 +69,18 @@ public class WorkerControllerTest {
 
     @Test
     public void saveWorker_itShouldReturnStatusCreated() throws Exception {
-        User user = new User("admin", "*", UserType.ADMIN);
+        User user = new User("admin", "*", UserType.ROLE_ADMIN);
         String id = "a1";
         user.setId(id);
         AdminDetails admin = new AdminDetails("Haircut", "Business", user);
         admin.setId(id);
 
-        User newUser = new User("worker", "**", UserType.WORKER);
+        User newUser = new User("worker", "**", UserType.ROLE_WORKER);
         WorkerDetails worker = new WorkerDetails(newUser,
                 "John", "Smith", admin, "0412345678");
 
         given(userService.saveUser(Mockito.any(User.class))).willReturn(newUser);
-        given(service.saveWorker(Mockito.any(WorkerDetails.class), eq(newUser.getUserName())))
+        given(service.saveWorker(Mockito.any(WorkerDetails.class), eq(newUser.getUsername())))
                 .willReturn(worker);
 
         WorkerSignup workerSignup = new WorkerSignup("worker", "**",
@@ -97,7 +97,7 @@ public class WorkerControllerTest {
 
     @Test
     public void saveWorker_throwException_ifUserNameExists() throws Exception {
-        User user = new User("admin", "*", UserType.ADMIN);
+        User user = new User("admin", "*", UserType.ROLE_ADMIN);
         String id = "a1";
         AdminDetails admin = new AdminDetails("Haircut", "Business", user);
         admin.setId(id);

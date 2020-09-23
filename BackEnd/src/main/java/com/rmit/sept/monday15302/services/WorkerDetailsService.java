@@ -7,6 +7,7 @@ import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,13 +21,16 @@ public class WorkerDetailsService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public EditWorker getWorkerById(String id) {
         WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
         if(worker == null) {
             throw new WorkerDetailsException("Worker with id " + id + " not found");
         }
         User user = userService.getUserById(id);
-        return new EditWorker(id, user.getUserName(), user.getPassword(), worker.getfName(),
+        return new EditWorker(id, user.getUsername(), user.getPassword(), worker.getfName(),
                 worker.getlName(), worker.getPhoneNumber());
     }
 
@@ -65,7 +69,7 @@ public class WorkerDetailsService {
     public EditWorker updateWorker(EditWorker worker, String id) {
         String username = worker.getUsername();
         if(userService.existsByUsername(username)
-                && !username.equals(userService.getUserById(id).getUserName())) {
+                && !username.equals(userService.getUserById(id).getUsername())) {
             throw new UserException("Error: Username is already taken!");
         }
         WorkerDetails workerDetails = workerDetailsRepository.getWorkerById(id);
@@ -74,7 +78,7 @@ public class WorkerDetailsService {
             throw new WorkerDetailsException("Worker with id '"+id+"' not found");
         }
         user.setUserName(worker.getUsername());
-        user.setPassword(worker.getPassword());
+        user.setPassword(bCryptPasswordEncoder.encode(worker.getPassword()));
         User updatedUser = userService.saveUser(user);
 
         workerDetails.setfName(worker.getfName());
@@ -83,7 +87,7 @@ public class WorkerDetailsService {
         workerDetails.setUser(user);
 
         WorkerDetails updatedWorker = workerDetailsRepository.save(workerDetails);
-        return new EditWorker(id, updatedUser.getUserName(), updatedUser.getPassword(), updatedWorker.getfName(),
+        return new EditWorker(id, updatedUser.getUsername(), updatedUser.getPassword(), updatedWorker.getfName(),
                 updatedWorker.getlName(), updatedWorker.getPhoneNumber());
     }
 
@@ -95,7 +99,7 @@ public class WorkerDetailsService {
         }
         for(WorkerDetails worker : toReturn) {
             User user = userService.getUserById(worker.getId());
-            EditWorker newWorker = new EditWorker(user.getId(), user.getUserName(), user.getPassword(), worker.getfName(),
+            EditWorker newWorker = new EditWorker(user.getId(), user.getUsername(), user.getPassword(), worker.getfName(),
                     worker.getlName(), worker.getPhoneNumber());
             workers.add(newWorker);
         }

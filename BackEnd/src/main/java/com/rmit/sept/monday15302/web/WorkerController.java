@@ -35,12 +35,12 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
-    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/admin/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
         return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/createWorker")
+    @PostMapping("/admin/createWorker")
     public ResponseEntity<?> createNewWorker(@Valid @RequestBody WorkerSignup signupWorker,
                              BindingResult result) {
 
@@ -55,7 +55,7 @@ public class WorkerController {
         AdminDetails admin = adminDetailsService.getAdminById(signupWorker.getAdminId());
 
         // Create new user and new worker
-        User user = new User(username, signupWorker.getPassword(), UserType.WORKER);
+        User user = new User(username, signupWorker.getPassword(), UserType.ROLE_WORKER);
         WorkerDetails worker = new WorkerDetails(user, signupWorker.getfName(),
                 signupWorker.getlName(), admin, signupWorker.getPhoneNumber());
         userService.saveUser(user);
@@ -63,14 +63,14 @@ public class WorkerController {
         return new ResponseEntity<>(newWorker, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/deleteWorker/{id}")
+    @DeleteMapping("/admin/deleteWorker/{id}")
     public ResponseEntity<?> deleteWorker(@PathVariable("id") String id) {
         workerDetailsService.deleteWorker(id);
         userService.deleteById(id);
         return new ResponseEntity<>("Deleted worker with id " + id, HttpStatus.OK);
     }
 
-    @PutMapping("/editWorker/{id}")
+    @PutMapping("/admin/editWorker/{id}")
     public ResponseEntity<?> updateWorker(@PathVariable("id") String id,
                               @Valid @RequestBody EditWorker worker,
                               BindingResult result) {
@@ -80,7 +80,7 @@ public class WorkerController {
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 
-    @GetMapping("/workers/{adminId}")
+    @GetMapping("/admin/workers/{adminId}")
     public ResponseEntity<?> getWorkersByAdmin(@PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(workerDetailsService.getWorkersByAdminId(adminId), HttpStatus.OK);
     }

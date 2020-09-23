@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 
 @CrossOrigin(origins = "http://localhost:3000")
-@RestController
+@RestController("/admin")
 public class SessionController {
 
     @Autowired

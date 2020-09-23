@@ -49,15 +49,15 @@ public class WorkerDetailsServiceTest {
 
     @Before
     public void setup() {
-        User user = new User(adminId,"admin", "*", UserType.ADMIN);
+        User user = new User(adminId,"admin", "*", UserType.ROLE_ADMIN);
         AdminDetails admin = new AdminDetails("Salon", "Massage", user);
 
-        user1 = new User(workerId_1, username, "*", UserType.WORKER);
+        user1 = new User(workerId_1, username, "*", UserType.ROLE_WORKER);
         worker1 = new WorkerDetails(user1, "John",
                 "Smith", admin, "0123456789");
         worker1.setId(workerId_1);
 
-        User user2 = new User(workerId_2, "worker1", "*", UserType.WORKER);
+        User user2 = new User(workerId_2, "worker1", "*", UserType.ROLE_WORKER);
         WorkerDetails worker2 = new WorkerDetails(user2, "John",
                 "Smith", admin, "0123456789");
         worker2.setId(workerId_2);
@@ -163,7 +163,7 @@ public class WorkerDetailsServiceTest {
 
     @Test
     public void updateWorker_returnWorker_IfWorkerUpdated() {
-        EditWorker worker = new EditWorker(workerId_1, user1.getUserName(), user1.getPassword(),
+        EditWorker worker = new EditWorker(workerId_1, user1.getUsername(), user1.getPassword(),
                 worker1.getfName(), worker1.getlName(), worker1.getPhoneNumber());
         Mockito.when(workerDetailsRepository.save(worker1)).thenReturn(worker1);
         Mockito.when(userService.saveUser(user1)).thenReturn(user1);

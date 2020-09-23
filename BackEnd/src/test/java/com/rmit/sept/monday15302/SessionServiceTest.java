@@ -66,8 +66,8 @@ public class SessionServiceTest {
 
     @Before
     public void setup() throws ParseException {
-        User user = new User("worker", "*", UserType.WORKER);
-        User user2 = new User("admin", "*", UserType.ADMIN);
+        User user = new User("worker", "*", UserType.ROLE_WORKER);
+        User user2 = new User("admin", "*", UserType.ROLE_ADMIN);
         admin = new AdminDetails("Business", service, user2);
         admin.setId(adminId);
         worker = new WorkerDetails(user, "John",

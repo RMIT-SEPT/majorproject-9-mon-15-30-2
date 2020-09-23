@@ -67,5 +67,9 @@ public class EditWorker {
     public void setUsername(String s) {
         this.userName = s;
     }
+
+    public void setPassword(String p) {
+        this.password = p;
+    }
 }
 

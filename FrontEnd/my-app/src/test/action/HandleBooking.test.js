@@ -47,7 +47,7 @@ describe('fetchData', () => {
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
         await expect(HandleBookings.getNewBookingById("5")).resolves.toEqual(data);
 
-        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/newbookings/5",
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/newbookings/5",
         );
     });
 
@@ -100,7 +100,7 @@ describe('fetchData', () => {
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
         await expect(HandleBookings.getPastBookingById("5")).resolves.toEqual(data);
 
-        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/historybookings/5",
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/historybookings/5",
         );
     });
 
@@ -136,7 +136,7 @@ describe('fetchData', () => {
             .resolves.toEqual(data);
 
         expect(axios.get)
-            .toHaveBeenCalledWith("http://localhost:8080//makebooking/sessions/7/Haircut",
+            .toHaveBeenCalledWith("http://localhost:8080//customer/makebooking/sessions/7/Haircut",
         );
     });
 

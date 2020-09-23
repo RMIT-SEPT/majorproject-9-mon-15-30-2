@@ -14,7 +14,7 @@ public class WorkingHoursController {
     @Autowired
     WorkingHoursService workingHoursService;
 
-    @GetMapping("/openinghours/{adminId}/{day}")
+    @GetMapping("/admin/openinghours/{adminId}/{day}")
     public ResponseEntity<?> getOpeningHoursByAdminIdAndDay(@PathVariable("adminId") String adminId,
                                                             @PathVariable("day") int day) {
         return new ResponseEntity<>(workingHoursService.getOpeningHoursByDayAndAdmin(day, adminId),
