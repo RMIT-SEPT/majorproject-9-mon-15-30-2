@@ -67,7 +67,7 @@ public class BookingControllerTest {
         bookings.add(booking1);
         bookings.add(booking2);
 
-        given(service.getAllPastBookingsByCustomerId(customerId)).willReturn(bookings);
+        given(service.getPastBookingsByCustomerId(customerId)).willReturn(bookings);
 
         mvc.perform(get("/historybookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +89,7 @@ public class BookingControllerTest {
         List<Booking> bookings = new ArrayList<>();
         bookings.add(booking);
 
-        given(service.getAllNewBookingsByCustomerId(customerId)).willReturn(bookings);
+        given(service.getNewBookingsByCustomerId(customerId)).willReturn(bookings);
 
         mvc.perform(get("/newbookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -162,9 +162,10 @@ public class BookingControllerTest {
                 admin, "0123445556");
         worker.setId(user3.getId());
         Booking booking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
-                "2021-09-02", "8:00:00", "9:00:00", "Haircut");
+                "2021-09-02", "8:00:00", "9:00:00",
+                "Haircut", Confirmation.PENDING);
         booking.setId("b1");
-        given(service.saveOrUpdateBooking(Mockito.any(Booking.class))).willReturn(booking);
+        given(service.saveBooking(Mockito.any(Booking.class))).willReturn(booking);
 
         String jsonString = objectMapper.writeValueAsString(booking);
 

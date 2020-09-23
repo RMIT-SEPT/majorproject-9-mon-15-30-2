@@ -2,10 +2,7 @@ package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
-import com.rmit.sept.monday15302.model.Booking;
-import com.rmit.sept.monday15302.model.BookingStatus;
-import com.rmit.sept.monday15302.model.CustomerDetails;
-import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.services.BookingService;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.junit.Before;
@@ -35,6 +32,7 @@ public class BookingServiceTest {
     private static WorkerDetails worker;
     private static final String workerId = "w1";
     private static Date today = new Date();
+    private static Confirmation confirm = Confirmation.CONFIRMED;
 
     @Autowired
     private BookingService bookingService;
@@ -82,25 +80,25 @@ public class BookingServiceTest {
     @Test(expected = BookingException.class)
     public void findPastBookingsByCustomerId_throwException_ifNoPastBookingsFound()
             throws BookingException {
-        bookingService.getAllPastBookingsByCustomerId("789");
+        bookingService.getPastBookingsByCustomerId("789");
     }
 
     @Test
     public void findPastBookingsByCustomerId_returnBookings_ifPastBookingsFound() {
         String customerId = "123";
-        assert(bookingService.getAllPastBookingsByCustomerId(customerId).size() == 2);
+        assert(bookingService.getPastBookingsByCustomerId(customerId).size() == 2);
     }
 
     @Test(expected = BookingException.class)
     public void findNewBookingsByCustomerId_throwException_ifNoNewBookingsFound()
             throws BookingException, ParseException {
-        bookingService.getAllNewBookingsByCustomerId("789");
+        bookingService.getNewBookingsByCustomerId("789");
     }
 
     @Test
     public void findNewBookingByCustomerID_returnBooking_ifOneBookingIsFound() throws ParseException {
         String customerId = "123";
-        assert(bookingService.getAllNewBookingsByCustomerId(customerId).size() == 1);
+        assert(bookingService.getNewBookingsByCustomerId(customerId).size() == 1);
     }
 
     @Test
@@ -116,13 +114,13 @@ public class BookingServiceTest {
         // When
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(today),
-                "05:00:00", "06:00:00", service);
+                "05:00:00", "06:00:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
         Mockito.doThrow(new BookingException("Cannot update booking " +
                 "status for booking with id b1")).when(bookingRepository)
                 .updateBookingStatus("b1", BookingStatus.PAST_BOOKING);
-        bookingService.sortBookings(bookings);
+        bookingService.updateBookingStatus(bookings);
     }
 
     @Test
@@ -131,13 +129,13 @@ public class BookingServiceTest {
         Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(date),
-                "08:00:00", "09:00:00", service);
+                "08:00:00", "09:00:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
         Mockito.doThrow(new BookingException("Cannot update booking " +
                 "status for booking with id b1")).when(bookingRepository)
                 .updateBookingStatus("b1", BookingStatus.PAST_BOOKING);
-        bookingService.sortBookings(bookings);
+        bookingService.updateBookingStatus(bookings);
     }
 
     @Test
@@ -146,10 +144,10 @@ public class BookingServiceTest {
         Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(date),
-                "08:00:00", "09:00:00", service);
+                "08:00:00", "09:00:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
-        List<Booking> sortedBookings = bookingService.sortBookings(bookings);
+        List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(sortedBookings.isEmpty());
     }
 
@@ -158,10 +156,10 @@ public class BookingServiceTest {
             throws ParseException {
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(today),
-                "05:00:00", "06:00:00", service);
+                "05:00:00", "06:00:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
-        List<Booking> sortedBookings = bookingService.sortBookings(bookings);
+        List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(sortedBookings.isEmpty());
     }
 
@@ -170,10 +168,10 @@ public class BookingServiceTest {
             throws ParseException {
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(today),
-                "23:00:00", "23:59:00", service);
+                "23:00:00", "23:59:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
-        List<Booking> sortedBookings = bookingService.sortBookings(bookings);
+        List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(!sortedBookings.isEmpty());
     }
 
@@ -183,10 +181,10 @@ public class BookingServiceTest {
         Date date = new Date(today.getTime() + (1000 * 60 * 60 * 24));
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(date),
-                "05:00:00", "06:00:00", service);
+                "05:00:00", "06:00:00", service, confirm);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
-        List<Booking> sortedBookings = bookingService.sortBookings(bookings);
+        List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(!sortedBookings.isEmpty());
     }
 
@@ -195,8 +193,8 @@ public class BookingServiceTest {
         CustomerDetails customer = new CustomerDetails();
         WorkerDetails worker = new WorkerDetails();
         Booking booking = new Booking("b1", customer, worker, status, date, startTime,
-                endTime, service);
-        bookingService.saveOrUpdateBooking(booking);
+                endTime, service, confirm);
+        bookingService.saveBooking(booking);
         Mockito.verify(bookingRepository,
                 Mockito.times(1)).save(booking);
     }
@@ -205,10 +203,10 @@ public class BookingServiceTest {
     public void createNewBooking_throwException_ifBookingNotAdded()
             throws ParseException, BookingException {
         Booking booking = new Booking("b1", customer, worker, status, date,
-                startTime, endTime, service);
+                startTime, endTime, service, confirm);
         Mockito.doThrow(new BookingException("Cannot create a booking"))
                 .when(bookingRepository)
                 .save(booking);
-        bookingService.saveOrUpdateBooking(booking);
+        bookingService.saveBooking(booking);
     }
 }

@@ -37,4 +37,7 @@ public interface BookingRepository extends CrudRepository<Booking, String> {
             "com.rmit.sept.monday15302.model.BookingStatus.NEW_BOOKING")
     List<Booking> findNewBookingByWorkerAndDate(String worker_id, Date date);
 
+    @Query("select booking from Booking booking where booking.id = :id")
+    Booking getBookingById(String id);
+
 }

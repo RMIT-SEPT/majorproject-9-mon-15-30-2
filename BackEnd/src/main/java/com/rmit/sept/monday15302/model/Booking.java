@@ -33,6 +33,11 @@ public class Booking {
     @Column(name="booking_status")
     private BookingStatus status;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name="confirmation")
+    private Confirmation confirmation;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     @Column(name="date", nullable = false)
@@ -54,18 +59,19 @@ public class Booking {
 
     public Booking() {}
 
-    public Booking(String i, CustomerDetails c, WorkerDetails w, BookingStatus bs, String s)
-    {
+    public Booking(String i, CustomerDetails c, WorkerDetails w, BookingStatus bs,
+                   String s, Confirmation confirmation) {
         id = i;
         customer = c;
         worker = w;
         status = bs;
         service = s;
+        this.confirmation = confirmation;
     }
 
     public Booking(String s, CustomerDetails customer, WorkerDetails worker, BookingStatus status,
-                   String date, String startTime, String endTime, String service)
-                    throws ParseException {
+                   String date, String startTime, String endTime, String service, Confirmation c)
+            throws ParseException {
         id = s;
         this.customer = customer;
         this.worker = worker;
@@ -74,10 +80,11 @@ public class Booking {
         this.setStartTime(startTime);
         this.setEndTime(endTime);
         this.service = service;
+        this.confirmation = c;
     }
 
     public Booking(CustomerDetails customer, WorkerDetails worker, BookingStatus status,
-                   String date, String startTime, String endTime, String service)
+                   String date, String startTime, String endTime, String service, Confirmation c)
             throws ParseException {
         this.customer = customer;
         this.worker = worker;
@@ -86,6 +93,7 @@ public class Booking {
         this.setStartTime(startTime);
         this.setEndTime(endTime);
         this.service = service;
+        this.confirmation = c;
     }
 
     public String getId() { return id; }
@@ -154,10 +162,15 @@ public class Booking {
     public boolean equals(Object o) {
         Booking b = (Booking) o;
         return id.equals(b.getId()) && customer.equals(b.getCustomer())
-            && worker.equals(b.getWorker()) && status.equals(b.getStatus())
-            && date.getTime() == b.getDate().getTime() && service.equals(b.getService())
-            && startTime.getTime() == b.getStartTime().getTime()
-            && endTime.getTime() == b.getEndTime().getTime();
+                && worker.equals(b.getWorker()) && status.equals(b.getStatus())
+                && date.getTime() == b.getDate().getTime() && service.equals(b.getService())
+                && startTime.getTime() == b.getStartTime().getTime()
+                && endTime.getTime() == b.getEndTime().getTime()
+                && confirmation.equals(b.getConfirmation());
+    }
+
+    public Confirmation getConfirmation() {
+        return confirmation;
     }
 
     @Override
@@ -171,7 +184,12 @@ public class Booking {
         result = 31 * result + (service != null ? service.hashCode() : 0);
         result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
         result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+        result = 31 * result + (confirmation != null ? confirmation.hashCode() : 0);
 
         return result;
+    }
+
+    public void setConfirmation(Confirmation confirm) {
+        this.confirmation = confirm;
     }
 }
