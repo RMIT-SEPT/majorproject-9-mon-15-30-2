@@ -4,9 +4,6 @@ import Workers from '../../actions/HandleWorkers';
 import Services from '../../actions/HandleServices';
 import CustomerDashboard from '../Customer/CustomerDashBoard';
 import Booking from '../../actions/HandleBookings';
-import Table from 'react-bootstrap/Table';
-
-
 
 class NewBookings extends Component {
 
@@ -15,7 +12,7 @@ class NewBookings extends Component {
         super();
 
         this.state={
-            selectedSession:[],
+            selectedSession:"",
             allworker: [],
             allservices: [],
             availableSessions:[],
@@ -91,6 +88,8 @@ class NewBookings extends Component {
     onChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
+        console.log(e.target.value);
+        console.log("hi");
     }
 
     onSubmit(e)
@@ -120,9 +119,9 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.selectedSession.substring(0,10),
-            startTime: this.state.selectedSession.substring(10,18),
-            endTime: this.state.selectedSession.substring(18,27),
+            date: this.state.selectedSession.substring(5,15),
+            startTime: this.state.selectedSession.substring(27,35),
+            endTime: this.state.selectedSession.substring(45,53),
             service: this.state.service
         }
         console.log(newbookings);
