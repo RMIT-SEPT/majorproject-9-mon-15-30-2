@@ -57,7 +57,7 @@ public class BookingService {
         return bookings;
     }
 
-    public List<Booking> getNewBookingsByAdminID(String adminID) {
+    public List<Booking> getNewBookingsByAdminID(String adminID) throws ParseException {
 
         List<Booking> bookings = new ArrayList<>();
 
@@ -65,10 +65,13 @@ public class BookingService {
         for (EditWorker worker : workers) {
             bookings.addAll(bookingRepository.findNewBookingByWorkerID(worker.getId()));
         }
-        if(bookings.isEmpty()) {
-            throw new BookingException("No past bookings found for admin ID: " + adminID);
+        List<Booking> toReturn = updateBookingStatus(bookings);
+
+        if(toReturn.isEmpty()) {
+            throw new BookingException("No new bookings found for admin ID: " + adminID);
         }
-        return bookings;
+
+        return toReturn;
     }
 
     @Transactional

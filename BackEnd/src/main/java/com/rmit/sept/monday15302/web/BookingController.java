@@ -93,7 +93,7 @@ public class BookingController {
     }
 
     @GetMapping(value="newBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getNewBookingsByAdminID(@PathVariable("adminID") String adminID) {
+    public ResponseEntity<?> getNewBookingsByAdminID(@PathVariable("adminID") String adminID) throws ParseException {
         List<Booking> bookings = bookingService.getNewBookingsByAdminID(adminID);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
