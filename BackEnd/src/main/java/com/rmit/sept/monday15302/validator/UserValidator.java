@@ -1,5 +1,6 @@
 package com.rmit.sept.monday15302.validator;
 
+import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,11 @@ public class UserValidator implements Validator {
         CustomerSignup customer = (CustomerSignup) object;
 
         if(customer.getPassword().length() < 6){
-            errors.rejectValue("password","Length",
-                    "Password must be at least 6 characters");
+            throw new UserException("Password must be at least 6 characters");
         }
 
         if(!customer.getPassword().equals(customer.getConfirmPassword())){
-            errors.rejectValue("confirmPassword","Match",
-                    "Passwords must match");
+            throw new UserException("Confirmed password must match");
 
         }
 
