@@ -85,4 +85,17 @@ public class BookingController {
     public ResponseEntity<?> getBookingById(@PathVariable("bookingId") String id) {
         return new ResponseEntity<>(bookingService.getBookingById(id), HttpStatus.OK);
     }
+
+    @GetMapping(value="pastBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPastBookingsByAdminID(@PathVariable("adminID") String adminID) {
+        List<Booking> bookings = bookingService.getPastBookingsByAdminID(adminID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping(value="newBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getNewBookingsByAdminID(@PathVariable("adminID") String adminID) {
+        List<Booking> bookings = bookingService.getNewBookingsByAdminID(adminID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
 }

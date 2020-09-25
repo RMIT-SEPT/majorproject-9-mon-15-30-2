@@ -6,6 +6,7 @@ import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.BookingStatus;
 import com.rmit.sept.monday15302.model.Confirmation;
 import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
+import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ import java.util.List;
 
 @Service
 public class BookingService {
+
+    @Autowired
+    private WorkerDetailsService workerDetailsService;
+
     @Autowired
     private BookingRepository bookingRepository;
 
@@ -36,6 +41,34 @@ public class BookingService {
             throw new BookingException("No new bookings found for customer with id " + customerId);
         }
         return toReturn;
+    }
+
+    public List<Booking> getPastBookingsByAdminID(String adminID) {
+
+        List<Booking> bookings = new ArrayList<>();
+
+        List<EditWorker> workers = workerDetailsService.getWorkersByAdminId(adminID);
+        for (EditWorker worker : workers) {
+            bookings.addAll(bookingRepository.findPastBookingByWorkerID(worker.getId()));
+        }
+        if(bookings.isEmpty()) {
+            throw new BookingException("No past bookings found for admin ID: " + adminID);
+        }
+        return bookings;
+    }
+
+    public List<Booking> getNewBookingsByAdminID(String adminID) {
+
+        List<Booking> bookings = new ArrayList<>();
+
+        List<EditWorker> workers = workerDetailsService.getWorkersByAdminId(adminID);
+        for (EditWorker worker : workers) {
+            bookings.addAll(bookingRepository.findNewBookingByWorkerID(worker.getId()));
+        }
+        if(bookings.isEmpty()) {
+            throw new BookingException("No past bookings found for admin ID: " + adminID);
+        }
+        return bookings;
     }
 
     @Transactional
