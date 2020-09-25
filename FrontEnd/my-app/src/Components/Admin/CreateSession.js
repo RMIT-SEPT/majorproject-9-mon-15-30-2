@@ -103,7 +103,7 @@ class CreateSession extends Component {
 
         if(this.state.error)
         {
-            return <h1>Error</h1>
+            return <h1 className="error">Error</h1>
         }
         return (
             <React.Fragment>

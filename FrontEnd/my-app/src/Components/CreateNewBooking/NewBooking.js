@@ -12,7 +12,7 @@ class NewBookings extends Component {
         super();
 
         this.state={
-            selectedSession:[],
+            selectedSession:"",
             allworker: [],
             allservices: [],
             availableSessions:[],
@@ -117,9 +117,9 @@ class NewBookings extends Component {
                 hibernateLazyInitializer: {}
             },
             status: "NEW_BOOKING",
-            date: this.state.selectedSession.substring(6,16),
-            startTime: this.state.selectedSession.substring(17,25),
-            endTime: this.state.selectedSession.substring(26,34),
+            date: this.state.selectedSession.substring(5,15),
+            startTime: this.state.selectedSession.substring(27,35),
+            endTime: this.state.selectedSession.substring(45,53),
             service: this.state.service
         }
         console.log(newbooking);
