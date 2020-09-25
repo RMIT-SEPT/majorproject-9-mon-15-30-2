@@ -25,6 +25,7 @@ public class User implements UserDetails {
     private String userName;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6)
     @Column(name="password")
     private String password;
 

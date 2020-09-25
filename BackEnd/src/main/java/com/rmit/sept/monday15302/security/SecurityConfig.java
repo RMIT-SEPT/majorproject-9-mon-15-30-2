@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static com.rmit.sept.monday15302.security.SecurityConstant.H2_URL;
 import static com.rmit.sept.monday15302.security.SecurityConstant.SIGN_UP_URLS;
@@ -57,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        System.out.println("Inside authenticationProvider method");
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(customUserService);
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
@@ -98,16 +98,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(H2_URL).permitAll()
                 .antMatchers("/customer/**").access("hasRole('CUSTOMER')")
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/worker/**").access("hasRole('WORKER')").anyRequest()
+                .antMatchers("/worker/**").access("hasRole('WORKER')")
+                .anyRequest()
                 .authenticated()
                 .and().csrf().disable().formLogin()
                 .successHandler(successHandler)
                 .loginPage("/login")
                 .and()
+                //.formLogin().disable()
                 .logout()
-                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .invalidateHttpSession(true);
-
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAfter(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

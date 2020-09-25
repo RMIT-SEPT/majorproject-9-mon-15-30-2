@@ -5,9 +5,7 @@ import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.rmit.sept.monday15302.security.SecurityConstant.EXPIRATION_TIME;
 import static com.rmit.sept.monday15302.security.SecurityConstant.SECRET;
@@ -16,7 +14,6 @@ import static com.rmit.sept.monday15302.security.SecurityConstant.SECRET;
 public class JwtTokenProvider {
 
     //Generate the token
-
     public String generateToken(Authentication authentication){
         User user = (User)authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
@@ -57,9 +54,7 @@ public class JwtTokenProvider {
         return false;
     }
 
-
     //Get user Id from token
-
     public String getUserIdFromJWT(String token){
         Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
         return (String)claims.get("id");

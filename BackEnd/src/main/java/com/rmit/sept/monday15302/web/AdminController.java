@@ -14,11 +14,9 @@ public class AdminController {
 
     @Autowired
     private AdminDetailsService adminDetailsService;
-    
+
     @GetMapping("customer/makebooking/services")
     public ResponseEntity<?> getAllServices() {
         return new ResponseEntity<>(adminDetailsService.getAllServices(), HttpStatus.OK);
     }
-
-
 }

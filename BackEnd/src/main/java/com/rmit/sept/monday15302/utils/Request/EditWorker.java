@@ -14,6 +14,7 @@ public class EditWorker {
     private String userName;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6)
     private String password;
 
     @NotBlank(message = "Worker's first name is required")

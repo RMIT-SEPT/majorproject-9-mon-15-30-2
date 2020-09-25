@@ -7,10 +7,11 @@ import javax.validation.constraints.Size;
 public class WorkerSignup {
 
     @NotBlank(message = "User name is required")
-    @Size(max = 21)
+    @Size(min = 3, max = 21)
     private String userName;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6)
     private String password;
 
     @NotBlank(message = "Worker's first name is required")

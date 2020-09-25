@@ -22,10 +22,10 @@ public class CustomerSignup {
     private String confirmPassword;
 
     @NotBlank(message = "Customer's first name is required")
-    private String fName;
+    private String fname;
 
     @NotBlank(message = "Customer's last name is required")
-    private String lName;
+    private String lname;
 
     @NotBlank(message = "Address is required")
     private String address;
@@ -44,22 +44,25 @@ public class CustomerSignup {
         this.username = username;
         this.password = password;
         this.type = type;
-        this.fName = fname;
-        this.lName = lname;
+        this.fname = fname;
+        this.lname = lname;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.confirmPassword = confirmPassword;
     }
 
-    public CustomerSignup(String username, String password, UserType type,
-                          String fName, String lName, String address,
-                          String phoneNumber, String email) {
+    public CustomerSignup() {
+
+    }
+
+    public CustomerSignup(String username, String password, UserType type, String lname,
+                          String fname, String address, String phoneNumber, String email) {
         this.username = username;
         this.password = password;
         this.type = type;
-        this.fName = fName;
-        this.lName = lName;
+        this.fname = fname;
+        this.lname = lname;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -78,11 +81,11 @@ public class CustomerSignup {
     }
 
     public String getFname() {
-        return fName;
+        return fname;
     }
 
     public String getLname() {
-        return lName;
+        return lname;
     }
 
     public String getAddress() {

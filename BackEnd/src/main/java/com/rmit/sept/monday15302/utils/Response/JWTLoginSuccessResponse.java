@@ -2,14 +2,14 @@ package com.rmit.sept.monday15302.utils.Response;
 
 import com.rmit.sept.monday15302.model.UserType;
 
-public class JWTLoginSucessReponse {
+public class JWTLoginSuccessResponse {
 
     private boolean success;
     private String token;
     private String id;
     private UserType role;
 
-    public JWTLoginSucessReponse(boolean success, String token, String id, UserType role) {
+    public JWTLoginSuccessResponse(boolean success, String token, String id, UserType role) {
         this.success = success;
         this.token = token;
         this.id = id;
@@ -46,7 +46,7 @@ public class JWTLoginSucessReponse {
 
     @Override
     public String toString() {
-        return "JWTLoginSucessReponse{" +
+        return "JWTLoginSuccessResponse{" +
                 "success=" + success +
                 ", token='" + token + '\'' +
                 ", id='" + id + '\'' +
