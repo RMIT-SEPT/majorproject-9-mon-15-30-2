@@ -61,18 +61,12 @@ public class User {
 
     public String getPassword() { return password; }
 
-    public UserType getType() { return type; }
-
     public void setId(String id) {
         this.id = id;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
     }
 
     public void setPassword(String password) {

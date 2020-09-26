@@ -59,16 +59,6 @@ public class Booking {
 
     public Booking() {}
 
-    public Booking(String i, CustomerDetails c, WorkerDetails w, BookingStatus bs,
-                   String s, Confirmation confirmation) {
-        id = i;
-        customer = c;
-        worker = w;
-        status = bs;
-        service = s;
-        this.confirmation = confirmation;
-    }
-
     public Booking(String s, CustomerDetails customer, WorkerDetails worker, BookingStatus status,
                    String date, String startTime, String endTime, String service, Confirmation c)
             throws ParseException {
@@ -171,22 +161,6 @@ public class Booking {
 
     public Confirmation getConfirmation() {
         return confirmation;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (customer != null ? customer.hashCode() : 0);
-        result = 31 * result + (worker != null ? worker.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (service != null ? service.hashCode() : 0);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + (confirmation != null ? confirmation.hashCode() : 0);
-
-        return result;
     }
 
     public void setConfirmation(Confirmation confirm) {

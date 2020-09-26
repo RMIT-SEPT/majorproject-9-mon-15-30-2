@@ -27,4 +27,8 @@ public class BookingConfirmation {
     public Confirmation getConfirmation() {
         return confirmation;
     }
+
+    public void setConfirmation(Confirmation confirm) {
+        this.confirmation = confirm;
+    }
 }

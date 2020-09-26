@@ -59,8 +59,6 @@ public class WorkingHours {
 
     public String getId() { return id; }
 
-    public AdminDetails getAdmin_id() { return admin_id; }
-
     public int getDay() { return day; }
 
     public Date getDate() { return date; }
@@ -79,20 +77,5 @@ public class WorkingHours {
 
     public void setEndTime(String endTime) throws ParseException {
         this.endTime = Utility.convertStringToTime(endTime);
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    public void setAdminId(AdminDetails id)
-    {
-        admin_id = id;
-    }
-
-    public void setDay(int day)
-    {
-        this.day = day;
     }
 }
