@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static com.rmit.sept.monday15302.security.SecurityConstant.TOKEN_PREFIX;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
