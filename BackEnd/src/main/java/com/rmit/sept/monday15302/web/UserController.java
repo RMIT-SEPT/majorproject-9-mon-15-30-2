@@ -64,7 +64,7 @@ public class UserController {
          userValidator.validate(customerSignup, result);
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if(errorMap != null)return errorMap;
+        if(errorMap != null) return errorMap;
 
         String username = customerSignup.getUsername();
         if (userService.existsByUsername(username)) {
@@ -106,6 +106,11 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
+
+        JwtBlacklist duplicateToken = jwtBlacklistRepository.findByTokenEquals(jwt);
+        if(duplicateToken != null) {
+            jwtBlacklistRepository.delete(duplicateToken);
+        }
 
         User user = userService.getUserByUsername(loginRequest.getUsername());
 

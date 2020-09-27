@@ -56,7 +56,11 @@ public class JwtTokenProvider {
 
     //Get user Id from token
     public String getUserIdFromJWT(String token){
-        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
-        return (String)claims.get("id");
+        try {
+            Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+            return (String)claims.get("id");
+        } catch(IllegalArgumentException e) {
+            throw new IllegalArgumentException("JWT String is empty");
+        }
     }
 }

@@ -13,7 +13,6 @@ class EditEmployee extends Component
             id: this.props.match.params.id,
             fName: "",
             lName: "",
-            password: "",
             phoneNumber: "",
             username: "",
             adminId: ""
@@ -22,28 +21,27 @@ class EditEmployee extends Component
         this.changeWorkerFirstName = this.changeWorkerFirstName.bind(this);
         this.changeWorkerLastName = this.changeWorkerLastName.bind(this);
         this.changeWorkerPhoneNumber = this.changeWorkerPhoneNumber.bind(this);
-        this.changeWorkerPassword = this.changeWorkerPassword.bind(this);
         this.changeWorkerUserName = this.changeWorkerUserName.bind(this);
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN") 
-        {
-            WorkerAction.getWorkerByID(this.state.id).then((res) => 
-            {
+        if (stored && stored.role === "ROLE_ADMIN") {
+            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => {
                 let editEmployee = res.data;
                 this.setState(
                 {
                     id: editEmployee.id,
                     fName: editEmployee.fName,
                     lName: editEmployee.lName,
-                    password: editEmployee.password,
                     phoneNumber: editEmployee.phoneNumber,
                     username: editEmployee.username,
                     adminId: editEmployee.adminId
                 });
+            }).catch((err) => {
+                // Render page not found
+
             });
         }
         else
@@ -59,7 +57,6 @@ class EditEmployee extends Component
         let editEmployee = 
         {
             id: this.state.id,
-            password: this.state.password,
             fName: this.state.fName,
             lName: this.state.lName,
             phoneNumber: this.state.phoneNumber,
@@ -67,10 +64,10 @@ class EditEmployee extends Component
             adminId: stored.id
         };
         console.log(editEmployee);
-        WorkerAction.updateWorker(editEmployee, this.state.id).then((res) => 
+        WorkerAction.updateWorker(editEmployee, this.state.id, stored.id).then((res) =>
         { 
             this.props.history.push('/employees');
-            alert("update successful");
+            alert("Employee details are updated successfully");
         }, (err) => 
         {
             console.log(err.response.data.message);
@@ -96,10 +93,7 @@ class EditEmployee extends Component
     {
         this.setState({phoneNumber: e.target.value});
     }
-    changeWorkerPassword= (e) => 
-    {
-        this.setState({password: e.target.value});
-    }
+
     changeWorkerUserName= (e) => 
     {
         this.setState({username: e.target.value});
@@ -197,26 +191,12 @@ class EditEmployee extends Component
                                         </div>
                                     </div>
 
-                                    <h6>Password</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="password" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new Password"
-                                                    name="password" 
-                                                    value={this.state.password} 
-                                                    onChange={this.changeWorkerPassword} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     {
                                         this.state.errorMessage &&
                                         <h6 className="text-danger"> {this.state.errorMessage} </h6> 
                                     }
                                     <button className="btn btn-success" 
-                                            type="submit" >save
+                                            type="submit" >Save
                                     </button>
                                     <button className="btn btn-danger" 
                                             onClick={this.cancel.bind(this)} 

@@ -24,13 +24,13 @@ class HandleRegisterLogin
             console.log(localStorage.getItem("user"));
             localStorage.clear();
             console.log(response);
-            alert("logout successful");
+            alert("Logout successfully");
         }).catch((error) => 
         {
             console.log(localStorage.getItem("user"));
             localStorage.clear();
             console.log(error);
-            alert("session expired");
+            alert("Session expired");
         });
     }
 

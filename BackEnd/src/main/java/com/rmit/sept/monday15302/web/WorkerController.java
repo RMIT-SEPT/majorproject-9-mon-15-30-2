@@ -36,9 +36,10 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
-    @GetMapping(value="/admin/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
+    @GetMapping(value="/admin/worker/{id}/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id,
+                                           @PathVariable("adminId") String adminId) {
+        return new ResponseEntity<>(workerDetailsService.getWorkerById(id, adminId), HttpStatus.OK);
     }
 
     @PostMapping("/admin/createWorker")
@@ -64,20 +65,21 @@ public class WorkerController {
         return new ResponseEntity<>(newWorker, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/admin/deleteWorker/{id}")
-    public ResponseEntity<?> deleteWorker(@PathVariable("id") String id) {
-        workerDetailsService.deleteWorker(id);
+    @DeleteMapping("/admin/deleteWorker/{id}/{adminId}")
+    public ResponseEntity<?> deleteWorker(@PathVariable("id") String id,
+                                          @PathVariable("adminId") String adminId) {
+        workerDetailsService.deleteWorker(id, adminId);
         userService.deleteById(id);
         return new ResponseEntity<>("Deleted worker with id " + id, HttpStatus.OK);
     }
 
-    @PutMapping("/admin/editWorker/{id}")
+    @PutMapping("/admin/editWorker/{id}/{adminId}")
     public ResponseEntity<?> updateWorker(@PathVariable("id") String id,
-                              @Valid @RequestBody EditWorker worker,
-                              BindingResult result) {
+                  @PathVariable("adminId") String adminId, @Valid @RequestBody EditWorker worker,
+                  BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-        EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id);
+        EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id, adminId);
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 

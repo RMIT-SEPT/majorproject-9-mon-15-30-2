@@ -21,7 +21,7 @@ class CurrentBookings extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            GetBookings.getNewBookingById(3).then((res) => 
+            GetBookings.getNewBookingById(stored.id).then((res) =>
             {
                 this.setState({currentBookings: res.data});
                 console.log(res.data);

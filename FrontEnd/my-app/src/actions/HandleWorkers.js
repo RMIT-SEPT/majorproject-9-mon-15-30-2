@@ -3,7 +3,7 @@ var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleWorkers 
 {
-  getWorkerByAdmin(admin_id)
+  getWorkersByAdmin(admin_id)
   {
     return axios.get("http://localhost:8080/admin/workers/" + admin_id, 
     {headers: {
@@ -11,9 +11,9 @@ class HandleWorkers
     }});
   }
 
-  getWorkerByID(worker_id)
+  getWorkerByID(worker_id, admin_id)
   {
-    return axios.get("http://localhost:8080/admin/worker/" + worker_id, 
+    return axios.get("http://localhost:8080/admin/worker/" + worker_id + "/" + admin_id,
     {headers: {
       Authorization: stored.token
     }});
@@ -27,16 +27,16 @@ class HandleWorkers
     }});
   }
 
-  updateWorker(worker, id)
+  updateWorker(worker, id, admin_id)
   {
-    return axios.put("http://localhost:8080/admin/editWorker/" + id, worker, 
+    return axios.put("http://localhost:8080/admin/editWorker/" + id + "/" + admin_id, worker,
     {headers: {
       Authorization: stored.token
     }});
   }
 
-  deleteWorker(id){
-    return axios.delete("http://localhost:8080/admin/deleteWorker/" + id,
+  deleteWorker(id, admin_id){
+    return axios.delete("http://localhost:8080/admin/deleteWorker/" + id + "/" + admin_id,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -44,12 +44,12 @@ class HandleWorkers
     }});
   }
 
-  createNewWorker(worker, token) {
+  createNewWorker(worker) {
     return axios.post("http://localhost:8080/admin/createWorker",worker,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      Authorization: token
+      Authorization: stored.token
     }});
   }
 }

@@ -59,7 +59,7 @@ public class WorkerControllerTest {
         String id = "w1";
         worker.setId(id);
 
-        given(service.getWorkerById(id)).willReturn(worker);
+        given(service.getWorkerById(id, "a1")).willReturn(worker);
 
         mvc.perform(get("/worker/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -126,10 +126,9 @@ public class WorkerControllerTest {
     @Test
     public void testEditEmployeeDetails_itShouldReturnStatusOk() throws Exception {
         String id = "123";
-        EditWorker worker = new EditWorker(id, "worker",
-                "**", "John", "Smith", "0412345678");
+        EditWorker worker = new EditWorker(id, "worker","John", "Smith", "0412345678");
 
-        given(service.updateWorker(Mockito.any(EditWorker.class), eq(id)))
+        given(service.updateWorker(Mockito.any(EditWorker.class), eq(id), eq("a1")))
                 .willReturn(worker);
 
         String jsonString = objectMapper.writeValueAsString(worker);
@@ -145,9 +144,9 @@ public class WorkerControllerTest {
     public void givenWorkersForAdmin_fetchWorkersByAdmin() throws Exception {
         String adminId = "a1";
         EditWorker worker = new EditWorker("123", "worker",
-                "**", "John", "Smith", "0412345678");
+                "John", "Smith", "0412345678");
         EditWorker worker2 = new EditWorker("456", "worker2",
-                "**", "John", "Smith", "0412345678");
+                "John", "Smith", "0412345678");
         List<EditWorker> workers = Arrays.asList(worker, worker2);
 
         given(service.getWorkersByAdminId(adminId)).willReturn(workers);

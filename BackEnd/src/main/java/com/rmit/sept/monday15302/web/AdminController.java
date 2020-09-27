@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -18,5 +19,10 @@ public class AdminController {
     @GetMapping("customer/makebooking/services")
     public ResponseEntity<?> getAllServices() {
         return new ResponseEntity<>(adminDetailsService.getAllServices(), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/service/{id}")
+    public ResponseEntity<?> getServiceByAdmin(@PathVariable("id") String adminId) {
+        return new ResponseEntity<>(adminDetailsService.getServiceByAdminId(adminId), HttpStatus.OK);
     }
 }

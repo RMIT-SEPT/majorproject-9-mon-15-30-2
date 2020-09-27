@@ -7,7 +7,6 @@ import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,16 +20,13 @@ public class WorkerDetailsService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    public EditWorker getWorkerById(String id) {
-        WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
+    public EditWorker getWorkerById(String id, String adminId) {
+        WorkerDetails worker = workerDetailsRepository.getByIdAndAdminId(id, adminId);
         if(worker == null) {
             throw new WorkerDetailsException("Worker with id " + id + " not found");
         }
         User user = userService.getUserById(id);
-        return new EditWorker(id, user.getUsername(), user.getPassword(), worker.getfName(),
+        return new EditWorker(id, user.getUsername(), worker.getfName(),
                 worker.getlName(), worker.getPhoneNumber());
     }
 
@@ -57,8 +53,8 @@ public class WorkerDetailsService {
         }
     }
 
-    public void deleteWorker(String id) {
-        WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
+    public void deleteWorker(String id, String adminId) {
+        WorkerDetails worker = workerDetailsRepository.getByIdAndAdminId(id, adminId);
         if(worker == null){
             throw new WorkerDetailsException("Cannot delete worker with id '"+id+"'. "
                     + "This worker does not exist");
@@ -66,19 +62,18 @@ public class WorkerDetailsService {
         workerDetailsRepository.delete(worker);
     }
 
-    public EditWorker updateWorker(EditWorker worker, String id) {
+    public EditWorker updateWorker(EditWorker worker, String id, String adminId) {
         String username = worker.getUsername();
         if(userService.existsByUsername(username)
                 && !username.equals(userService.getUserById(id).getUsername())) {
             throw new UserException("Error: Username is already taken!");
         }
-        WorkerDetails workerDetails = workerDetailsRepository.getWorkerById(id);
+        WorkerDetails workerDetails = workerDetailsRepository.getByIdAndAdminId(id, adminId);
         User user = userService.getUserById(id);
         if(workerDetails == null || user == null) {
             throw new WorkerDetailsException("Worker with id '"+id+"' not found");
         }
         user.setUserName(worker.getUsername());
-        user.setPassword(bCryptPasswordEncoder.encode(worker.getPassword()));
         User updatedUser = userService.saveUser(user);
 
         workerDetails.setfName(worker.getfName());
@@ -87,7 +82,7 @@ public class WorkerDetailsService {
         workerDetails.setUser(user);
 
         WorkerDetails updatedWorker = workerDetailsRepository.save(workerDetails);
-        return new EditWorker(id, updatedUser.getUsername(), updatedUser.getPassword(), updatedWorker.getfName(),
+        return new EditWorker(id, updatedUser.getUsername(), updatedWorker.getfName(),
                 updatedWorker.getlName(), updatedWorker.getPhoneNumber());
     }
 
@@ -99,7 +94,7 @@ public class WorkerDetailsService {
         }
         for(WorkerDetails worker : toReturn) {
             User user = userService.getUserById(worker.getId());
-            EditWorker newWorker = new EditWorker(user.getId(), user.getUsername(), user.getPassword(), worker.getfName(),
+            EditWorker newWorker = new EditWorker(user.getId(), user.getUsername(), worker.getfName(),
                     worker.getlName(), worker.getPhoneNumber());
             workers.add(newWorker);
         }

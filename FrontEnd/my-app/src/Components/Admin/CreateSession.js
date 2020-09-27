@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Workers from '../../actions/HandleWorkers';
+import Service from '../../actions/HandleServices';
 import HandleSession from '../../actions/HandleSessions';
 import AdminDashboard from '../Admin/AdminDashboard';
 import Table from 'react-bootstrap/Table';
@@ -12,6 +13,7 @@ class CreateSession extends Component
         super();
         this.state=
         {
+            service:"",
             openinghours:"",
             allavailablesessions:[],
             allworker:[],
@@ -86,7 +88,7 @@ class CreateSession extends Component
                 console.log(newsession);
                 HandleSession.createNewSession(newsession).then((res) => 
                 {
-                    this.props.history.push('/adminhomepage');
+                    this.props.history.push('/');
                     alert("New session is created successfully");
                 }).catch((err) => 
                 {
@@ -107,10 +109,22 @@ class CreateSession extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") 
         {
-            Workers.getWorkerByAdmin(stored.id).then((res) => 
+            Workers.getWorkersByAdmin(stored.id).then((res) =>
             {
                 this.setState({ allworker: res.data});
                 console.log(res.data);
+            });
+            Service.getServiceByAdmin(stored.id).then((res) => {
+                if(!res.data.empty)
+                {
+                    console.log(res.data);
+                    this.setState({ service: res.data});
+                }
+                else
+                {
+                    this.setState({ service: "No service"});
+                    console.log("Empty");
+                }
             });
         }
         else
@@ -137,16 +151,15 @@ class CreateSession extends Component
 
                                 <h5 className="display-4 text-center pb-5">Create New Session</h5>
                                 <form onSubmit={this.onSubmit} >
-                                    {/*Hardcode because no admin value*/}
                                     <h5>Service</h5>
-                                    <p>Haircut</p>
+                                    <p>{this.state.service}</p>
 
                                     <h6>Choose Worker</h6>
                                     <div className="form-group">
                                         <select id="inputState" 
                                             className="form-control" 
                                             name="workerId" 
-                                            value={this.state.workerId} 
+                                            value={this.state.workerId}
                                             onChange={this.onChange} required>
                                             <option value="unknown" defaultValue>Choose Staff</option>
                                             {

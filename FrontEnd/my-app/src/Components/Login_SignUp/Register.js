@@ -49,7 +49,7 @@ class NewBookings extends Component
         SignUp.Registering(newCustomer).then((res) => 
         {
             alert("Register successful");
-            this.props.history.push("/");
+            this.props.history.push("/login");
         }, (err) => 
         {
             console.log(err.response.data);
@@ -91,7 +91,7 @@ class NewBookings extends Component
                                 <div className="form-group">
                                     <Label className="name">Email</Label>
                                     <Input className="form-control" 
-                                        type="text" 
+                                        type="email"
                                         placeholder="Email"
                                         name="email"
                                         value={this.state.email} 
@@ -143,11 +143,11 @@ class NewBookings extends Component
 
                                 <div className="form-group">
                                     <Label className="name">Phone Number</Label>
-                                    <Input className="form-control" 
-                                        type="text" 
+                                    <Input className="form-control form-control-lg"
+                                        type="tel"
                                         placeholder="Phone Number"
                                         name="phoneNumber"
-                                        maxLength={10} minLength={10}
+                                        maxLength={10} minLength={10} pattern="[0-9]*"
                                         value={this.state.phoneNumber} 
                                         onChange={this.onChange} required/>
                                 </div>

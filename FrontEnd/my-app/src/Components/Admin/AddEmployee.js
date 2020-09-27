@@ -10,13 +10,13 @@ class AddEmployee extends Component
         super();
         this.state= 
         {
-        id: "",
-        fName: "",
-        lName: "",
-        password: "",
-        phoneNumber: "",
-        username: "",
-        adminId: ""
+            id: "",
+            fName: "",
+            lName: "",
+            password: "",
+            phoneNumber: "",
+            username: "",
+            adminId: ""
         }; 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -31,7 +31,7 @@ class AddEmployee extends Component
     {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
-        const newEmployee = 
+        const newEmployee =
         {
             id: "",
             fName: this.state.fName,
@@ -42,11 +42,11 @@ class AddEmployee extends Component
             adminId: stored.id
         }
         console.log(newEmployee);
-        WorkerAction.createNewWorker(newEmployee).then((res) => 
+        WorkerAction.createNewWorker(newEmployee).then((res) =>
         {
             this.props.history.push('/employees');
-            alert("Employees successfully created");
-        }, (err) => 
+            alert("Employee successfully created");
+        }).catch((err) =>
         {
             console.log(err.response.data.message);
             this.setState({errorMessage: err.response.data.message});
@@ -93,7 +93,7 @@ class AddEmployee extends Component
                                         className="form-control form-control-lg" 
                                         placeholder="Phone Number" 
                                         name="phoneNumber"
-                                        maxLength={10} minLength={10}
+                                        maxLength={10} minLength={10} pattern="[0-9]*"
                                         value={this.state.phoneNumber}
                                         onChange={this.onChange} required/>
                                     </div>
@@ -115,7 +115,7 @@ class AddEmployee extends Component
                                         <input type="password" 
                                         className="form-control form-control-lg" 
                                         placeholder="Password" 
-                                        name="password"
+                                        name="password" maxLength={24} minLength={6}
                                         value={this.state.password}
                                         onChange={this.onChange} required/>
                                     </div>

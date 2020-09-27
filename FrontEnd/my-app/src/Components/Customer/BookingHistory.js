@@ -21,7 +21,7 @@ class BookingHistory extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            GetPastBookings.getPastBookingById(3).then((res) => 
+            GetPastBookings.getPastBookingById(stored.id).then((res) =>
             {
                 this.setState({pastBookings: res.data});
                 console.log(res.data);

@@ -109,10 +109,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return password;
-    }
-
     public UserType getType() {
         return type;
     }

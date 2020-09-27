@@ -65,7 +65,7 @@ class Login extends Component
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control type="username" 
                                             placeholder="Username" 
-                                            name="username"
+                                            name="username" maxLength={21} minLength={3}
                                             value={this.state.username} 
                                             onChange={this.onChange} required/>
                                     </Form.Group>
@@ -74,7 +74,7 @@ class Login extends Component
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" 
                                             placeholder="Password"
-                                            name="password"
+                                            name="password" maxLength={24} minLength={6}
                                             value={this.state.password} 
                                             onChange={this.onChange} required/>
                                     </Form.Group>

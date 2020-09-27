@@ -70,7 +70,7 @@ public class WorkerDetailsServiceTest {
         Mockito.when(workerDetailsRepository.findByAdminId(adminId))
                 .thenReturn(workers);
 
-        Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);
+        Mockito.when(workerDetailsRepository.getByIdAndAdminId(workerId_1, adminId)).thenReturn(worker1);
         Mockito.when(userService.getUserById(workerId_1)).thenReturn(user1);
         Mockito.when(userService.getUserById(workerId_2)).thenReturn(user2);
 
@@ -79,14 +79,14 @@ public class WorkerDetailsServiceTest {
 
     @Test
     public void getWorkerById_returnWorker_ifWorkerFound() {
-        EditWorker toCheck = workerDetailsService.getWorkerById(workerId_1);
+        EditWorker toCheck = workerDetailsService.getWorkerById(workerId_1, adminId);
         assert(toCheck.getId().equals(workerId_1));
     }
 
     @Test(expected = WorkerDetailsException.class)
     public void getWorkerById_throwException_ifWorkerNotFound()
             throws WorkerDetailsException {
-        assert(workerDetailsService.getWorkerById("1234") == null);
+        assert(workerDetailsService.getWorkerById("1234", "123") == null);
     }
 
     @Test
@@ -121,9 +121,9 @@ public class WorkerDetailsServiceTest {
 
     @Test
     public void deleteWorker_returnTrue_ifWorkerIdDeleted() {
-        Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);
+        Mockito.when(workerDetailsRepository.getByIdAndAdminId(workerId_1, adminId)).thenReturn(worker1);
         // when
-        workerDetailsService.deleteWorker(workerId_1);
+        workerDetailsService.deleteWorker(workerId_1, adminId);
         // then
         Mockito.verify(workerDetailsRepository, times(1)).delete(worker1);
     }
@@ -131,7 +131,7 @@ public class WorkerDetailsServiceTest {
     @Test(expected = WorkerDetailsException.class)
     public void deleteWorker_throwException_ifNoWorkerFound()
             throws WorkerDetailsException {
-        workerDetailsService.deleteWorker("Sale");
+        workerDetailsService.deleteWorker("Sale", "123");
     }
 
     @Test
@@ -149,7 +149,7 @@ public class WorkerDetailsServiceTest {
     @Test(expected = WorkerDetailsException.class)
     public void updateWorker_throwException_IfWorkerNotFound()
             throws WorkerDetailsException {
-        workerDetailsService.updateWorker(new EditWorker(), "345");
+        workerDetailsService.updateWorker(new EditWorker(), "345", "123");
     }
 
     @Test(expected = UserException.class)
@@ -158,17 +158,17 @@ public class WorkerDetailsServiceTest {
         EditWorker worker = new EditWorker();
         worker.setUsername("123");
 
-        workerDetailsService.updateWorker(worker, workerId_1);
+        workerDetailsService.updateWorker(worker, workerId_1, adminId);
     }
 
     @Test
     public void updateWorker_returnWorker_IfWorkerUpdated() {
-        EditWorker worker = new EditWorker(workerId_1, user1.getUsername(), user1.getPassword(),
+        EditWorker worker = new EditWorker(workerId_1, user1.getUsername(),
                 worker1.getfName(), worker1.getlName(), worker1.getPhoneNumber());
         Mockito.when(workerDetailsRepository.save(worker1)).thenReturn(worker1);
         Mockito.when(userService.saveUser(user1)).thenReturn(user1);
         // when
-        workerDetailsService.updateWorker(worker, workerId_1);
+        workerDetailsService.updateWorker(worker, workerId_1, adminId);
         // then
         Mockito.verify(workerDetailsRepository, times(1)).save(worker1);
     }

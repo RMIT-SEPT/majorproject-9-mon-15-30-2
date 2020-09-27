@@ -82,7 +82,7 @@ public class SessionServiceTest {
         workers = Arrays.asList(worker);
         Mockito.when(sessionRepository.findByWorkerIdAndService(workerId, service))
                 .thenReturn(sessions);
-        Mockito.when(workerDetailsRepository.getWorkerById(workerId)).thenReturn(worker);
+        Mockito.when(workerDetailsRepository.getByIdAndAdminId(workerId, adminId)).thenReturn(worker);
         Mockito.when(adminDetailsRepository.getServiceByAdminId(adminId)).thenReturn(service);
         Mockito.when(workerDetailsRepository.findByAdminId(adminId)).thenReturn(workers);
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1)).thenReturn(sessions);

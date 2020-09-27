@@ -20,7 +20,8 @@ class Employees extends Component
 
     deleteWorker(worker_id)
     {
-        WorkerAction.deleteWorker(worker_id).then((res) => 
+        var stored = JSON.parse(localStorage.getItem("user"));
+        WorkerAction.deleteWorker(worker_id, stored.id).then((res) =>
         { 
             this.setState(
             {
@@ -28,7 +29,7 @@ class Employees extends Component
                     allemployee => allemployee.id !== worker_id)
             });
             this.props.history.push('/employees');
-            alert("Delete successful");
+            alert("Employee is deleted successfully");
         }, (err) => 
         {
             console.log(err.response.data.message);
@@ -46,8 +47,7 @@ class Employees extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") 
         {
-            // WorkerAction.getAllWorkers().then((res) => {
-            WorkerAction.getWorkerByAdmin(stored.id).then((res) => 
+            WorkerAction.getWorkersByAdmin(stored.id).then((res) =>
             {
                 this.setState({allemployee: res.data});
                 console.log(res.data);
@@ -89,10 +89,6 @@ class Employees extends Component
                                         <th className="th">First Name</th>
                                         <th className="th">Last Name</th>
                                         <th className="th">Phone Number</th>
-                                        {
-                                        // <th className="th">Service</th>
-                                        // <th className="th">Business Name</th>
-                                        }
                                         <th> Actions</th>
                                     </tr>
                                 </thead>
