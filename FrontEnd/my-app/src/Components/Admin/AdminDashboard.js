@@ -12,19 +12,6 @@ class AdminDashboard extends Component
     logOut() 
     {
         HandleLogout.Logout();
-        // SignUp.Logout().then((res) => 
-        // {
-        //     localStorage.clear();
-        //     console.log(res.response);
-        //     console.log(localStorage.getItem("user"));
-        //     alert("logout successful");
-        // }).catch((err) => 
-        // {
-        //     localStorage.clear();
-        //     console.log(err.response);
-        //     console.log(localStorage.getItem("user"));
-        //     alert("session expired");
-        // });
     }
 
     render() 

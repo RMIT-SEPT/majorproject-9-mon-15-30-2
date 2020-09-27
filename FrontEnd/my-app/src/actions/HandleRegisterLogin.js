@@ -13,22 +13,22 @@ class HandleRegisterLogin
         }});
     }
 
-    async Logout() 
+    Logout()
     {
         const token = 
         {
             token: stored.token
         }
-        return await axios.put("http://localhost:8080/api/users/logout", token).then((response) => 
+        return axios.put("http://localhost:8080/api/users/logout", token).then((response) =>
         {
             console.log(localStorage.getItem("user"));
-            localStorage.clear();
+            window.localStorage.clear();
             console.log(response);
-            alert("Logout successfully");
+            alert("Logout successful");
         }).catch((error) => 
         {
             console.log(localStorage.getItem("user"));
-            localStorage.clear();
+            window.localStorage.clear();
             console.log(error);
             alert("Session expired");
         });

@@ -10,7 +10,8 @@ class BookingHistory extends Component
     constructor(props) 
     {
         super(props)
-        this.state = {
+        this.state = 
+        {
             pastBookings: [],
             customer: []
         }
@@ -69,19 +70,19 @@ class BookingHistory extends Component
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {
-                                        this.state.pastBookings.map(
-                                            pastBookings => 
-                                            <tr key = {pastBookings.id}>
-                                                <td> {pastBookings.id}</td>
-                                                <td> {pastBookings.service}</td>
-                                                <td> {pastBookings.worker.fName}</td>
-                                                <td> {pastBookings.date}</td>   
-                                                <td> {pastBookings.startTime}</td>
-                                                <td> {pastBookings.endTime}</td>
-                                            </tr>
-                                        )
-                                    }
+                                {
+                                    this.state.pastBookings.map(
+                                        pastBookings => 
+                                        <tr key = {pastBookings.id}>
+                                            <td> {pastBookings.id}</td>
+                                            <td> {pastBookings.service}</td>
+                                            <td> {pastBookings.worker.fName}</td>
+                                            <td> {pastBookings.date}</td>   
+                                            <td> {pastBookings.startTime}</td>
+                                            <td> {pastBookings.endTime}</td>
+                                        </tr>
+                                    )
+                                }
                                 </tbody>
                             </Table>
                         </div>

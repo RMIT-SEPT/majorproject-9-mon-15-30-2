@@ -6,12 +6,12 @@ class HandleBookings
   createBooking(booking)
   {
     return axios.post("http://localhost:8080/customer/createbooking", booking,
-      {
-        headers: {
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        Authorization: stored.token
-      }});
+    {
+      headers: {
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      Authorization: stored.token
+    }});
   }
 
   getNewBookingById(customer_id)

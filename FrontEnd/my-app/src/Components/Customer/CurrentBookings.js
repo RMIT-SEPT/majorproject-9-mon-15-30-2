@@ -69,19 +69,19 @@ class CurrentBookings extends Component
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {
-                                        this.state.currentBookings.map(
-                                            currentBookings => 
-                                            <tr key = {currentBookings.id}>
-                                                <td> {currentBookings.id}</td>
-                                                <td> {currentBookings.service}</td>
-                                                <td> {currentBookings.worker.fName}</td>
-                                                <td> {currentBookings.date}</td>   
-                                                <td> {currentBookings.startTime}</td>
-                                                <td> {currentBookings.endTime}</td>
-                                            </tr>
-                                        )
-                                    }
+                                {
+                                    this.state.currentBookings.map(
+                                        currentBookings => 
+                                        <tr key = {currentBookings.id}>
+                                            <td> {currentBookings.id}</td>
+                                            <td> {currentBookings.service}</td>
+                                            <td> {currentBookings.worker.fName}</td>
+                                            <td> {currentBookings.date}</td>   
+                                            <td> {currentBookings.startTime}</td>
+                                            <td> {currentBookings.endTime}</td>
+                                        </tr>
+                                    )
+                                }
                                 </tbody>
                             </Table>
                         </div>

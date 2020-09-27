@@ -39,8 +39,7 @@ class HomePage extends Component
                                 </Container>
                             </Jumbotron>
                         </Col>
-                        <Col>
-                        </Col>
+                        <Col></Col>
                     </Row>
                 </Container>
             </React.Fragment>
