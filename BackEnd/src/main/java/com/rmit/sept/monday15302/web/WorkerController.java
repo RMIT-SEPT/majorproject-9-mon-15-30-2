@@ -1,6 +1,7 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.exception.UserException;
+import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -45,7 +46,7 @@ public class WorkerController {
                              BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if(errorMap != null) return errorMap;
+        if(errorMap != null) throw new WorkerDetailsException(errorMap.toString());
 
         String username = signupWorker.getUsername();
         if (userService.existsByUsername(username)) {

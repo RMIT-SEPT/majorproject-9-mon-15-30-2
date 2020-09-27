@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
-import LoginPage from './Login_SignUp/Login';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavigationBar from './NavigationBar';
+import HomePageDashBoard from './HomePageDashBoard';
 
-class HomePage extends Component {
-    render() {
-        return (
+class HomePage extends Component 
+{
+    render() 
+    { 
+        return(
             <React.Fragment>
-                <NavigationBar/>
+                <HomePageDashBoard/>
                     <Container>
                     <Row>
                         <Col>
@@ -39,13 +40,10 @@ class HomePage extends Component {
                             </Jumbotron>
                         </Col>
                         <Col>
-                            <LoginPage/>
                         </Col>
                     </Row>
                 </Container>
             </React.Fragment>
-            
-            
         )
     }
 }

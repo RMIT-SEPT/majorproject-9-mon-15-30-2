@@ -1,4 +1,4 @@
-/* Create user data*/
+ /* Create user data*/
 /* password1 */
 INSERT INTO USER (USER_ID, PASSWORD, USER_TYPE, USER_NAME) VALUES (1, '$2a$10$Pwb./SxpoztK7wP1ajsWZO0DeNo3xL8enEkOt1BDelcwGXkHBW7hC', 'ROLE_CUSTOMER', 'user1')
 /* password2 */
