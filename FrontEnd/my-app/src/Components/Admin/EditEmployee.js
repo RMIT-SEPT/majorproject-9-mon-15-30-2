@@ -73,10 +73,19 @@ class EditEmployee extends Component
             alert("update successful");
         }, (err) => 
         {
-            console.log(err.response.data.message);
-            console.log(err.response);
-            console.log(err.response.data);
-            this.setState({errorMessage: err.response.data.message});
+            if (String(err.response.status) === "401")
+            {
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                console.log(err.response);
+                console.log(err.response.data);
+                this.setState({errorMessage: err.response.data.message});
+            }
         });
     }
 

@@ -10,13 +10,13 @@ class AddEmployee extends Component
         super();
         this.state= 
         {
-        id: "",
-        fName: "",
-        lName: "",
-        password: "",
-        phoneNumber: "",
-        username: "",
-        adminId: ""
+            id: "",
+            fName: "",
+            lName: "",
+            password: "",
+            phoneNumber: "",
+            username: "",
+            adminId: ""
         }; 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -48,8 +48,17 @@ class AddEmployee extends Component
             alert("Employees successfully created");
         }, (err) => 
         {
-            console.log(err.response.data.message);
-            this.setState({errorMessage: err.response.data.message});
+            if (String(err.response.status) === "401")
+            {
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                this.setState({errorMessage: err.response.data.message});
+            }
         });
     }
     

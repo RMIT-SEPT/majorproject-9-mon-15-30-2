@@ -44,12 +44,12 @@ class HandleWorkers
     }});
   }
 
-  createNewWorker(worker, token) {
+  createNewWorker(worker) {
     return axios.post("http://localhost:8080/admin/createWorker",worker,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      Authorization: token
+      Authorization: stored.token
     }});
   }
 }

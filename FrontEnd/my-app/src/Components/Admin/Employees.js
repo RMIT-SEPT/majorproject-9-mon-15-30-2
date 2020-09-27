@@ -31,8 +31,18 @@ class Employees extends Component
             alert("Delete successful");
         }, (err) => 
         {
-            console.log(err.response.data.message);
-            this.setState({errorMessage: err.response.data.message});
+            if (String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                this.setState({errorMessage: err.response.data.message});
+            }
         });
     }
 
@@ -58,6 +68,7 @@ class Employees extends Component
             return <Redirect to="/"/>
         }
     }
+
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));

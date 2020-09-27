@@ -90,9 +90,18 @@ class CreateSession extends Component
                     alert("New session is created successfully");
                 }).catch((err) => 
                 {
-                    message = err.response.data.message;
-                    this.setState({errorMessage: err.response.data.message});
-                    alert(message);
+                    if (String(err.response.status) === "401")
+                    {
+                        localStorage.clear();
+                        alert("Session Expired");
+                        this.props.history.push('/login');
+                    }
+                    else
+                    {
+                        message = err.response.data.message;
+                        this.setState({errorMessage: err.response.data.message});
+                        alert(message);
+                    }
                 });
             }
         } 

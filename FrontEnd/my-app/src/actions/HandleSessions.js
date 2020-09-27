@@ -23,8 +23,7 @@ class HandleSessions
 
     getAvailableSessionByWorkerIdAndDay(worker_id, day)
     {
-        return axios.get("http://localhost:8080/admin/sessions/" +
-        worker_id + "/" + day, 
+        return axios.get("http://localhost:8080/admin/sessions/" + worker_id + "/" + day, 
         {headers: {
             Authorization: stored.token
         }});

@@ -138,9 +138,18 @@ class NewBookings extends Component
             this.props.history.push("/currentbookings");
         }).catch((err) => 
         {
-            this.setState({errorMessage: err.response.data.message});
-            alert(err.response.data.message);
-            this.props.history.push("/newbooking");
+            if (String(err.response.status) === "401")
+            {
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                this.setState({errorMessage: err.response.data.message});
+                alert(err.response.data.message);
+                this.props.history.push("/newbooking");
+            }
         });
     }
 

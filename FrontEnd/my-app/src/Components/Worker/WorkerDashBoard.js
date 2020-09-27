@@ -11,21 +11,7 @@ class DashboardWorker extends Component
 
     logOut() 
     {
-        localStorage.clear();
-        HandleLogout.logOut();
-        // SignUp.Logout().then((res) => 
-        // {
-        //     console.log(res.response);
-        //     console.log(localStorage.getItem("user"));
-        //     alert("logout successful");
-        // }).catch((err) => 
-        // {
-        //     console.log(err.response);
-        //     localStorage.clear();
-        //     console.log(localStorage.getItem("user"));
-        //     alert("session expired");
-        // });
-        // localStorage.clear();
+        HandleLogout.Logout();
     }
     
     render() 
