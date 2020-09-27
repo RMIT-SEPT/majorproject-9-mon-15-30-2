@@ -123,13 +123,14 @@ class NewBookings extends Component {
             service: this.state.service
         }
         console.log(newbooking);
-        CreateBooking.createBooking(newbooking).then(res => {
+        CreateBooking.createBooking(e).then(res => {
             alert("Booking successful");
             this.props.history.push("/currentbookings");
-        }).catch(err => {
-            this.setState({errorMessage: err.response.data.message});
-            alert(err.response.data.message);
-            this.props.history.push("/newbooking");
+        }).catch((err) => {
+            alert("Booking unsuccessful");
+            console.log("error");
+            // this.setState({errorMessage: err.response.data.message});
+            // this.props.history.push("/newbooking");
         });
     }
 

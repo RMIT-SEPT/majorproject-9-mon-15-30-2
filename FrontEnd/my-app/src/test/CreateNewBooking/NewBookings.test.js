@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import NewBookings from "../Components/CreateNewBooking/NewBooking";
+import NewBookings from "../../Components/CreateNewBooking/NewBooking";
 import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -70,7 +70,6 @@ describe('<NewBookings /> Unit Test', () =>
             name: "service",
             value: "Wash"
         };
-
         const e1 = {
             target: target1
         };
@@ -92,7 +91,6 @@ describe('<NewBookings /> Unit Test', () =>
         // const newBooking = new NewBookings();
         const wrapper = mount(<NewBookings />);
         wrapper.instance().componentDidMount();
-        
         wrapper.instance().handleServiceChange(e1);
 
         expect(wrapper.instance().state.service).toBe(target1.value);
@@ -123,13 +121,11 @@ describe('<NewBookings /> Unit Test', () =>
 
         jest.spyOn(axios, 'get').mockResolvedValueOnce(responce1);
 
-        // const newBooking = new NewBookings();
         const wrapper = mount(<NewBookings />);
         
         wrapper.instance().handleServiceChange(e1);
 
         expect(wrapper.instance().state.worker).toBe(target1.value);
-        //expect(wrapper.instance().state).toBe(1);
     });
 
     it('onChange', () =>
@@ -151,20 +147,39 @@ describe('<NewBookings /> Unit Test', () =>
 
     it('onSubmit', () =>
     {
-
+        const wrapper = mount(<NewBookings />);
         const responce1 = {
+            customer: {
+                id: "3",
+                fName: "Tom",
+                lName: "Hall",
+                address: "77 Latrobe St, Melbourne, Australia",
+                phoneNumber: 1117788890,
+                email: "tomHall@gmail.com",
+                hibernateLazyInitializer: {}
+            },
+            worker: {
+                id: "2",
+                fName: "fName",
+                lName: "lName",
+                admin: {
+                    id: "1",
+                    adminName: "adminName",
+                    service: "Haircut",
+                    hibernateLazyInitializer: {}
+                },
+                hibernateLazyInitializer: {}
+            },
             status: "NEW_BOOKING",
-            date: "2021/09/25",
-            startTime: "20:00:00",
-            endTime: "21:00:00",
-            service: "service"
+            date: "Date: 2020-12-12 Start Time: 12:00:00 End Time: 13:00:00",
+            startTime: "12:00:00",
+            endTime: "13:00:00",
+            service: "Haircut"
         };
 
         jest.spyOn(axios, 'post').mockResolvedValueOnce(responce1);
-        window.alert = jest.fn();
-        // const newBooking = new NewBookings();
-        const wrapper = mount(<NewBookings />);
-
+        jest.spyOn(window, 'alert').mockImplementation(() => {});
+        jest.spyOn(wrapper.instance(), 'onSubmit');
         class Ev extends Component{
             constructor(){
                 super()
@@ -172,17 +187,121 @@ describe('<NewBookings /> Unit Test', () =>
 
             preventDefault(){}
         }
-        const ev = new Ev;
-        
-        //expect(wrapper.instance().state.selectedSession).toBe(1);
-        wrapper.instance().state = responce1;
-        wrapper.instance().state.selectedSession = "2021/09/252021/09/252021/09/25";
-        wrapper.instance().onSubmit(ev);
 
+        const ev = new Ev();
+        wrapper.instance().state.selectedSession = "Date: 2020-12-12 Start Time: 12:00:00 End Time: 13:00:00";
+        wrapper.instance().onSubmit(ev);
         expect(axios.post).toHaveBeenCalled();
-        //expect(window.alert).toHaveBeenCalled();
-        //expect(wrapper.instance().state).toBe(1);
+        expect(wrapper.instance().onSubmit).toHaveBeenCalled();
+    });
+});
+
+describe('If onSubmit, alert are being called and successfully pushed', () => {
+    let wrapper;
+    const props = {
+        customer: {
+            id: "3",
+            fName: "Tom",
+            lName: "Hall",
+            address: "77 Latrobe St, Melbourne, Australia",
+            phoneNumber: 1117788890,
+            email: "tomHall@gmail.com",
+            hibernateLazyInitializer: {}
+        },
+        worker: {
+            id: "2",
+            fName: "fName",
+            lName: "lName",
+            admin: {
+                id: "1",
+                adminName: "adminName",
+                service: "Haircut",
+                hibernateLazyInitializer: {}
+            },
+            hibernateLazyInitializer: {}
+        },
+        status: "NEW_BOOKING",
+        date: "Date: 2020-12-12 Start Time: 12:00:00 End Time: 13:00:00",
+        startTime: "12:00:00",
+        endTime: "13:00:00",
+        service: "Haircut"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<NewBookings {...props}/>);
+        
     });
 
+    it('should call onSubmit', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super()
+            }
 
-})
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenCalledWith("Booking successful");
+    });
+});
+
+describe('If onSubmit, alert are being called and unsuccessfully pushed', () => {
+
+    let wrapperfail;
+    const failprops = {
+        customer: {
+            id: "3",
+            fName: "Tom",
+            lName: "Hall",
+            address: "77 Latrobe St, Melbourne, Australia",
+            phoneNumber: 1117788890,
+            email: "tomHall@gmail.com",
+            hibernateLazyInitializer: {}
+        },
+        worker: {
+            id: "",
+            fName: "",
+            lName: "",
+            admin: {
+                id: "",
+                adminName: "",
+                service: "",
+                hibernateLazyInitializer: {}
+            },
+            hibernateLazyInitializer: {}
+        },
+        status: "",
+        date: "",
+        startTime: "",
+        endTime: "",
+        service: ""
+    };
+
+    beforeEach(() => {
+        wrapperfail = shallow(<NewBookings {...failprops}/>);
+    });
+
+    it('should call onSubmit and fail', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super()
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapperfail.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenLastCalledWith("Booking unsuccessful");
+    });
+});

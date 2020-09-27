@@ -126,20 +126,18 @@ describe('<EditEmployee /> Unit Test', () =>
 
     it('updateEmployee', () =>
     {
-
         const responce1 = {
-            id: "this.state.id",
+            id: "3",
             password: "this.state.password",
-            fName: "this.state.fName",
-            lName: "this.state.lName",
-            phoneNumber: "this.state.phoneNumber",
-            username: "this.state.username",
+            fName: "fName",
+            lName: "lName",
+            phoneNumber: "1234567890",
+            username: "user1",
             adminId: "4"
         };
 
         jest.spyOn(axios, 'put').mockResolvedValueOnce(responce1);
-
-        // const newBooking = new NewBookings();
+        jest.spyOn(window, 'alert').mockImplementation(() => {});
         const wrapper = mount(<EditEmployee {...props1}/>);
 
         class Ev extends Component{
@@ -154,6 +152,43 @@ describe('<EditEmployee /> Unit Test', () =>
         wrapper.instance().updateEmployee(ev);
 
         expect(wrapper.instance().props.history).toHaveLength(1);
-        //expect(wrapper.instance().state).toBe(1);
+        expect(axios.put).toHaveBeenCalled();
+        
     });
-})
+});
+
+describe('Test for success update and alert message', () => {
+    let wrapper;
+    const props = {
+        id: "3",
+        password: "this.state.password",
+        fName: "fName",
+        lName: "lName",
+        phoneNumber: "1234567890",
+        username: "user1",
+        adminId: "4"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<EditEmployee {...props} {...props1}/>);
+    });
+
+    it('should call onSubmit', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super();
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'updateEmployee');
+        instance.updateEmployee(ev);
+        expect(instance.updateEmployee).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenCalled();
+        expect(window.alert).toHaveBeenCalledWith("Update successful");
+    });
+});

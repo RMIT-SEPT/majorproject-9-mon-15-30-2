@@ -35,7 +35,6 @@ class Employees extends Component
 
     componentDidMount()
     {
-        // WorkerAction.getAllWorkers().then((res) => {
         WorkerAction.getWorkerByAdmin(4).then((res) => {
             this.setState({allemployee: res.data});
             console.log(res.data);

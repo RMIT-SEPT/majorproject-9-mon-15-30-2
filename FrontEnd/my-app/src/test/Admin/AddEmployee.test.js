@@ -44,9 +44,9 @@ describe('<AddEmployee /> Unit Test', () =>
 
     it('onSubmit', () =>
     {
-
+        const wrapper = mount(<AddEmployee />);
         const responce1 = {
-            id: "this.state.id",
+            id: "1",
             password: "this.state.password",
             fName: "fName",
             lName: "lName",
@@ -57,10 +57,6 @@ describe('<AddEmployee /> Unit Test', () =>
 
         jest.spyOn(axios, 'post').mockResolvedValueOnce(responce1);
         jest.spyOn(window, 'alert').mockImplementation(() => {});
-
-        // const newBooking = new NewBookings();
-        const wrapper = mount(<AddEmployee />);
-
         class Ev extends Component{
             constructor(){
                 super()
@@ -68,17 +64,84 @@ describe('<AddEmployee /> Unit Test', () =>
 
             preventDefault(){}
         }
+
         const ev = new Ev();
         wrapper.instance().state = responce1;
         wrapper.instance().onSubmit(ev);
-
         expect(axios.post).toHaveBeenCalled();
-        expect(window.alert).toHaveBeenCalled();
-
-        //expect(wrapper.instance().alert()).toHaveBeenCalled();
-        //expect(wrapper.instance().state).toBe(1);
     });
-    
-    
+});
 
-})
+describe('If onSubmit, alert are being called and successfully pushed', () => {
+    let wrapper;
+    const props = {
+        id: "1",
+        password: "this.state.password",
+        fName: "fName",
+        lName: "lName",
+        phoneNumber: "0912123842",
+        username: "this.state.u",
+        adminId: "4"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<AddEmployee {...props}/>);
+        
+    });
+
+    it('should call onSubmit', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super()
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenCalledWith("Employees successfully created");
+    });
+});
+
+describe('If onSubmit, alert are being called and unsuccessfully pushed', () => {
+
+    let wrapperfail;
+    const failprops = {
+        id: "",
+        password: "",
+        fName: "",
+        lName: "",
+        phoneNumber: "",
+        username: "",
+        adminId: ""
+    };
+
+    beforeEach(() => {
+        wrapperfail = shallow(<AddEmployee {...failprops}/>);
+    });
+
+    it('should call onSubmit and fail', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super()
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapperfail.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenLastCalledWith("Employees unsuccessfully created");
+    });
+});
+
+

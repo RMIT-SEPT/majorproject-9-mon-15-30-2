@@ -37,11 +37,11 @@ class AddEmployee extends Component {
         }
         console.log(newEmployee);
         WorkerAction.createNewWorker(newEmployee).then( res => {
-            this.props.history.push('/employees');
             alert("Employees successfully created");
-        }, (err) => {
-            console.log(err.response.data.message);
-            this.setState({errorMessage: err.response.data.message});
+            this.props.history.push('/employees');
+        }).catch((err) => {
+            alert("Employees unsuccessfully created");
+            console.log("error");
         });
     }
     
@@ -54,7 +54,7 @@ class AddEmployee extends Component {
                     <div className="col-md-8 m-auto">
                             <h5 className="display-4 text-center">Register New Employee</h5>
                             <hr />
-                            <form onSubmit={this.onSubmit}>
+                            <form onSubmit={this.onSubmit} className="form">
 
                                 <h6>First Name</h6>
                                 <div className="form-group">

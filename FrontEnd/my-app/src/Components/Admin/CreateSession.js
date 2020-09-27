@@ -76,15 +76,15 @@ class CreateSession extends Component {
                 }
                 console.log(newsession);
                 HandleSession.createNewSession(newsession).then (res => {
-                    this.props.history.push('/adminhomepage');
                     alert("New session is created successfully");
+                    this.props.history.push('/adminhomepage');
+                    
                 }).catch(err => {
+                    alert(message);
                     message = err.response.data.message;
                     this.setState({errorMessage: err.response.data.message});
-                    alert(message);
                 });
             }
-
         } catch (err) {
             alert(message);
         }

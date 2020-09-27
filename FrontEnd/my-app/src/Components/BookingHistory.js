@@ -10,8 +10,7 @@ class BookingHistory extends Component
     {
         super(props)
         this.state = {
-            pastBookings: [],
-            customer: []
+            pastBookings: []
         }
     }
 
@@ -21,7 +20,6 @@ class BookingHistory extends Component
             this.setState({pastBookings: res.data});
             console.log(res.data);
         });
-
     }
 
     render() 
@@ -64,12 +62,12 @@ class BookingHistory extends Component
                                     this.state.pastBookings.map(
                                         pastBookings => 
                                         <tr key = {pastBookings.id}>
-                                            <td> {pastBookings.id}</td>
-                                            <td> {pastBookings.service}</td>
-                                            <td> {pastBookings.worker.fName}</td>
-                                            <td> {pastBookings.date}</td>   
-                                            <td> {pastBookings.startTime}</td>
-                                            <td> {pastBookings.endTime}</td>
+                                            <td className="td"> {pastBookings.id}</td>
+                                            <td className="td"> {pastBookings.service}</td>
+                                            <td className="td"> {pastBookings.worker.fName}</td>
+                                            <td className="td"> {pastBookings.date}</td>   
+                                            <td className="td"> {pastBookings.startTime}</td>
+                                            <td className="td"> {pastBookings.endTime}</td>
                                         </tr>
                                     )
                                 }
