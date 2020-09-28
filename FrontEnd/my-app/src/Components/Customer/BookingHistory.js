@@ -26,6 +26,9 @@ class BookingHistory extends Component
             {
                 this.setState({pastBookings: res.data});
                 console.log(res.data);
+            }).catch((err) =>
+            {
+                console.log(err.response.data.message);
             });
         }
         else
