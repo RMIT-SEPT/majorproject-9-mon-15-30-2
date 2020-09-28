@@ -139,11 +139,11 @@ public class BookingControllerTest {
 
     @Test
     public void saveBooking_itShouldReturnStatusOk() throws Exception {
-        User user1 = new User("customer", "******", UserType.CUSTOMER);
+        User user1 = new User("customer", "******", UserType.ROLE_CUSTOMER);
         user1.setId(customerId);
-        User user2 = new User("admin", "******", UserType.ADMIN);
+        User user2 = new User("admin", "******", UserType.ROLE_ADMIN);
         user1.setId(adminId);
-        User user3 = new User("worker", "******", UserType.WORKER);
+        User user3 = new User("worker", "******", UserType.ROLE_WORKER);
         user1.setId(workerId);
 
         AdminDetails admin = new AdminDetails("Haircut", "Business", user2);

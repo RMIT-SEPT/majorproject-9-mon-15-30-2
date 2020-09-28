@@ -96,4 +96,20 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUserName(String username) {
+        this.userName = username;
+    }
+
+    public void setPassword(String encode) {
+        this.password = encode;
+    }
+
+    public UserType getType() {
+        return type;
+    }
 }
