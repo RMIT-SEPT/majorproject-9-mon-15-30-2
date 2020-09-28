@@ -14,6 +14,7 @@ import java.text.ParseException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@RequestMapping("/admin")
 public class SessionController {
 
     @Autowired

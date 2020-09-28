@@ -1,9 +1,9 @@
 package com.rmit.sept.monday15302.model;
 
 public enum UserType {
-    ADMIN("Admin"),
-    CUSTOMER("Customer"),
-    WORKER("Worker");
+    ROLE_ADMIN("Admin"),
+    ROLE_CUSTOMER("Customer"),
+    ROLE_WORKER("Worker");
 
     private final String label;
 

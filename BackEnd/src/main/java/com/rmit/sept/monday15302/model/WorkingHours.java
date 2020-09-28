@@ -59,8 +59,6 @@ public class WorkingHours {
 
     public String getId() { return id; }
 
-    public AdminDetails getAdmin_id() { return admin_id; }
-
     public int getDay() { return day; }
 
     public Date getDate() { return date; }
