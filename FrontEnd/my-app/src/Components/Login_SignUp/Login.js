@@ -80,7 +80,6 @@ class Login extends Component
                                     </Form.Group>
                                     
                                     {
-                                        // <Button variant="secondary" type="submit" href="/customerhomepage">
                                         this.state.errorMessage &&
                                         <h6 className="text-danger"> {this.state.errorMessage} </h6> 
                                     }

@@ -25,7 +25,7 @@ class HandleRegisterLogin
             window.localStorage.clear();
             console.log(response);
             alert("Logout successful");
-        }).catch((error) => 
+        }),((error) =>
         {
             console.log(localStorage.getItem("user"));
             window.localStorage.clear();

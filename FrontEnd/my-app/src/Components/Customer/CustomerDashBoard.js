@@ -12,36 +12,7 @@ class NavigationBar extends Component
     logOut() 
     {   
         HandleLogout.Logout();
-        // SignUp.Logout().then((res) => 
-        // {
-        //     localStorage.clear();
-        //     console.log(res.response);
-        //     console.log(localStorage.getItem("user"));
-        //     alert("logout successful");
-        // }).catch((err) => 
-        // {
-        //     localStorage.clear();
-        //     console.log(err.response);
-        //     console.log(localStorage.getItem("user"));
-        //     alert("session expired");
-        // }
-        // ,(err) => {
-        //     if (err.response.data <= 0)
-        //     {
-        //         console.log(err.response.data);
-        //         this.setState({errorMessage: err.response.data.message});
-        //         alert(err.response.data.message);
-        //     }
-        //     else 
-        //     {
-        //         console.log("Session Expired");
-        //         alert("Session expired");
-        //         localStorage.removeItem("user");
-        //         this.props.history.push("/");   
-        //     }
-        // }
-        // );
-      }
+    }
 
     render() 
     {

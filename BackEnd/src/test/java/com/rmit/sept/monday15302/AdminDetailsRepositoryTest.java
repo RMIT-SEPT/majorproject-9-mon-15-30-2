@@ -29,8 +29,8 @@ public class AdminDetailsRepositoryTest {
 
     @Before
     public void setup() {
-        User user = new User("admin", "*", UserType.ROLE_ADMIN);
-        User user1 = new User("admin1", "*", UserType.ROLE_ADMIN);
+        User user = new User("admin", "******", UserType.ROLE_ADMIN);
+        User user1 = new User("admin1", "******", UserType.ROLE_ADMIN);
         entityManager.persist(user);
         entityManager.persist(user1);
 

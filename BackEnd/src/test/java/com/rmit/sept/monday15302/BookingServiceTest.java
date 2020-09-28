@@ -158,7 +158,7 @@ public class BookingServiceTest {
             throws ParseException {
         Booking booking = new Booking(customer, worker,
                 status, Utility.getDateAsString(today),
-                "05:00:00", "06:00:00", service);
+                "01:00:00", "02:00:00", service);
         booking.setId("b1");
         List<Booking> bookings = Arrays.asList(booking);
         List<Booking> sortedBookings = bookingService.sortBookings(bookings);
