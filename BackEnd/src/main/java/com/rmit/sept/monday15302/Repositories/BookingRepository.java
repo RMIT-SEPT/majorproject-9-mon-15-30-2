@@ -2,6 +2,7 @@ package com.rmit.sept.monday15302.Repositories;
 
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.BookingStatus;
+import com.rmit.sept.monday15302.model.WorkerDetails;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,6 +28,18 @@ public interface BookingRepository extends CrudRepository<Booking, String> {
             "order by booking.date ASC")
     List<Booking> findNewBookingByCustomerID(@Param("customerId") String customerId);
 
+    @Query("select DISTINCT booking from Booking booking where " +
+            "booking.worker.id = :workerId and " +
+            "booking.status <> com.rmit.sept.monday15302.model.BookingStatus.NEW_BOOKING " +
+            "order by booking.date DESC")
+    List<Booking> findPastBookingByWorkerID(@Param("workerId") String adminID);
+
+    @Query("select DISTINCT booking from Booking booking where "+
+            "booking.worker.id = :workerId and " +
+            "booking.status = com.rmit.sept.monday15302.model.BookingStatus.NEW_BOOKING " +
+            "order by booking.date ASC")
+    List<Booking> findNewBookingByWorkerID(@Param("workerId") String adminID);
+
     @Modifying
     @Transactional
     @Query("UPDATE Booking booking SET booking.status = :status WHERE booking.id = :bookingId")
@@ -36,5 +49,8 @@ public interface BookingRepository extends CrudRepository<Booking, String> {
             "booking.worker.id = :worker_id and booking.date = :date and booking.status = " +
             "com.rmit.sept.monday15302.model.BookingStatus.NEW_BOOKING")
     List<Booking> findNewBookingByWorkerAndDate(String worker_id, Date date);
+
+    @Query("select booking from Booking booking where booking.id = :id")
+    Booking getBookingById(String id);
 
 }

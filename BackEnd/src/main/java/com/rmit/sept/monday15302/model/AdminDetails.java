@@ -57,10 +57,6 @@ public class AdminDetails {
         this.id = id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public void setService(String service) {
         this.service = service;
     }
@@ -70,15 +66,5 @@ public class AdminDetails {
         AdminDetails a = (AdminDetails) o;
         return id.equals(a.getId()) && adminName.equals(a.getAdminName())
                 && service.equals(a.getService());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (adminName != null ? adminName.hashCode() : 0);
-        result = 31 * result + (service != null ? service.hashCode() : 0);
-
-        return result;
     }
 }

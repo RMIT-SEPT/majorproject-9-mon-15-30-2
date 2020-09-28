@@ -1,9 +1,6 @@
 package com.rmit.sept.monday15302;
 
-import com.rmit.sept.monday15302.model.Booking;
-import com.rmit.sept.monday15302.model.BookingStatus;
-import com.rmit.sept.monday15302.model.CustomerDetails;
-import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.model.*;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,7 +36,8 @@ public class BookingTest {
     @Before
     public void setup() throws ParseException {
         booking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
-                "2021-09-02", "8:00:00", "9:00:00", "Haircut");
+                "2021-09-02", "8:00:00", "9:00:00",
+                "Haircut", Confirmation.PENDING);
     }
 
     @AfterClass

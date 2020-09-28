@@ -86,10 +86,6 @@ public class Session {
         return worker;
     }
 
-    public void setWorker(WorkerDetails worker) {
-        this.worker = worker;
-    }
-
     @Override
     public boolean equals(Object o) {
         Session s = (Session) o;
@@ -101,26 +97,6 @@ public class Session {
 
     private String getId() {
         return this.session_id;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = session_id != null ? session_id.hashCode() : 0;
-        result = 31 * result + (worker != null ? worker.hashCode() : 0);
-        result = 31 * result + day;
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-        result = 31 * result + (service != null ? service.hashCode() : 0);
-
-        return result;
-    }
-
-    public void setDay(int i) {
-        this.day = i;
-    }
-
-    public void setService(String s) {
-        this.service = s;
     }
 
     public void setId(String s1) {
