@@ -204,7 +204,7 @@ public class SessionServiceTest {
 
         Booking booking = new Booking(new CustomerDetails(), worker,
                 BookingStatus.NEW_BOOKING, dateAsString, "08:00:00",
-                "09:00:00", service);
+                "09:00:00", service, Confirmation.PENDING);
         List<Booking> bookings = Arrays.asList(booking);
 
         SessionReturn exclude = new SessionReturn(dateAsString,

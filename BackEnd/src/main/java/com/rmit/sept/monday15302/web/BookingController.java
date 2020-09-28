@@ -3,6 +3,7 @@ package com.rmit.sept.monday15302.web;
 import com.rmit.sept.monday15302.model.Booking;
 import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,13 +36,13 @@ public class BookingController {
 
     @GetMapping(value="/customer/historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
-        List<Booking> bookings = bookingService.getAllPastBookingsByCustomerId(id);
+        List<Booking> bookings = bookingService.getPastBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
     @GetMapping(value="/customer/newbookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNewBookings(@PathVariable("id") String id) throws ParseException {
-        List<Booking> bookings = bookingService.getAllNewBookingsByCustomerId(id);
+        List<Booking> bookings = bookingService.getNewBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
@@ -58,7 +59,7 @@ public class BookingController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
 
-        Booking newBooking = bookingService.saveOrUpdateBooking(booking);
+        Booking newBooking = bookingService.saveBooking(booking);
         return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
     }
 
@@ -68,4 +69,33 @@ public class BookingController {
         List<SessionReturn> toReturn = sessionService.getAvailableSession(workerId, service);
         return new ResponseEntity<>(toReturn, HttpStatus.OK);
     }
+
+    @PutMapping("/confirmBooking/{bookingId}")
+    public ResponseEntity<?> updateWorker(@PathVariable("bookingId") String id,
+                                          @Valid @RequestBody BookingConfirmation booking,
+                                          BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+
+        Booking updatedBooking = bookingService.updateBooking(booking, id);
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+    }
+
+    @GetMapping(value="/booking/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getBookingById(@PathVariable("bookingId") String id) {
+        return new ResponseEntity<>(bookingService.getBookingById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value="pastBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getPastBookingsByAdminID(@PathVariable("adminID") String adminID) {
+        List<Booking> bookings = bookingService.getPastBookingsByAdminID(adminID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping(value="newBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getNewBookingsByAdminID(@PathVariable("adminID") String adminID) throws ParseException {
+        List<Booking> bookings = bookingService.getNewBookingsByAdminID(adminID);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
 }

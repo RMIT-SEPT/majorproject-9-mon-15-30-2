@@ -81,10 +81,6 @@ public class CustomerDetails {
         this.id = id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public void setfName(String fname) {
         this.fName = fname;
     }
@@ -112,18 +108,5 @@ public class CustomerDetails {
                 && lName.equals(c.getlName()) && address.equals(c.getAddress())
                 && phoneNumber.equals(c.getPhoneNumber())
                 && email.equals(c.getEmail());
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        result = 31 * result + (fName != null ? fName.hashCode() : 0);
-        result = 31 * result + (lName != null ? lName.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-
-        return result;
     }
 }

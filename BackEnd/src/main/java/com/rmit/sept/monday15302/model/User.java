@@ -96,20 +96,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserType getType() {
-        return type;
-    }
 }

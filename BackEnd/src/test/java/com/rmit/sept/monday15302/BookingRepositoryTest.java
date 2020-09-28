@@ -53,11 +53,14 @@ public class BookingRepositoryTest {
         entityManager.persist(worker);
 
         pastBooking = new Booking(customer, worker, BookingStatus.PAST_BOOKING,
-                "2020-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2020-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.CONFIRMED);
         cancelledBooking = new Booking(customer, worker, BookingStatus.CANCELLED_BOOKING,
-                "2020-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2020-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.CANCELLED);
         newBooking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
-                "2021-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2021-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.PENDING);
         entityManager.persist(pastBooking);
         entityManager.persist(cancelledBooking);
         entityManager.persist(newBooking);

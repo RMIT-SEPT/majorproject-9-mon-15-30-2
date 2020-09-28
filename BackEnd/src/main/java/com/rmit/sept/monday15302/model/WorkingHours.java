@@ -78,19 +78,4 @@ public class WorkingHours {
     public void setEndTime(String endTime) throws ParseException {
         this.endTime = Utility.convertStringToTime(endTime);
     }
-
-    public void setId(String id)
-    {
-        this.id = id;
-    }
-
-    public void setAdminId(AdminDetails id)
-    {
-        admin_id = id;
-    }
-
-    public void setDay(int day)
-    {
-        this.day = day;
-    }
 }
