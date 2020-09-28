@@ -34,26 +34,26 @@ public class BookingController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    @GetMapping(value="historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/customer/historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
         List<Booking> bookings = bookingService.getPastBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @GetMapping(value="newbookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/customer/newbookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNewBookings(@PathVariable("id") String id) throws ParseException {
         List<Booking> bookings = bookingService.getNewBookingsByCustomerId(id);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @GetMapping("makebooking/byservice/{service}")
+    @GetMapping("/customer/makebooking/workers/{service}")
     public ResponseEntity<?> getWorkersByService(@PathVariable("service") String service) {
         List<String> adminList = adminDetailsService.getAdminIdByService(service);
         List<WorkerDetails> workersList = workerDetailsService.getWorkersByAdminIds(adminList);
         return new ResponseEntity<>(workersList, HttpStatus.OK);
     }
 
-    @PostMapping("makebooking/create")
+    @PostMapping("/customer/createbooking")
     public ResponseEntity<?> createNewBooking(@Valid @RequestBody Booking booking, BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
@@ -63,7 +63,7 @@ public class BookingController {
         return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
     }
 
-    @GetMapping("/makebooking/sessions/{workerId}/{service}")
+    @GetMapping("/customer/makebooking/sessions/{workerId}/{service}")
     public ResponseEntity<?> getAvailableSessions(@PathVariable("workerId") String workerId,
                               @PathVariable("service") String service) throws ParseException {
         List<SessionReturn> toReturn = sessionService.getAvailableSession(workerId, service);

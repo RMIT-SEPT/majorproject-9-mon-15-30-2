@@ -1,6 +1,7 @@
 package com.rmit.sept.monday15302.web;
 
 import com.rmit.sept.monday15302.exception.UserException;
+import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
@@ -35,17 +36,18 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
-    @GetMapping(value="/worker/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(workerDetailsService.getWorkerById(id), HttpStatus.OK);
+    @GetMapping(value="/admin/worker/{id}/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id,
+                                           @PathVariable("adminId") String adminId) {
+        return new ResponseEntity<>(workerDetailsService.getWorkerById(id, adminId), HttpStatus.OK);
     }
 
-    @PostMapping("/createWorker")
+    @PostMapping("/admin/createWorker")
     public ResponseEntity<?> createNewWorker(@Valid @RequestBody WorkerSignup signupWorker,
                              BindingResult result) {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if(errorMap != null) return errorMap;
+        if(errorMap != null) throw new WorkerDetailsException(errorMap.toString());
 
         String username = signupWorker.getUsername();
         if (userService.existsByUsername(username)) {
@@ -55,7 +57,7 @@ public class WorkerController {
         AdminDetails admin = adminDetailsService.getAdminById(signupWorker.getAdminId());
 
         // Create new user and new worker
-        User user = new User(username, signupWorker.getPassword(), UserType.WORKER);
+        User user = new User(username, signupWorker.getPassword(), UserType.ROLE_WORKER);
         WorkerDetails worker = new WorkerDetails(user, signupWorker.getfName(),
                 signupWorker.getlName(), admin, signupWorker.getPhoneNumber());
         userService.saveUser(user);
@@ -63,24 +65,25 @@ public class WorkerController {
         return new ResponseEntity<>(newWorker, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/deleteWorker/{id}")
-    public ResponseEntity<?> deleteWorker(@PathVariable("id") String id) {
-        workerDetailsService.deleteWorker(id);
+    @DeleteMapping("/admin/deleteWorker/{id}/{adminId}")
+    public ResponseEntity<?> deleteWorker(@PathVariable("id") String id,
+                                          @PathVariable("adminId") String adminId) {
+        workerDetailsService.deleteWorker(id, adminId);
         userService.deleteById(id);
         return new ResponseEntity<>("Deleted worker with id " + id, HttpStatus.OK);
     }
 
-    @PutMapping("/editWorker/{id}")
+    @PutMapping("/admin/editWorker/{id}/{adminId}")
     public ResponseEntity<?> updateWorker(@PathVariable("id") String id,
-                              @Valid @RequestBody EditWorker worker,
-                              BindingResult result) {
+                  @PathVariable("adminId") String adminId, @Valid @RequestBody EditWorker worker,
+                  BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-        EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id);
+        EditWorker updatedWorker = workerDetailsService.updateWorker(worker, id, adminId);
         return new ResponseEntity<>(updatedWorker, HttpStatus.OK);
     }
 
-    @GetMapping("/workers/{adminId}")
+    @GetMapping("/admin/workers/{adminId}")
     public ResponseEntity<?> getWorkersByAdmin(@PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(workerDetailsService.getWorkersByAdminId(adminId), HttpStatus.OK);
     }
