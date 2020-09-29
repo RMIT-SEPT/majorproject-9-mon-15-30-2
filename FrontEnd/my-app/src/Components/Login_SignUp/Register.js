@@ -54,7 +54,7 @@ class NewBookings extends Component
         {
             console.log(err.response.data);
             this.setState({errorMessage: err.response.data.message});
-            alert(err.response.data.message);
+            // alert(err.response.data.message);
         });
     }
     

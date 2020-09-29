@@ -17,9 +17,7 @@ describe('<NavigationBar /> Unit Test', () => {
     it('renders nav bar toggler', () =>
         {
             const wrapper = shallow(<NavigationBar />);
-            expect(wrapper.find('.navbar-toggler')).toHaveLength(1);
+            expect(wrapper.find('.nav-item')).toHaveLength(0);
         }
     );
-
-
 })

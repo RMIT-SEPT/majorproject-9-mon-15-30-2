@@ -57,10 +57,11 @@ class Employees extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") 
         {
+            console.log(stored.token);
             WorkerAction.getWorkersByAdmin(stored.id).then((res) =>
             {
                 this.setState({allemployee: res.data});
-                console.log(res.data);
+                // console.log(res.data);
             });
         }
         else
