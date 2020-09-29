@@ -39,6 +39,32 @@ describe('<CurrentBooking /> Unit Test', () =>
         expect(wrapper.find('.th')).toHaveLength(6);
 
     });
-    
+});
 
-})
+describe('<BookingHistory /> Unit Test Actions', () =>
+{
+    let wrapper;
+
+    const props = {
+        id: "1",
+        service: "Haircut",
+        worker: {
+            fName: "John"
+        },
+        date: "2020-12-12",
+        startTime: "12:00:00",
+        endTime: "13:00:00"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<CurrentBookings {...props}/>);
+    });
+
+    it('should call componentdidmount()', () => {
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'componentDidMount');
+        instance.componentDidMount();
+        expect(instance.componentDidMount).toHaveBeenCalled();
+    });
+});
+

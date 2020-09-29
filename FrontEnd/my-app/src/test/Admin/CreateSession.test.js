@@ -1,10 +1,26 @@
-import React from "react";
+import React, { Component } from "react";
 import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import CreateSession from "../../Components/Admin/CreateSession";
+import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+const id1 = "1";
+const params1 = 
+{
+    id: id1
+}
+const match1 = 
+{
+    params:params1
+}
+const props1 = 
+{
+    match: match1,
+    history: []
+}
 
 describe('<CreateSession /> Unit Test', () => 
 {
@@ -57,4 +73,150 @@ describe('<CreateSession /> Unit Test', () =>
         expect(wrapper.find('.day')).toHaveLength(7);
     });
 
-})
+    it('error', () =>
+    {
+        const create = new CreateSession();
+        create.state.error = true;
+        const wrapper = shallow(create.render());
+        expect(wrapper.find('.error')).toHaveLength(1);
+    });
+
+    it('handleDaySelection', () =>
+    {
+        const target1 = {
+            name: "service",
+            value: "Wash"
+        };
+
+        const e1 = {
+            target: target1
+        };
+
+        const service1 = {
+            key: "a",
+            value: "Wash"
+        };
+
+        const services = [];
+        services.push(service1);
+
+        const responce1 = {
+            data: services
+        };
+
+        jest.spyOn(axios, 'get').mockResolvedValueOnce(responce1);
+
+        const wrapper = mount(<CreateSession />);
+        
+        wrapper.instance().handleDaySelection(e1);
+
+        expect(wrapper.instance().state.service).toBe(target1.value);
+    });
+
+    it('onChange', () =>
+    {
+        const target1 = {
+            name: "day",
+            value: "name"
+        };
+        const e1 = {
+            target: target1
+        };
+        const wrapper = mount(<CreateSession />);
+        expect(wrapper.instance().state.day).toBe("");
+        wrapper.instance().onChange(e1);
+        expect(wrapper.instance().state.day).toBe(target1.value);
+    });
+
+    it('onSubmit', () =>
+    {
+        const wrapper = mount(<CreateSession />);
+        const responce1 = {
+            day : "Monday",
+            startTime : "12:00",
+            endTime : "13:00",
+            workerId : "2"
+        };
+
+        jest.spyOn(axios, 'post').mockResolvedValueOnce(responce1);
+        jest.spyOn(window, 'alert').mockImplementation(() => {});
+        class Ev extends Component{
+            constructor(){
+                super()
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        wrapper.instance().state = responce1;
+        wrapper.instance().onSubmit(ev);
+        expect(axios.post).toHaveBeenCalled();
+    });
+});
+
+describe('Test for success push', () => {
+    let wrapper;
+    const props = {
+        day : "Monday",
+        startTime : "12:00",
+        endTime : "13:00",
+        workerId : "2"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<CreateSession {...props}/>);
+    });
+
+    it('should call onSubmit', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super();
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenCalled();
+        expect(window.alert).toHaveBeenCalledWith("New session is created successfully");
+    });
+});
+
+describe('Test for unsuccess push', () => {
+    let wrapper;
+    const props = {
+        day : "",
+        startTime : "",
+        endTime : "",
+        workerId : ""
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<CreateSession {...props}/>);
+    });
+
+    it('should call onSubmit', () =>
+    {
+        class Ev extends Component{
+            constructor(){
+                super();
+            }
+
+            preventDefault(){}
+        }
+
+        const ev = new Ev();
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'onSubmit');
+        instance.onSubmit(ev);
+        expect(instance.onSubmit).toHaveBeenCalledTimes(1);
+        expect(window.alert).toHaveBeenCalled();
+        expect(window.alert).toHaveBeenCalledWith("Invalid start time or end time");
+    });
+});

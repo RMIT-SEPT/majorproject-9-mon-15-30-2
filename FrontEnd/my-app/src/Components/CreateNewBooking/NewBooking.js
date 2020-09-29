@@ -11,9 +11,9 @@ class NewBookings extends Component
     constructor()
     {
         super();
-        this.state=
-        {
-            selectedSession:[],
+
+        this.state={
+            selectedSession:"",
             allworker: [],
             allservices: [],
             availableSessions:[],
