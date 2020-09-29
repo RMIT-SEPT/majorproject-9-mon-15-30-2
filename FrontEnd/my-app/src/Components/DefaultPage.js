@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import HomePageDashBoard from './HomePageDashBoard';
 
-class HomePage extends Component 
+class DefaultPage extends Component 
 {
     render() 
     { 
@@ -46,4 +46,4 @@ class HomePage extends Component
         )
     }
 }
-export default HomePage;
+export default DefaultPage;
