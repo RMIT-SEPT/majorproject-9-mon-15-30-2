@@ -3,6 +3,7 @@ package com.rmit.sept.monday15302;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.BookingController;
@@ -16,15 +17,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -50,12 +50,14 @@ public class BookingControllerTest {
     private SessionService sessionService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
+    private static String customerId = "c1";
+    private static String workerId = "w1";
+    private static String adminId = "a1";
+    private static String bookingId = "b1";
 
     @Test
     public void givenPastBookingsForCustomer_whenGetPastBookingsForCustomer_thenReturnJsonArray()
             throws Exception {
-
-        String customerId = "c1";
 
         Booking booking1 = new Booking();
         booking1.setStatus(BookingStatus.PAST_BOOKING);
@@ -63,11 +65,9 @@ public class BookingControllerTest {
         Booking booking2 = new Booking();
         booking2.setStatus(BookingStatus.CANCELLED_BOOKING);
 
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(booking1);
-        bookings.add(booking2);
+        List<Booking> bookings = Arrays.asList(booking1, booking2);
 
-        given(service.getAllPastBookingsByCustomerId(customerId)).willReturn(bookings);
+        given(service.getPastBookingsByCustomerId(customerId)).willReturn(bookings);
 
         mvc.perform(get("/historybookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -81,15 +81,12 @@ public class BookingControllerTest {
     public void givenNewBookingsForCustomer_whenGetNewBookingsForCustomer_thenReturnJsonArray()
             throws Exception {
 
-        String customerId = "c1";
-
         Booking booking = new Booking();
         booking.setStatus(BookingStatus.NEW_BOOKING);
 
-        List<Booking> bookings = new ArrayList<>();
-        bookings.add(booking);
+        List<Booking> bookings = Arrays.asList(booking);
 
-        given(service.getAllNewBookingsByCustomerId(customerId)).willReturn(bookings);
+        given(service.getNewBookingsByCustomerId(customerId)).willReturn(bookings);
 
         mvc.perform(get("/newbookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -101,22 +98,18 @@ public class BookingControllerTest {
     @Test
     public void givenWorkersWithService_whenGetWorkersByService_thenReturnJsonArray()
             throws Exception {
-        String workerId1 = "w1";
         String workerId2 = "w2";
-        String adminId = "a1";
         String service = "Haircut";
 
         WorkerDetails worker1 = new WorkerDetails();
-        worker1.setId(workerId1);
+        worker1.setId(workerId);
 
         WorkerDetails worker2 = new WorkerDetails();
         worker2.setId(workerId2);
 
         List<String> adminList = Arrays.asList(adminId);
 
-        List<WorkerDetails> workers = new ArrayList<>();
-        workers.add(worker1);
-        workers.add(worker2);
+        List<WorkerDetails> workers = Arrays.asList(worker1, worker2);
 
         given(adminDetailsService.getAdminIdByService(service)).willReturn(adminList);
         given(workerDetailsService.getWorkersByAdminIds(adminList)).willReturn(workers);
@@ -125,14 +118,13 @@ public class BookingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(workerId1)))
+                .andExpect(jsonPath("$[0].id", is(workerId)))
                 .andExpect(jsonPath("$[1].id", is(workerId2)));
     }
 
     @Test
     public void fetchAvailableSessionsByWorkerAndService() throws Exception {
         String service = "Haircut";
-        String workerId = "w1";
         SessionReturn session1 = new SessionReturn("2020-09-12",
                 "08:00:00", "09:00:00");
         List<SessionReturn> sessions = Arrays.asList(session1);
@@ -147,12 +139,13 @@ public class BookingControllerTest {
 
     @Test
     public void saveBooking_itShouldReturnStatusOk() throws Exception {
-        User user1 = new User("customer", "*", UserType.CUSTOMER);
-        user1.setId("c1");
-        User user2 = new User("admin", "*", UserType.ADMIN);
-        user1.setId("a1");
-        User user3 = new User("worker", "*", UserType.WORKER);
-        user1.setId("w1");
+        User user1 = new User("customer", "******", UserType.ROLE_CUSTOMER);
+        user1.setId(customerId);
+        User user2 = new User("admin", "******", UserType.ROLE_ADMIN);
+        user1.setId(adminId);
+        User user3 = new User("worker", "******", UserType.ROLE_WORKER);
+        user1.setId(workerId);
+
         AdminDetails admin = new AdminDetails("Haircut", "Business", user2);
         admin.setId(user2.getId());
         CustomerDetails customer = new CustomerDetails(user1, "John", "Smith",
@@ -162,9 +155,10 @@ public class BookingControllerTest {
                 admin, "0123445556");
         worker.setId(user3.getId());
         Booking booking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
-                "2021-09-02", "8:00:00", "9:00:00", "Haircut");
-        booking.setId("b1");
-        given(service.saveOrUpdateBooking(Mockito.any(Booking.class))).willReturn(booking);
+                "2021-09-02", "8:00:00", "9:00:00",
+                "Haircut", Confirmation.PENDING);
+        booking.setId(bookingId);
+        given(service.saveBooking(Mockito.any(Booking.class))).willReturn(booking);
 
         String jsonString = objectMapper.writeValueAsString(booking);
 
@@ -172,6 +166,35 @@ public class BookingControllerTest {
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
+                .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    public void testGetBookingById() throws Exception {
+        Booking booking = new Booking();
+        booking.setId(bookingId);
+
+        given(service.getBookingById(bookingId)).willReturn(booking);
+
+        mvc.perform(get("/booking/{bookingId}", bookingId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(bookingId)));
+    }
+
+    @Test
+    public void updateBookingStatus_returnStatusOK() throws Exception {
+        Booking booking = new Booking();
+
+        given(service.updateBooking(Mockito.any(BookingConfirmation.class), eq(bookingId)))
+                .willReturn(booking);
+
+        String jsonString = objectMapper.writeValueAsString(booking);
+
+        mvc.perform(put("/confirmBooking/{bookingId}", bookingId)
+                .content(jsonString)
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }
 }

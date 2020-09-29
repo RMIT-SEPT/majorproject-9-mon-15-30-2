@@ -34,9 +34,9 @@ public class BookingRepositoryTest {
 
     @Before
     public void setup() throws ParseException {
-        user = new User("customer", "*", UserType.CUSTOMER);
-        user2 = new User("worker", "*", UserType.WORKER);
-        user3 = new User("admin", "*", UserType.ADMIN);
+        user = new User("customer", "*****", UserType.ROLE_CUSTOMER);
+        user2 = new User("worker", "*****", UserType.ROLE_WORKER);
+        user3 = new User("admin", "*****", UserType.ROLE_ADMIN);
         entityManager.persist(user);
         entityManager.persist(user2);
         entityManager.persist(user3);
@@ -53,11 +53,14 @@ public class BookingRepositoryTest {
         entityManager.persist(worker);
 
         pastBooking = new Booking(customer, worker, BookingStatus.PAST_BOOKING,
-                "2020-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2020-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.CONFIRMED);
         cancelledBooking = new Booking(customer, worker, BookingStatus.CANCELLED_BOOKING,
-                "2020-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2020-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.CANCELLED);
         newBooking = new Booking(customer, worker, BookingStatus.NEW_BOOKING,
-                "2021-09-02", "17:00:00", "18:00:00", "Haircut");
+                "2021-09-02", "17:00:00", "18:00:00",
+                "Haircut", Confirmation.PENDING);
         entityManager.persist(pastBooking);
         entityManager.persist(cancelledBooking);
         entityManager.persist(newBooking);

@@ -66,8 +66,8 @@ public class SessionServiceTest {
 
     @Before
     public void setup() throws ParseException {
-        User user = new User("worker", "*", UserType.WORKER);
-        User user2 = new User("admin", "*", UserType.ADMIN);
+        User user = new User("worker", "*", UserType.ROLE_WORKER);
+        User user2 = new User("admin", "*", UserType.ROLE_ADMIN);
         admin = new AdminDetails("Business", service, user2);
         admin.setId(adminId);
         worker = new WorkerDetails(user, "John",
@@ -82,7 +82,7 @@ public class SessionServiceTest {
         workers = Arrays.asList(worker);
         Mockito.when(sessionRepository.findByWorkerIdAndService(workerId, service))
                 .thenReturn(sessions);
-        Mockito.when(workerDetailsRepository.getWorkerById(workerId)).thenReturn(worker);
+        Mockito.when(workerDetailsRepository.getByIdAndAdminId(workerId, adminId)).thenReturn(worker);
         Mockito.when(adminDetailsRepository.getServiceByAdminId(adminId)).thenReturn(service);
         Mockito.when(workerDetailsRepository.findByAdminId(adminId)).thenReturn(workers);
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1)).thenReturn(sessions);
@@ -204,7 +204,7 @@ public class SessionServiceTest {
 
         Booking booking = new Booking(new CustomerDetails(), worker,
                 BookingStatus.NEW_BOOKING, dateAsString, "08:00:00",
-                "09:00:00", service);
+                "09:00:00", service, Confirmation.PENDING);
         List<Booking> bookings = Arrays.asList(booking);
 
         SessionReturn exclude = new SessionReturn(dateAsString,

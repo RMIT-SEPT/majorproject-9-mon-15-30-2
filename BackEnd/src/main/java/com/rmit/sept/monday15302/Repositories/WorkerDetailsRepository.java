@@ -12,6 +12,10 @@ public interface WorkerDetailsRepository extends CrudRepository<WorkerDetails, S
     
     List<WorkerDetails> findByAdminId(String adminId);
 
-    @Query("select worker from WorkerDetails worker where worker.user.id = :id")
-    WorkerDetails getWorkerById(String id);
+    @Query("select worker from WorkerDetails worker where worker.user.id = :id " +
+            "and worker.admin.id = :adminId")
+    WorkerDetails getByIdAndAdminId(String id, String adminId);
+
+    @Query("select worker from WorkerDetails worker where worker.user.id = :workerId")
+    WorkerDetails getWorkerById(String workerId);
 }

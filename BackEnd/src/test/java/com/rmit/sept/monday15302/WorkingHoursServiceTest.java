@@ -26,11 +26,12 @@ public class WorkingHoursServiceTest {
     private WorkingHoursService workingHoursService;
 
     private static WorkingHours hours;
+    private static String adminId = "a1";
 
     @Before
     public void setup() throws ParseException {
         AdminDetails admin = new AdminDetails();
-        admin.setId("a1");
+        admin.setId(adminId);
 
         hours = new WorkingHours(admin, 3,
                 "08:00:00", "10:00:00", "2020-12-12");
@@ -41,12 +42,12 @@ public class WorkingHoursServiceTest {
 
     @Test
     public void getOpeningHoursByDayAndAdmin_returnHours_ifHoursFound() {
-        assert(workingHoursService.getOpeningHoursByDayAndAdmin(3,"a1").equals(hours));
+        assert(workingHoursService.getOpeningHoursByDayAndAdmin(3,adminId).equals(hours));
     }
 
     @Test
     public void getOpeningHoursByDayAndAdmin_returnNull_ifHoursNotFound() {
-        assert(workingHoursService.getOpeningHoursByDayAndAdmin(1, "a1") == null);
+        assert(workingHoursService.getOpeningHoursByDayAndAdmin(1, adminId) == null);
     }
 
 }

@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.times;
@@ -25,13 +26,16 @@ public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     static private User user;
     static private final String username = "admin";
     static private final String userId = "123";
 
     @Before
     public void setup() {
-        user = new User(username, "*", UserType.ADMIN);
+        user = new User(username, "*", UserType.ROLE_ADMIN);
         user.setId(userId);
 
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);

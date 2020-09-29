@@ -14,12 +14,10 @@ describe('<NavigationBar /> Unit Test', () => {
         }
     );
 
-    it('renders 7 nav-item', () =>
+    it('renders nav bar toggler', () =>
         {
             const wrapper = shallow(<NavigationBar />);
             expect(wrapper.find('.nav-item')).toHaveLength(0);
         }
     );
-
-
 })
