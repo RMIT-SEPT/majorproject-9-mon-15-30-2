@@ -12,6 +12,7 @@ import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Request.WorkerSignup;
+import com.rmit.sept.monday15302.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,9 +37,11 @@ public class WorkerController {
     @Autowired
     AdminDetailsService adminDetailsService;
 
+    @Autowired
+    private Utility utility;
+
     @GetMapping(value="/admin/worker/{id}/{adminId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id,
-                                           @PathVariable("adminId") String adminId) {
+    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id, @PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(workerDetailsService.getWorkerById(id, adminId), HttpStatus.OK);
     }
 
@@ -86,5 +89,13 @@ public class WorkerController {
     @GetMapping("/admin/workers/{adminId}")
     public ResponseEntity<?> getWorkersByAdmin(@PathVariable("adminId") String adminId) {
         return new ResponseEntity<>(workerDetailsService.getWorkersByAdminId(adminId), HttpStatus.OK);
+    }
+
+    @GetMapping("/worker/profile/{id}")
+    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
+        if(utility.isCurrentLoggedInUser(id)) {
+            return new ResponseEntity<>(workerDetailsService.getWorkerProfileById(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
     }
 }

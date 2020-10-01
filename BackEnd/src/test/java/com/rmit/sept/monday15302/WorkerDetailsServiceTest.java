@@ -172,4 +172,16 @@ public class WorkerDetailsServiceTest {
         // then
         Mockito.verify(workerDetailsRepository, times(1)).save(worker1);
     }
+
+    @Test
+    public void getWorkerProfileById_returnWorker_ifWorkerFound() {
+        Mockito.when(workerDetailsRepository.getWorkerById(workerId_1)).thenReturn(worker1);
+        assert(workerDetailsService.getWorkerProfileById(workerId_1) != null);
+    }
+
+    @Test(expected = WorkerDetailsException.class)
+    public void getWorkerProfileById_throwException_ifWorkerNotFound()
+            throws WorkerDetailsException {
+        assert(workerDetailsService.getWorkerProfileById("1234") == null);
+    }
 }

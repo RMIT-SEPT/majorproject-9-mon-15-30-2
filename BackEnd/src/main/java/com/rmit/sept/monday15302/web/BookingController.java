@@ -33,7 +33,7 @@ public class BookingController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
+    
     @GetMapping(value="/customer/historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
         List<Booking> bookings = bookingService.getPastBookingsByCustomerId(id);

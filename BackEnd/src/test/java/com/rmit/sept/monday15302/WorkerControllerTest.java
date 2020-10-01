@@ -1,16 +1,14 @@
 package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rmit.sept.monday15302.model.AdminDetails;
-import com.rmit.sept.monday15302.model.User;
-import com.rmit.sept.monday15302.model.UserType;
-import com.rmit.sept.monday15302.model.WorkerDetails;
+import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.*;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Request.WorkerSignup;
+import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.WorkerController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +67,9 @@ public class WorkerControllerTest {
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @MockBean
+    private Utility utility;
 
     @Test
     public void givenWorker_fetchOneWorkerById() throws Exception {
@@ -175,5 +176,30 @@ public class WorkerControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is("123")))
                 .andExpect(jsonPath("$[1].id", is("456")));
+    }
+
+    @Test
+    public void getWorkerById() throws Exception {
+
+        WorkerDetails worker = new WorkerDetails();
+        String id = "w1";
+        worker.setId(id);
+
+        given(service.getWorkerProfileById(id)).willReturn(worker);
+        given(utility.isCurrentLoggedInUser(id)).willReturn(true);
+
+        mvc.perform(get("/worker/profile/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(id)));
+    }
+
+    @Test
+    public void getWorkerById_throwUnauthorizedStatus() throws Exception {
+        given(utility.isCurrentLoggedInUser("w1")).willReturn(false);
+
+        mvc.perform(get("/worker/profile/{id}", "w1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 }
