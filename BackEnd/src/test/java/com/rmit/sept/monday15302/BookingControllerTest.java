@@ -2,6 +2,9 @@ package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
+import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
+import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
+import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.*;
 import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
@@ -11,9 +14,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -29,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookingController.class)
+@AutoConfigureMockMvc(addFilters=false)
 public class BookingControllerTest {
 
     @Autowired
@@ -48,6 +54,21 @@ public class BookingControllerTest {
 
     @MockBean
     private SessionService sessionService;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private CustomUserService customUserService;
+
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    private CustomAuthenticationSuccessHandler successHandler;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private static String customerId = "c1";
@@ -69,7 +90,7 @@ public class BookingControllerTest {
 
         given(service.getPastBookingsByCustomerId(customerId)).willReturn(bookings);
 
-        mvc.perform(get("/historybookings/{id}", customerId)
+        mvc.perform(get("/customer/historybookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -88,7 +109,7 @@ public class BookingControllerTest {
 
         given(service.getNewBookingsByCustomerId(customerId)).willReturn(bookings);
 
-        mvc.perform(get("/newbookings/{id}", customerId)
+        mvc.perform(get("/customer/newbookings/{id}", customerId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -114,7 +135,7 @@ public class BookingControllerTest {
         given(adminDetailsService.getAdminIdByService(service)).willReturn(adminList);
         given(workerDetailsService.getWorkersByAdminIds(adminList)).willReturn(workers);
 
-        mvc.perform(get("/makebooking/byservice/{service}", service)
+        mvc.perform(get("/customer/makebooking/workers/{service}", service)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -129,7 +150,7 @@ public class BookingControllerTest {
                 "08:00:00", "09:00:00");
         List<SessionReturn> sessions = Arrays.asList(session1);
         given(sessionService.getAvailableSession(workerId, service)).willReturn(sessions);
-        mvc.perform(get("/makebooking/sessions/{workerId}/{service}", workerId, service)
+        mvc.perform(get("/customer/makebooking/sessions/{workerId}/{service}", workerId, service)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -162,7 +183,7 @@ public class BookingControllerTest {
 
         String jsonString = objectMapper.writeValueAsString(booking);
 
-        mvc.perform(post("/makebooking/create")
+        mvc.perform(post("/customer/createbooking")
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -176,7 +197,7 @@ public class BookingControllerTest {
 
         given(service.getBookingById(bookingId)).willReturn(booking);
 
-        mvc.perform(get("/booking/{bookingId}", bookingId)
+        mvc.perform(get("/admin/booking/{bookingId}", bookingId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(bookingId)));
@@ -191,7 +212,7 @@ public class BookingControllerTest {
 
         String jsonString = objectMapper.writeValueAsString(booking);
 
-        mvc.perform(put("/confirmBooking/{bookingId}", bookingId)
+        mvc.perform(put("/admin/confirmBooking/{bookingId}", bookingId)
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

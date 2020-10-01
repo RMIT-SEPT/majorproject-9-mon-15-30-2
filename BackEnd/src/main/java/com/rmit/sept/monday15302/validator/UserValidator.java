@@ -1,7 +1,6 @@
 package com.rmit.sept.monday15302.validator;
 
 import com.rmit.sept.monday15302.exception.UserException;
-import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +11,7 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return User.class.equals(aClass);
+        return CustomerSignup.class.equals(aClass);
     }
 
     @Override

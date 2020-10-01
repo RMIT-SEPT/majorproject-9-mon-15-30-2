@@ -5,10 +5,10 @@ import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
 import com.rmit.sept.monday15302.model.WorkerDetails;
-import com.rmit.sept.monday15302.services.AdminDetailsService;
-import com.rmit.sept.monday15302.services.MapValidationErrorService;
-import com.rmit.sept.monday15302.services.UserService;
-import com.rmit.sept.monday15302.services.WorkerDetailsService;
+import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
+import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
+import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
+import com.rmit.sept.monday15302.services.*;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Request.WorkerSignup;
 import com.rmit.sept.monday15302.web.WorkerController;
@@ -16,9 +16,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(WorkerController.class)
+@AutoConfigureMockMvc(addFilters=false)
 public class WorkerControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -52,6 +55,21 @@ public class WorkerControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private CustomUserService customUserService;
+
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    private CustomAuthenticationSuccessHandler successHandler;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Test
     public void givenWorker_fetchOneWorkerById() throws Exception {
 
@@ -61,7 +79,7 @@ public class WorkerControllerTest {
 
         given(service.getWorkerById(id, "a1")).willReturn(worker);
 
-        mvc.perform(get("/worker/{id}", id)
+        mvc.perform(get("/admin/worker/{id}/{adminId}", id, "a1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(id)));
@@ -88,7 +106,7 @@ public class WorkerControllerTest {
 
         String jsonString = objectMapper.writeValueAsString(workerSignup);
 
-        mvc.perform(post("/createWorker")
+        mvc.perform(post("/admin/createWorker")
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -109,7 +127,7 @@ public class WorkerControllerTest {
 
         given(userService.existsByUsername(eq("worker"))).willReturn(true);
 
-        mvc.perform(post("/createWorker")
+        mvc.perform(post("/admin/createWorker")
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -117,7 +135,7 @@ public class WorkerControllerTest {
 
     @Test
     public void testDeleteWorker_itShouldReturnStatusOk() throws Exception {
-        mvc.perform(delete("/deleteWorker/{id}", "11")
+        mvc.perform(delete("/admin/deleteWorker/{id}/{adminId}", "w1", "a1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -133,7 +151,7 @@ public class WorkerControllerTest {
 
         String jsonString = objectMapper.writeValueAsString(worker);
 
-        mvc.perform(put("/editWorker/{id}", id)
+        mvc.perform(put("/admin/editWorker/{id}/{adminId}", id, "a1")
                 .content(jsonString)
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -151,7 +169,7 @@ public class WorkerControllerTest {
 
         given(service.getWorkersByAdminId(adminId)).willReturn(workers);
 
-        mvc.perform(get("/workers/{adminId}", adminId)
+        mvc.perform(get("/admin/workers/{adminId}", adminId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
