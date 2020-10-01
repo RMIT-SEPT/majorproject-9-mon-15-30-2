@@ -5,7 +5,7 @@ class HandleRegisterLogin
 {
     Login(user)
     {
-        return axios.post("http://localhost:8080/api/users/login", user, {withCredentials: false},
+        return axios.post("http://localhost:8080/api/users/login", user,
         {
             headers: {
             'Access-Control-Allow-Origin' : '*',
@@ -25,7 +25,7 @@ class HandleRegisterLogin
             window.localStorage.clear();
             console.log(response);
             alert("Logout successful");
-        }),((error) =>
+        },(error) =>
         {
             console.log(localStorage.getItem("user"));
             window.localStorage.clear();

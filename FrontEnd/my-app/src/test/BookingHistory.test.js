@@ -37,8 +37,34 @@ describe('<BookingHistory /> Unit Test', () =>
 
         expect(wrapper.find('.table')).toHaveLength(2);
         expect(wrapper.find('.th')).toHaveLength(6);
+        expect(wrapper.find('.td')).toHaveLength(6);
 
     });
-    
+});
 
-})
+describe('<BookingHistory /> Unit Test Actions', () =>
+{
+    let wrapper;
+
+    const props = {
+        id: "1",
+        service: "Haircut",
+        worker: {
+            fName: "John"
+        },
+        date: "2020-12-12",
+        startTime: "12:00:00",
+        endTime: "13:00:00"
+    };
+
+    beforeEach(() => {
+        wrapper = shallow(<BookingHistory {...props}/>);
+    });
+
+    it('should call componentdidmount()', () => {
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'componentDidMount');
+        instance.componentDidMount();
+        expect(instance.componentDidMount).toHaveBeenCalled();
+    });
+});

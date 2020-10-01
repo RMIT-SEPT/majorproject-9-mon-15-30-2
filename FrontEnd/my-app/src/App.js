@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-// import CustomerHomePage from './Components/Customer/CustomerHomePage';
-// import WorkerHomePage from './Components/Worker/WorkerHomepage';
-// import AdminPage from './Components/Admin/AdminHomePage';
+import HomePage from './Components/HomePage';
 import Login from './Components/Login_SignUp/Login';
 import Register from './Components/Login_SignUp/Register';
 import AccountPage from './Components/Account';
@@ -15,7 +13,8 @@ import EditEmployee from './Components/Admin/EditEmployee';
 import Employees from './Components/Admin/Employees';
 import AvailableWorkers from './Components/Admin/AvailableWorkers';
 import CreateSession from './Components/Admin/CreateSession';
-import DefaultPage from './Components/HomePage';
+import DefaultPage from './Components/DefaultPage';
+import ViewAllBookings from './Components/Admin/ViewAllBookings';
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
 function App() 
@@ -24,11 +23,7 @@ function App()
         <Router>
             <div>
                 <Route exact path= "/" component={DefaultPage}/>
-                {
-                // <Route exact path= "/customerhomepage" component={CustomerHomePage}/>
-                // <Route exact path= "/workerhomepage" component={WorkerHomePage}/>
-                // <Route exact path= "/adminhomepage" component={AdminPage}/>
-                }
+                <Route exact path= "/homepage" component={HomePage}/>
                 <Route exact path= "/login" component={Login}/>
                 <Route exact path= "/register" component={Register}/>
                 <Route exact path= "/account" component={AccountPage}/>
@@ -40,6 +35,7 @@ function App()
                 <Route exact path= "/employees" component={Employees}/>
                 <Route exact path= "/availableworkers" component={AvailableWorkers}/>
                 <Route exact path= "/createsession" component={CreateSession}/>
+                <Route exact path= "/viewallbookings" component={ViewAllBookings}/>
             </div>
         </Router>
     );

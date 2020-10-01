@@ -11,9 +11,9 @@ class NewBookings extends Component
     constructor()
     {
         super();
-        this.state=
-        {
-            selectedSession:[],
+
+        this.state={
+            selectedSession:"",
             allworker: [],
             allservices: [],
             availableSessions:[],
@@ -129,7 +129,8 @@ class NewBookings extends Component
             date: this.state.selectedSession.substring(6,16),
             startTime: this.state.selectedSession.substring(17,25),
             endTime: this.state.selectedSession.substring(26,34),
-            service: this.state.service
+            service: this.state.service,
+            confirmation: "PENDING"
         }
         console.log(newbooking);
         CreateBooking.createBooking(newbooking).then((res) => 
@@ -156,6 +157,7 @@ class NewBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             Services.getAllServices().then((res) => 

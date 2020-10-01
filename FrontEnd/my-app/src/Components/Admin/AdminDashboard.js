@@ -53,6 +53,11 @@ class AdminDashboard extends Component
                                         Create New Session
                                     </a>
                                 </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/viewallbookings">
+                                        Manage Bookings
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul className="navbar-nav ml-auto">
