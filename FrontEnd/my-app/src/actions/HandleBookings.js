@@ -68,7 +68,5 @@ class HandleBookings
       Authorization: stored.token
     }});
   }
-
-
 }
-export default new HandleBookings()
+export default new HandleBookings();
