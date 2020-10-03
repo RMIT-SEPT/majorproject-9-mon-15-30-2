@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import HandleLogout from '../../actions/HandleRegisterLogin';
 
 class DashboardWorker extends Component 
@@ -11,7 +12,21 @@ class DashboardWorker extends Component
 
     logOut() 
     {
-        HandleLogout.Logout();
+        HandleLogout.Logout().then((response) =>
+        {
+            console.log(localStorage.getItem("user"));
+            window.localStorage.clear();
+            console.log(response);
+            alert("Logout successful");
+            this.props.history.push('/');
+        }).catch((error) =>
+        {
+            console.log(localStorage.getItem("user"));
+            window.localStorage.clear();
+            console.log(error);
+            alert("Session expired");
+            this.props.history.push('/');
+        });
     }
     
     render() 
@@ -28,13 +43,13 @@ class DashboardWorker extends Component
                         </button>
 
                         <ul className="navbar-nav ml-auto">
-                            <li className="nav-item" hidden>
+                            <li className="nav-item" >
                                 <a className="nav-link" href="/account">
                                     Account
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" onClick={this.logOut} href="/">
+                                <a className="nav-link" onClick={this.logOut} href="#logout">
                                     Logout
                                 </a>
                             </li>
@@ -45,4 +60,4 @@ class DashboardWorker extends Component
         )
     }
 }
-export default DashboardWorker;
+export default withRouter(DashboardWorker);

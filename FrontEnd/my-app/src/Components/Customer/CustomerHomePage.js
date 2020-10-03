@@ -24,7 +24,7 @@ class HomePage extends Component
                             <h1>SEPT/9.MON-15.30-2</h1>
                             <p>
                                 Team Members: 
-                                <ul>
+                                
                                     <li>
                                         Bossen, William (s3658961)
                                     </li>
@@ -40,7 +40,7 @@ class HomePage extends Component
                                     <li>
                                         Villaflores, Vincent (s3728807)
                                     </li>
-                                </ul> 
+                                
                             </p>
                             </Container>
                         </Jumbotron>

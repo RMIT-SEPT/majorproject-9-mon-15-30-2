@@ -143,6 +143,7 @@ public class BookingServiceTest {
     @Test
     public void sortBooking_CurrentDateButBookingTimeInThePast_updateBookingStatus()
             throws ParseException {
+        booking.setEndTime("00:01:00");
         List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(sortedBookings.isEmpty());
     }

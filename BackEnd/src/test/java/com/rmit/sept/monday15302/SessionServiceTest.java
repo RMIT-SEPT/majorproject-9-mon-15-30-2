@@ -86,6 +86,7 @@ public class SessionServiceTest {
         Mockito.when(adminDetailsRepository.getServiceByAdminId(adminId)).thenReturn(service);
         Mockito.when(workerDetailsRepository.findByAdminId(adminId)).thenReturn(workers);
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1)).thenReturn(sessions);
+        Mockito.when(workerDetailsRepository.getWorkerById(workerId)).thenReturn(worker);
     }
 
     @Test

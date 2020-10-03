@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import HandleLogout from '../../actions/HandleRegisterLogin';
 
 class AdminDashboard extends Component 
@@ -11,7 +12,21 @@ class AdminDashboard extends Component
 
     logOut() 
     {
-        HandleLogout.Logout();
+        HandleLogout.Logout().then((response) =>
+        {
+            console.log(localStorage.getItem("user"));
+            window.localStorage.clear();
+            console.log(response);
+            this.props.history.push("/");
+            alert("Logout successful");
+        }, (error) =>
+        {
+            console.log(localStorage.getItem("user"));
+            window.localStorage.clear();
+            console.log(error);
+            alert("Session expired");
+            this.props.history.push('/');
+        });
     }
 
     render() 
@@ -53,11 +68,16 @@ class AdminDashboard extends Component
                                         Create New Session
                                     </a>
                                 </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/viewallbookings">
+                                        Manage Bookings
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul className="navbar-nav ml-auto">
                                 <li className="nav-item">
-                                    <a className="nav-link" onClick={this.logOut} href="/">
+                                    <a className="nav-link" onClick={this.logOut} href="#logout">
                                         Logout
                                     </a>
                                 </li>
@@ -69,4 +89,4 @@ class AdminDashboard extends Component
         )
     }
 }
-export default AdminDashboard;
+export default withRouter(AdminDashboard);

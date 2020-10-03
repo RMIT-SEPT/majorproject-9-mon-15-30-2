@@ -25,6 +25,9 @@ class CurrentBookings extends Component
             {
                 this.setState({currentBookings: res.data});
                 console.log(res.data);
+            }).catch((err) =>
+            {
+                console.log(err.response.data.message);
             });
         }
         else

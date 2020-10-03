@@ -19,4 +19,11 @@ public class CustomerDetailsService {
         }
     }
 
+    public CustomerDetails getCustomerById(String id) {
+        CustomerDetails customer = customerDetailsRepository.getCustomerById(id);
+        if(customer == null) {
+            throw new UserException("No customer with id " + id + " found");
+        }
+        return customer;
+    }
 }

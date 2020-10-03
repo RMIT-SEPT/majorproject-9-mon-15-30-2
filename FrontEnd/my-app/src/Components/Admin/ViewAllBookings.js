@@ -1,0 +1,274 @@
+import React, {Component} from 'react';
+import { Redirect } from 'react-router-dom';
+import HandleBookings from '../../actions/HandleBookings';
+import AdminDashboard from './AdminDashboard';
+import Alert from 'react-bootstrap/Alert';
+import Table from 'react-bootstrap/Table';
+
+class ViewAllBookings extends Component 
+{
+    constructor(props)
+    {
+        super(props)
+        this.state = 
+        {
+            pendingbookings: [],
+            newbookings: [], 
+            pastbookings: []
+        }
+        this.confirmBooking = this.confirmBooking.bind(this);
+        this.rejectBooking = this.rejectBooking.bind(this);
+    }
+
+    confirmBooking(booking_id)
+    {
+        let bookingResponse = 
+        {
+            status: "NEW_BOOKING",
+            confirmation: "CONFIRMED"
+        }
+        HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
+        {
+            window.location.reload();
+            this.props.history.push("/viewallbookings");
+        }).catch((err) => {
+            alert(err.response.data.message);
+        });
+    }
+
+    rejectBooking(booking_id)
+    {
+        let bookingResponse = 
+        {
+            status: "CANCELLED_BOOKING",
+            confirmation: "CANCELLED"
+        }
+        HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
+        {
+            window.location.reload();
+        }).catch((err) => {
+            alert(err.response.data.message);
+        });
+    }
+
+    componentDidMount()
+    {
+        var stored = JSON.parse(localStorage.getItem("user"));
+        if(stored && stored.role === "ROLE_ADMIN")
+        {
+            HandleBookings.getNewBookingsByAdminID(stored.id).then((res) => 
+            {
+                var i = 0;
+                if(res.data[i].confirmation === "CONFIRMED")
+                {
+                    this.setState({newbookings: res.data});
+                }
+                else if(res.data[i].confirmation === "PENDING")
+                {
+                    this.setState({pendingbookings: res.data});
+                }
+                i++;
+            }).catch((err) => 
+            {
+                console.log(err.response.data.message);
+            });
+
+            HandleBookings.getPastBookingsByAdminID(stored.id).then((res) => 
+            {   
+                this.setState({pastbookings: res.data});
+            }).catch((err) => 
+            {
+                console.log(err.response.data.message);
+            });
+        }
+        else
+        {
+            return <Redirect to="/"/>
+        }
+    }
+
+    render()
+    {
+        var stored = JSON.parse(localStorage.getItem("user"));
+        if(stored && stored.role === "ROLE_ADMIN")
+        {
+            if(this.state.pendingbookings <= 0 && this.state.newbookings <= 0 && this.state.pastbookings)
+            {
+                return(
+                    <React.Fragment>
+                        <AdminDashboard/>
+                        <div className="container">
+                            <Alert className="alert" variant='danger'>
+                                No Booking
+                            </Alert>
+                        </div>
+                    </React.Fragment>
+                )
+            }
+            else
+            {
+                return(
+                    <React.Fragment>
+                        <AdminDashboard/>
+                        <div className="container">
+                        {/*
+                            This will display if no pending bookings
+                        */}
+                        {
+                            this.state.pendingbookings.length <= 0 && 
+                            <div className="pt-3">
+                                <Alert className="alert" variant='danger'>
+                                    No Pending Bookings
+                                </Alert>
+                            </div>
+                        }
+                        {/*
+                            This will display when pending booking is found
+                        */}
+                        {
+                            <div>
+                                <h3>Pending Bookings</h3>
+                                <Table className="table" striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th className="th">Booking ID</th>
+                                            <th className="th">Service</th>
+                                            <th className="th">Worker</th>
+                                            <th className="th">Date</th>
+                                            <th className="th">Start Time</th>
+                                            <th className="th">End Time</th>
+                                            <th className="th">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        this.state.pendingbookings.map(
+                                            pendingbookings => 
+                                            <tr key = {pendingbookings.id}>
+                                                <td> {pendingbookings.id}</td>
+                                                <td> {pendingbookings.service}</td>
+                                                <td> {pendingbookings.worker.fName}</td>
+                                                <td> {pendingbookings.date}</td>   
+                                                <td> {pendingbookings.startTime}</td>
+                                                <td> {pendingbookings.endTime}</td>
+                                                <td> 
+                                                    <button onClick={() => this.confirmBooking(pendingbookings.id)} className="btn btn-info ml-3">
+                                                        Confirm
+                                                    </button>
+                                                    <button onClick={() => this.rejectBooking(pendingbookings.id)} className="btn btn-danger ml-3">
+                                                        Reject
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    }
+                                    </tbody>
+                                </Table>
+                            </div>
+                            
+                        }
+                        {/*
+                            This will display if no new bookings
+                        */}
+                        {
+                            this.state.newbookings.length <= 0 && 
+                            <div className="pt-3">
+                                <Alert className="alert" variant='danger'>
+                                    No New Bookings
+                                </Alert>
+                            </div>
+                        }
+                        {/*
+                            This will display when new booking is found
+                        */}
+                        {
+                            this.state.newbookings.length  > 0 && 
+                            <div className="pt-3"> 
+                                <h3>New Bookings</h3>
+                                <Table className="table" striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th className="th">Booking ID</th>
+                                            <th className="th">Service</th>
+                                            <th className="th">Worker</th>
+                                            <th className="th">Date</th>
+                                            <th className="th">Start Time</th>
+                                            <th className="th">End Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        this.state.newbookings.map(
+                                            newbookings => 
+                                            <tr key = {newbookings.id}>
+                                                <td> {newbookings.id}</td>
+                                                <td> {newbookings.service}</td>
+                                                <td> {newbookings.worker.fName}</td>
+                                                <td> {newbookings.date}</td>   
+                                                <td> {newbookings.startTime}</td>
+                                                <td> {newbookings.endTime}</td>
+                                            </tr>
+                                        )
+                                    }
+                                    </tbody>
+                                </Table>
+                            </div>
+                            
+                        }
+                        {/*
+                            This will display if no past bookings
+                        */}
+                        {
+                            this.state.pastbookings.length <= 0 && 
+                            <Alert className="alert" variant='danger'>
+                                No Past Bookings
+                            </Alert>
+                        }
+                        {/*
+                            This will display when past booking is found
+                        */}
+                        {
+                            this.state.pastbookings.length > 0 && 
+                            <div className = "pt-3">
+                                <h3>Past Bookings</h3>
+                                <Table className="table" striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th className="th">Booking ID</th>
+                                            <th className="th">Service</th>
+                                            <th className="th">Worker</th>
+                                            <th className="th">Date</th>
+                                            <th className="th">Start Time</th>
+                                            <th className="th">End Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        this.state.pastbookings.map(
+                                            pastbookings => 
+                                            <tr key = {pastbookings.id}>
+                                                <td> {pastbookings.id}</td>
+                                                <td> {pastbookings.service}</td>
+                                                <td> {pastbookings.worker.fName}</td>
+                                                <td> {pastbookings.date}</td>   
+                                                <td> {pastbookings.startTime}</td>
+                                                <td> {pastbookings.endTime}</td>
+                                            </tr>
+                                        )
+                                    }
+                                    </tbody>
+                                </Table>
+                            </div>
+                        }
+                        </div>
+                    </React.Fragment>
+                )
+            }
+        }
+        else
+        {
+            return <Redirect to="/"/>
+        }
+    }
+}
+export default ViewAllBookings;

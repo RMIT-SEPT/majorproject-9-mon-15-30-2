@@ -34,9 +34,9 @@ public class BookingRepositoryTest {
 
     @Before
     public void setup() throws ParseException {
-        user = new User("customer", "*****", UserType.ROLE_CUSTOMER);
-        user2 = new User("worker", "*****", UserType.ROLE_WORKER);
-        user3 = new User("admin", "*****", UserType.ROLE_ADMIN);
+        user = new User("customer", "******", UserType.ROLE_CUSTOMER);
+        user2 = new User("worker", "******", UserType.ROLE_WORKER);
+        user3 = new User("admin", "******", UserType.ROLE_ADMIN);
         entityManager.persist(user);
         entityManager.persist(user2);
         entityManager.persist(user3);

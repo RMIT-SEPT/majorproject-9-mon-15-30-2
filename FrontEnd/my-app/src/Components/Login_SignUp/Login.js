@@ -34,11 +34,8 @@ class Login extends Component
         console.log(loginDetail);
         SignUp.Login(loginDetail).then((res) => 
         {
-            // alert("Register successful");
             localStorage.clear();
-            localStorage.setItem("user", JSON.stringify(res.data))
-            console.log(res.data);
-            console.log(localStorage.getItem("user"));
+            localStorage.setItem("user", JSON.stringify(res.data)) 
             this.props.history.push("/");
         },(err) => 
         {

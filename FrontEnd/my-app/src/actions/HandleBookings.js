@@ -40,5 +40,33 @@ class HandleBookings
       Authorization: stored.token
     }});
   }
+
+  getNewBookingsByAdminID(admin_id)
+  {
+    return axios.get("http://localhost:8080/admin/newBookingsAdmin/"+admin_id,
+    {
+      headers: {
+        Authorization: stored.token
+      }
+    });
+  }
+
+  getPastBookingsByAdminID(admin_id)
+  {
+    return axios.get("http://localhost:8080/admin/pastBookingsAdmin/" + admin_id,
+    {
+      headers: {
+        Authorization: stored.token
+      }
+    });
+  }
+
+  confirmBooking(booking_id, booking)
+  {
+    return axios.put("http://localhost:8080/admin/confirmBooking/"+booking_id, booking,
+    { headers: {
+      Authorization: stored.token
+    }});
+  }
 }
-export default new HandleBookings()
+export default new HandleBookings();

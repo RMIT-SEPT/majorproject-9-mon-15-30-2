@@ -41,7 +41,7 @@ class EditEmployee extends Component
                 });
             }).catch((err) => {
                 // Render page not found
-
+                this.props.history.push('/employees');
             });
         }
         else

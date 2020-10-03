@@ -20,10 +20,6 @@ public class JWTLoginSuccessResponse {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public UserType getRole() {
         return role;
     }
