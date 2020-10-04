@@ -13,17 +13,15 @@ import EditEmployee from './Components/Admin/EditEmployee';
 import Employees from './Components/Admin/Employees';
 import AvailableWorkers from './Components/Admin/AvailableWorkers';
 import CreateSession from './Components/Admin/CreateSession';
-import DefaultPage from './Components/DefaultPage';
 import ViewAllBookings from './Components/Admin/ViewAllBookings';
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 function App() 
 {
     return(
         <Router>
-            <div>
-                <Route exact path= "/" component={DefaultPage}/>
-                <Route exact path= "/homepage" component={HomePage}/>
+            <Switch>
+                <Route exact path= "/" component={HomePage}/>
                 <Route exact path= "/login" component={Login}/>
                 <Route exact path= "/register" component={Register}/>
                 <Route exact path= "/account" component={AccountPage}/>
@@ -36,7 +34,8 @@ function App()
                 <Route exact path= "/availableworkers" component={AvailableWorkers}/>
                 <Route exact path= "/createsession" component={CreateSession}/>
                 <Route exact path= "/viewallbookings" component={ViewAllBookings}/>
-            </div>
+                <Route exact path= "*" component={HomePage}/>
+            </Switch>
         </Router>
     );
 }

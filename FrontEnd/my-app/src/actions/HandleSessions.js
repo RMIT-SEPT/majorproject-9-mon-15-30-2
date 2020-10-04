@@ -29,4 +29,4 @@ class HandleSessions
         }});
     }
 }
-export default new HandleSessions()
+export default new HandleSessions();

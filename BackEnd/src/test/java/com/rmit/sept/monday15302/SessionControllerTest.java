@@ -3,7 +3,10 @@ package com.rmit.sept.monday15302;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.Session;
 import com.rmit.sept.monday15302.model.WorkerDetails;
-import com.rmit.sept.monday15302.security.SecurityConfig;
+import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
+import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
+import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
+import com.rmit.sept.monday15302.services.CustomUserService;
 import com.rmit.sept.monday15302.services.MapValidationErrorService;
 import com.rmit.sept.monday15302.services.SessionService;
 import com.rmit.sept.monday15302.utils.Request.SessionCreated;
@@ -13,10 +16,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SessionController.class)
+@AutoConfigureMockMvc(addFilters=false)
 public class SessionControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -46,7 +51,19 @@ public class SessionControllerTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @MockBean
-    private SecurityConfig securityConfig;
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
+    private CustomUserService customUserService;
+
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @MockBean
+    private CustomAuthenticationSuccessHandler successHandler;
+
+    @MockBean
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static Session session;
     private static String workerId = "w1";
@@ -60,7 +77,6 @@ public class SessionControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin1", password = "******", roles = "ROLE_ADMIN")
     public void testCreateSession_itReturnsOK() throws Exception {
         SessionCreated sessionCreated = new SessionCreated(1,
                 "08:00:00", "09:00:00", workerId);
@@ -77,7 +93,6 @@ public class SessionControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "admin1", password = "******", roles = "ROLE_ADMIN")
     public void testGetSessionsByWorkerAndDay() throws Exception {
         String workerId = "1";
         int day = 4;

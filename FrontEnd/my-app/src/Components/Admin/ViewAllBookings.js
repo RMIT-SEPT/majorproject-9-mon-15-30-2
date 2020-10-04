@@ -31,8 +31,20 @@ class ViewAllBookings extends Component
         {
             window.location.reload();
             this.props.history.push("/viewallbookings");
-        }).catch((err) => {
-            alert(err.response.data.message);
+        }).catch((err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                alert(err.response.data.message);
+            }
         });
     }
 
@@ -46,8 +58,20 @@ class ViewAllBookings extends Component
         HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
         {
             window.location.reload();
-        }).catch((err) => {
-            alert(err.response.data.message);
+        }).catch((err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                alert(err.response.data.message);
+            }
         });
     }
 
@@ -70,7 +94,17 @@ class ViewAllBookings extends Component
                 i++;
             }).catch((err) => 
             {
-                console.log(err.response.data.message);
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    console.log(err.response.data.message);
+                }
             });
 
             HandleBookings.getPastBookingsByAdminID(stored.id).then((res) => 
@@ -78,7 +112,17 @@ class ViewAllBookings extends Component
                 this.setState({pastbookings: res.data});
             }).catch((err) => 
             {
-                console.log(err.response.data.message);
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    console.log(err.response.data.message);
+                }
             });
         }
         else

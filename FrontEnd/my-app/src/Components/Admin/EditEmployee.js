@@ -28,7 +28,8 @@ class EditEmployee extends Component
     {
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") {
-            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => {
+            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => 
+            {
                 let editEmployee = res.data;
                 this.setState(
                 {
@@ -39,9 +40,20 @@ class EditEmployee extends Component
                     username: editEmployee.username,
                     adminId: editEmployee.adminId
                 });
-            }).catch((err) => {
-                // Render page not found
-
+            }).catch((err) => 
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    // Render page not found
+                    this.props.history.push('/employees');
+                }
             });
         }
         else
@@ -78,32 +90,31 @@ class EditEmployee extends Component
             }
             else
             {
-                console.log(err.response.data.message);
+                // console.log(err.response.data.message);
                 console.log(err.response);
-                console.log(err.response.data);
+                // console.log(err.response.data);
                 this.setState({errorMessage: err.response.data.message});
             }
         });
     }
 
-    changeWorkerId=(e) => 
+    changeWorkerId = (e) => 
     {
         this.setState({id: e.target.value});
     }
-    changeWorkerFirstName= (e) => 
+    changeWorkerFirstName = (e) => 
     {
         this.setState({fName: e.target.value});
     }
-    changeWorkerLastName= (e) => 
+    changeWorkerLastName = (e) => 
     {
         this.setState({lName: e.target.value});
     }
-    changeWorkerPhoneNumber= (e) => 
+    changeWorkerPhoneNumber = (e) => 
     {
         this.setState({phoneNumber: e.target.value});
     }
-
-    changeWorkerUserName= (e) => 
+    changeWorkerUserName = (e) => 
     {
         this.setState({username: e.target.value});
     }

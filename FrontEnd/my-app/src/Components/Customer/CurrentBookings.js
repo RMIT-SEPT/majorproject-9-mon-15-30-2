@@ -27,7 +27,17 @@ class CurrentBookings extends Component
                 console.log(res.data);
             }).catch((err) =>
             {
-                console.log(err.response.data.message);
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    console.log(err.response.data.message);
+                }
             });
         }
         else

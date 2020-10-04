@@ -1,7 +1,5 @@
 package com.rmit.sept.monday15302.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.Repositories.JwtBlacklistRepository;
 import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.CustomerDetails;
@@ -25,8 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -54,22 +50,12 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody CustomerSignup customerSignup,
-                                          BindingResult result, HttpServletRequest request)
-            throws JsonProcessingException {
-
-        ObjectMapper o = new ObjectMapper();
-        System.out.println(o.writeValueAsString(customerSignup));
-
-         // Validate passwords match
-         userValidator.validate(customerSignup, result);
-
+                                          BindingResult result) {
+        userValidator.validate(customerSignup, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-
         String username = customerSignup.getUsername();
-        if (userService.existsByUsername(username)) {
-            throw new UserException("Error: Username is already taken!");
-        }
+        if (userService.existsByUsername(username)) throw new UserException("Error: Username is already taken!");
 
         User user = new User(username,
                 customerSignup.getPassword(), customerSignup.getType());
@@ -81,8 +67,7 @@ public class UserController {
         CustomerSignup toReturn = new CustomerSignup(newUser.getUsername(), newUser.getPassword(),
                 newUser.getType(), newCustomer.getfName(), newCustomer.getlName(),
                 newCustomer.getAddress(), newCustomer.getPhoneNumber(), newCustomer.getEmail());
-
-        return  new ResponseEntity<>(toReturn, HttpStatus.CREATED);
+        return new ResponseEntity<>(toReturn, HttpStatus.CREATED);
     }
 
     @Autowired
@@ -103,7 +88,6 @@ public class UserController {
                         loginRequest.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
 
@@ -111,20 +95,17 @@ public class UserController {
         if(duplicateToken != null) {
             jwtBlacklistRepository.delete(duplicateToken);
         }
-
         User user = userService.getUserByUsername(loginRequest.getUsername());
-
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt,
                 user.getId(), user.getType()));
     }
 
     @PutMapping("/logout")
-    public JwtBlacklist logout(@RequestBody Map<String,String> json, HttpSession httpSession) {
+    public JwtBlacklist logout(@RequestBody Map<String,String> json) {
         String token = json.get("token");
         JwtBlacklist jwtBlacklist = new JwtBlacklist();
         jwtBlacklist.setToken(token);
 
         return jwtBlacklistRepository.save(jwtBlacklist);
     }
-
 }
