@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.rmit.sept</groupId>
     <artifactId>monday-1530-2</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>monday-1530-2</name>
     <description>Booking System Project</description>
 
