@@ -32,7 +32,7 @@ class Employees extends Component
             alert("Employee is deleted successfully");
         }, (err) => 
         {
-            if (String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 console.log(err.response.status);
                 localStorage.clear();
@@ -62,6 +62,19 @@ class Employees extends Component
             {
                 this.setState({allemployee: res.data});
                 // console.log(res.data);
+            },(err) =>
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    console.log(err.response.data.message);
+                }
             });
         }
         else

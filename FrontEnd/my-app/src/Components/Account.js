@@ -34,6 +34,15 @@ class Account extends Component
             {
                 this.setState({profile: res.data});
                 console.log(res.data);
+            }, (err) => 
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
             });
         }
         else
@@ -45,20 +54,36 @@ class Account extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored)
+        if(stored  && (stored.role === "ROLE_WORKER" || stored.role === "ROLE_CUSTOMER"))
         {
             if(this.state.profile <= 0)
             {
-                return(
-                    <React.Fragment>
-                        <CustomerDashboard/>
-                        <Container>
-                            <Alert variant='danger'>
-                                Not Available
-                            </Alert>
-                        </Container>
-                    </React.Fragment>
-                )
+                if (stored.role === "ROLE_WORKER")
+                { 
+                    return(
+                        <React.Fragment>
+                            <WorkerDashboard/>
+                            <Container>
+                                <Alert variant='danger'>
+                                    Not Available
+                                </Alert>
+                            </Container>
+                        </React.Fragment>
+                    )
+                }
+                else if (stored.role === "ROLE_CUSTOMER")
+                { 
+                    return(
+                        <React.Fragment>
+                            <CustomerDashboard/>
+                            <Container>
+                                <Alert variant='danger'>
+                                    Not Available
+                                </Alert>
+                            </Container>
+                        </React.Fragment>
+                    )
+                }
             }
             else
             {
@@ -101,7 +126,7 @@ class Account extends Component
                 {
                     return(
                         <React.Fragment>
-                            <WorkerDashboard/>
+                            <CustomerDashboard/>
                             <Container>
                                 <div className = "card col-md-6 offset-md-3">
                                 <h3 className = "text-center">Account Details</h3>

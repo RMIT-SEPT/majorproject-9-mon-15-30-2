@@ -15,7 +15,6 @@ class HandleRegisterLogin
 
     Logout()
     {
-        console.log(stored.token);
         const token = 
         {
             token: stored.token

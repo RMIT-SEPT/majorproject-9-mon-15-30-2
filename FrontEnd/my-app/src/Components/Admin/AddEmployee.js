@@ -48,8 +48,9 @@ class AddEmployee extends Component
             alert("Employee successfully created");
         }).catch((err) =>
         {
-            if (String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
+                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
