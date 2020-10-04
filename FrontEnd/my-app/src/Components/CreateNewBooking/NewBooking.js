@@ -68,6 +68,15 @@ class NewBookings extends Component
             {
                 console.log("Empty");
             }
+        }, (err) =>
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
         });
     }
 
@@ -87,7 +96,16 @@ class NewBookings extends Component
             {
                 console.log("Empty");
             }
-        })
+        }, (err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+        });
     }
 
     onChange(e)
@@ -139,14 +157,16 @@ class NewBookings extends Component
             this.props.history.push("/currentbookings");
         }).catch((err) => 
         {
-            if (String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
+                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
             }
             else
             {
+                console.log(err.response.data.message);
                 this.setState({errorMessage: err.response.data.message});
                 alert(err.response.data.message);
                 this.props.history.push("/newbooking");
@@ -164,6 +184,15 @@ class NewBookings extends Component
             {
                 this.setState({allservices: res.data});
                 console.log(res.data);
+            }, (err) => 
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
             });
         }
         else
