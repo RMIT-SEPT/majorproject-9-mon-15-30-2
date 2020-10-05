@@ -13,7 +13,7 @@ class ViewAllBookings extends Component
         this.state = 
         {
             pendingbookings: [],
-            newbookings: [], 
+            newbookings: [],
             pastbookings: []
         }
         this.confirmBooking = this.confirmBooking.bind(this);
@@ -22,6 +22,7 @@ class ViewAllBookings extends Component
 
     confirmBooking(booking_id)
     {
+        console.log("confirm: "+booking_id);
         let bookingResponse = 
         {
             status: "NEW_BOOKING",
@@ -30,7 +31,6 @@ class ViewAllBookings extends Component
         HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
         {
             window.location.reload();
-            this.props.history.push("/viewallbookings");
         }).catch((err) => 
         {
             if(String(err.response.status) === "401")
@@ -50,6 +50,7 @@ class ViewAllBookings extends Component
 
     rejectBooking(booking_id)
     {
+        console.log("reject: "+ booking_id);
         let bookingResponse = 
         {
             status: "CANCELLED_BOOKING",
@@ -82,17 +83,19 @@ class ViewAllBookings extends Component
         {
             HandleBookings.getNewBookingsByAdminID(stored.id).then((res) => 
             {
-                var i = 0;
-                if(res.data[i].confirmation === "CONFIRMED")
+                for(var i=0; i < res.data.length; i++)
                 {
-                    this.setState({newbookings: res.data});
+                    if(res.data[i].confirmation === "CONFIRMED")
+                    {
+                        this.setState({newbookings: this.state.newbookings.concat(res.data[i])});
+                    }
+                    else if(res.data[i].confirmation === "PENDING")
+                    {
+                        this.setState({pendingbookings: this.state.pendingbookings.concat(res.data[i])});
+                    }
                 }
-                else if(res.data[i].confirmation === "PENDING")
-                {
-                    this.setState({pendingbookings: res.data});
-                }
-                i++;
-            }).catch((err) => 
+                
+            }).catch((err) =>
             {
                 if(String(err.response.status) === "401")
                 {
@@ -136,7 +139,7 @@ class ViewAllBookings extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            if(this.state.pendingbookings <= 0 && this.state.newbookings <= 0 && this.state.pastbookings)
+            if(this.state.pendingbookings <= 0 && this.state.newbookings <= 0 && this.state.pastbookings <= 0)
             {
                 return(
                     <React.Fragment>
@@ -161,6 +164,7 @@ class ViewAllBookings extends Component
                         {
                             this.state.pendingbookings.length <= 0 && 
                             <div className="pt-3">
+                                <h3>Pending Bookings</h3>
                                 <Alert className="alert" variant='danger'>
                                     No Pending Bookings
                                 </Alert>
@@ -170,6 +174,7 @@ class ViewAllBookings extends Component
                             This will display when pending booking is found
                         */}
                         {
+                            this.state.pendingbookings.length  > 0 &&
                             <div>
                                 <h3>Pending Bookings</h3>
                                 <Table className="table" striped bordered hover size="sm">
@@ -186,7 +191,9 @@ class ViewAllBookings extends Component
                                     </thead>
                                     <tbody>
                                     {
+                                        
                                         this.state.pendingbookings.map(
+                                            
                                             pendingbookings => 
                                             <tr key = {pendingbookings.id}>
                                                 <td> {pendingbookings.id}</td>
@@ -217,6 +224,7 @@ class ViewAllBookings extends Component
                         {
                             this.state.newbookings.length <= 0 && 
                             <div className="pt-3">
+                                <h3>New Bookings</h3>
                                 <Alert className="alert" variant='danger'>
                                     No New Bookings
                                 </Alert>
@@ -264,9 +272,12 @@ class ViewAllBookings extends Component
                         */}
                         {
                             this.state.pastbookings.length <= 0 && 
-                            <Alert className="alert" variant='danger'>
-                                No Past Bookings
-                            </Alert>
+                            <div>
+                                <h3>Past Bookings</h3>
+                                <Alert className="alert" variant='danger'>
+                                    No Past Bookings
+                                </Alert>
+                            </div>
                         }
                         {/*
                             This will display when past booking is found
