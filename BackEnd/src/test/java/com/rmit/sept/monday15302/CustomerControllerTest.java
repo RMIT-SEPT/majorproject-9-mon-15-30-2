@@ -1,12 +1,15 @@
 package com.rmit.sept.monday15302;
 
-import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.CustomUserService;
 import com.rmit.sept.monday15302.services.CustomerDetailsService;
+import com.rmit.sept.monday15302.services.MapValidationErrorService;
+import com.rmit.sept.monday15302.services.UserService;
+import com.rmit.sept.monday15302.utils.Request.EditCustomer;
 import com.rmit.sept.monday15302.utils.Utility;
+import com.rmit.sept.monday15302.validator.PasswordValidator;
 import com.rmit.sept.monday15302.web.CustomerController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,20 +52,30 @@ public class CustomerControllerTest {
     @MockBean
     private CustomAuthenticationSuccessHandler successHandler;
 
+    @MockBean
+    private MapValidationErrorService mapValidationErrorService;
+
+    @MockBean
+    private PasswordValidator passwordValidator;
+
+    @MockBean
+    private UserService userService;
+
     @Test
     public void getCustomerById() throws Exception {
 
-        CustomerDetails customer = new CustomerDetails();
+        EditCustomer customer = new EditCustomer();
         String id = "c1";
-        customer.setId(id);
+        String username = "name";
+        customer.setUserName(username);
 
-        given(service.getCustomerById(id)).willReturn(customer);
+        given(service.getCustomerProfile(id)).willReturn(customer);
         given(utility.isCurrentLoggedInUser(id)).willReturn(true);
 
         mvc.perform(get("/customer/profile/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(id)));
+                .andExpect(jsonPath("$.username", is(username)));
     }
 
     @Test
