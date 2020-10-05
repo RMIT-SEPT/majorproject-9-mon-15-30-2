@@ -95,11 +95,15 @@ public class Session {
                 && service.equals(s.getService());
     }
 
-    private String getId() {
+    public String getId() {
         return this.session_id;
     }
 
     public void setId(String s1) {
         this.session_id = s1;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 }
