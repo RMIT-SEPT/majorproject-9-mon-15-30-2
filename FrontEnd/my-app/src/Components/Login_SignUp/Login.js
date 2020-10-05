@@ -56,9 +56,9 @@ class Login extends Component
                     <div className="col-md-12">
                         <div className="card card-container">
                             <h4 className="display-5 text-center pb-3">Login</h4>
-                            <Container>
-                                <Form onSubmit={this.onSubmit}>
-                                    <Form.Group controlId="formBasicUsername">
+                            <Container className="container">
+                                <Form className="form" onSubmit={this.onSubmit}>
+                                    <Form.Group className="username" controlId="formBasicUsername">
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control type="username" 
                                             placeholder="Username" 
@@ -67,7 +67,7 @@ class Login extends Component
                                             onChange={this.onChange} required/>
                                     </Form.Group>
 
-                                    <Form.Group controlId="formBasicPassword">
+                                    <Form.Group className="password" controlId="formBasicPassword">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" 
                                             placeholder="Password"
