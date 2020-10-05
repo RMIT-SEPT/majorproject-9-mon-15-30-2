@@ -2,6 +2,7 @@ package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.model.*;
+import org.hibernate.type.ShortType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,6 +88,26 @@ public class BookingRepositoryTest {
     @Test
     public void getNewBookingsByCustomerId_returnEmptyList_ifNoBookingsFound() {
         assert(bookingRepository.findNewBookingByCustomerID("123").isEmpty());
+    }
+
+    @Test
+    public void getNewBookingsByWorkerId_returnEmptyList_ifNoBookingsFound() {
+        assert(bookingRepository.findNewBookingByWorkerID("123").isEmpty());
+    }
+
+    @Test
+    public void getNewBookingsByWorkerId_returnBookings_ifBookingsFound(){
+        assert(bookingRepository.findNewBookingByWorkerID(worker.getId()).contains(newBooking));
+    }
+
+    @Test
+    public void getPastBookingsByWorkerId_returnEmptyList_ifNoBookingsFound(){
+        assert(bookingRepository.findPastBookingByCustomerID("123").isEmpty());
+    }
+
+    @Test
+    public void getPastBookingsByWorkerId_returnBookings_ifBookingsFound(){
+        assert(bookingRepository.findPastBookingByWorkerID(worker.getId()).contains(pastBooking));
     }
 
     @Test

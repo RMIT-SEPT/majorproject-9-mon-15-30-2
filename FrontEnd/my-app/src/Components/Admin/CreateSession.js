@@ -45,8 +45,18 @@ class CreateSession extends Component
             this.setState({allavailablesessions: res.data});
         }).catch((err) => 
         {
-            console.log(err.response.data.message);
-            this.setState({allavailablesessions: null});
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+                this.setState({allavailablesessions: null});
+            }
         });
         
         HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay).then((res) =>
@@ -54,10 +64,19 @@ class CreateSession extends Component
             this.setState({openinghours: res.data});
         }).catch((err) => 
         {
-            this.setState({openinghours: null});
-            console.log(err.response.data.message);
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                this.setState({openinghours: null});
+                console.log(err.response.data.message);
+            }
         })
-        
     }
 
     onSubmit(e){
@@ -92,8 +111,9 @@ class CreateSession extends Component
                     alert("New session is created successfully");
                 }).catch((err) => 
                 {
-                    if (String(err.response.status) === "401")
+                    if(String(err.response.status) === "401")
                     {
+                        console.log(err.response.status);
                         localStorage.clear();
                         alert("Session Expired");
                         this.props.history.push('/login');
@@ -101,6 +121,7 @@ class CreateSession extends Component
                     else
                     {
                         message = err.response.data.message;
+                        console.log(message);
                         this.setState({errorMessage: err.response.data.message});
                         alert(message);
                     }
@@ -120,19 +141,45 @@ class CreateSession extends Component
         {
             Workers.getWorkersByAdmin(stored.id).then((res) =>
             {
-                this.setState({ allworker: res.data});
-                console.log(res.data);
-            });
-            Service.getServiceByAdmin(stored.id).then((res) => {
                 if(!res.data.empty)
                 {
-                    console.log(res.data);
-                    this.setState({ service: res.data});
+                    this.setState({allworker: res.data});
+                    // console.log(res.data);
                 }
                 else
                 {
-                    this.setState({ service: "No service"});
-                    console.log("Empty");
+                    console.log("Worker: Empty")
+                }
+            },(err) => 
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+            });
+            Service.getServiceByAdmin(stored.id).then((res) => 
+            {
+                if(!res.data.empty)
+                {
+                    // console.log(res.data);
+                    this.setState({service: res.data});
+                }
+                else
+                {
+                    this.setState({service: "No service"});
+                    console.log("Service: Empty");
+                }
+            }, (err) => 
+            {
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
                 }
             });
         }

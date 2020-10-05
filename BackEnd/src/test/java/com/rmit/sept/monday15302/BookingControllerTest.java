@@ -117,6 +117,50 @@ public class BookingControllerTest {
     }
 
     @Test
+    public void givenPastBookingsForAdmin_whenGetPastBookingsForAdmin_thenReturnJsonArray()
+            throws Exception {
+
+        Booking booking1 = new Booking();
+        booking1.setStatus(BookingStatus.PAST_BOOKING);
+
+        Booking booking2 = new Booking();
+        booking2.setStatus(BookingStatus.CANCELLED_BOOKING);
+
+        List<Booking> bookings = Arrays.asList(booking1, booking2);
+
+        given(service.getPastBookingsByAdminID(adminId)).willReturn(bookings);
+
+        mvc.perform(get("/admin/pastBookingsAdmin/{adminID}", adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].status", is(BookingStatus.PAST_BOOKING.toString())))
+                .andExpect(jsonPath("$[1].status", is(BookingStatus.CANCELLED_BOOKING.toString())));
+    }
+
+    @Test
+    public void givenNewBookingsForAdmin_whenGetNewBookingsForAdmin_thenReturnJsonArray()
+            throws Exception {
+
+        Booking booking1 = new Booking();
+        booking1.setStatus(BookingStatus.PAST_BOOKING);
+
+        Booking booking2 = new Booking();
+        booking2.setStatus(BookingStatus.CANCELLED_BOOKING);
+
+        List<Booking> bookings = Arrays.asList(booking1, booking2);
+
+        given(service.getNewBookingsByAdminID(adminId)).willReturn(bookings);
+
+        mvc.perform(get("/admin/newBookingsAdmin/{adminID}", adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].status", is(BookingStatus.PAST_BOOKING.toString())))
+                .andExpect(jsonPath("$[1].status", is(BookingStatus.CANCELLED_BOOKING.toString())));
+    }
+
+    @Test
     public void givenWorkersWithService_whenGetWorkersByService_thenReturnJsonArray()
             throws Exception {
         String workerId2 = "w2";
