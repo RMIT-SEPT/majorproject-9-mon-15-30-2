@@ -14,7 +14,6 @@ class ViewAllBookings extends Component
         {
             pendingbookings: [],
             newbookings: [],
-            confirmedbookings: [],
             pastbookings: []
         }
         this.confirmBooking = this.confirmBooking.bind(this);
@@ -31,9 +30,7 @@ class ViewAllBookings extends Component
         }
         HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
         {
-            this.componentDidMount();
             window.location.reload();
-            // this.props.history.push("/viewallbookings");
         }).catch((err) => 
         {
             if(String(err.response.status) === "401")
@@ -86,10 +83,8 @@ class ViewAllBookings extends Component
         {
             HandleBookings.getNewBookingsByAdminID(stored.id).then((res) => 
             {
-                console.log(res.data);
                 for(var i=0; i < res.data.length; i++)
                 {
-                    console.log(res.data[i]);
                     if(res.data[i].confirmation === "CONFIRMED")
                     {
                         this.setState({newbookings: this.state.newbookings.concat(res.data[i])});
