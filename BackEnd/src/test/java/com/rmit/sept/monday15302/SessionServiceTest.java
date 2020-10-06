@@ -149,7 +149,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "08:30:00", "10:00:00", service));
+                "08:30:00", "10:00:00", service), false);
     }
 
     @Test(expected = AdminDetailsException.class)
@@ -158,7 +158,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "07:00:00", "08:30:00", service));
+                "07:00:00", "08:30:00", service), false);
     }
 
     @Test(expected = AdminDetailsException.class)
@@ -167,7 +167,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "07:00:00", "10:00:00", service));
+                "07:00:00", "10:00:00", service), false);
     }
 
     @Test

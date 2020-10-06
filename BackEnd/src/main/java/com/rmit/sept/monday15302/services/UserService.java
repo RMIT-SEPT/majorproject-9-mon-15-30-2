@@ -3,6 +3,8 @@ package com.rmit.sept.monday15302.services;
 import com.rmit.sept.monday15302.Repositories.UserRepository;
 import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.User;
+import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
+import com.rmit.sept.monday15302.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,15 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private PasswordValidator passwordValidator;
+
+    @Autowired
+    private UserService userService;
 
     public boolean existsByUsername(String username) {
         User user = getUserByUsername(username);
@@ -56,5 +67,14 @@ public class UserService {
             throw new UserException("Cannot find user with username " + username);
         }
         userRepository.delete(user);
+    }
+
+    public User changeUserPassword(UpdatePassword passwordRequest, String id) {
+        User user = getUserById(id);
+        if(!bCryptPasswordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
+            throw new UserException("Invalid old password");
+        }
+        user.setPassword(passwordRequest.getNewPassword());
+        return saveUser(user);
     }
 }

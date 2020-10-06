@@ -29,12 +29,32 @@ public class SessionCreated {
     @NotBlank(message = "Worker ID is required")
     private String workerId;
 
+    private String workerFirstName;
+
+    private String workerLastName;
+
+    private String sessionId;
+
     public SessionCreated(int day, String startTime, String endTime, String workerId)
             throws ParseException {
         this.day = day;
         setStartTime(startTime);
         setEndTime(endTime);
         this.workerId = workerId;
+    }
+
+    public SessionCreated(int day, Date startTime, Date endTime, String workerFirstName,
+                  String workerLastName, String sessionId) {
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.workerFirstName = workerFirstName;
+        this.workerLastName = workerLastName;
+        this.sessionId = sessionId;
+    }
+
+    public SessionCreated() {
+
     }
 
     public void setStartTime(String startTime) throws ParseException {
@@ -59,5 +79,17 @@ public class SessionCreated {
 
     public String getEndTime() {
         return Utility.getTimeAsString(endTime);
+    }
+
+    public String getWorkerFirstName() {
+        return workerFirstName;
+    }
+
+    public String getWorkerLastName() {
+        return workerLastName;
+    }
+
+    public String getSessionId() {
+        return sessionId;
     }
 }
