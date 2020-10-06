@@ -32,4 +32,18 @@ public class UserValidatorTest {
         user.setConfirmPassword("123456");
         userValidator.validate(user, errors);
     }
+
+    @Test
+    public void changePassword_doNothing_ifPasswordValid() throws UserException {
+        CustomerSignup user = new CustomerSignup();
+        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(user, "user");
+        user.setPassword("123456");
+        user.setConfirmPassword("123456");
+        userValidator.validate(user, errors);
+    }
+
+    @Test
+    public void support_returnTrue_ifClassMatched() {
+        assert(userValidator.supports(CustomerSignup.class));
+    }
 }

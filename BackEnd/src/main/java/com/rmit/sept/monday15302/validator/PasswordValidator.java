@@ -30,8 +30,5 @@ public class PasswordValidator implements Validator {
         if(!newPassword.equals(confirmPassword)){
             throw new UserException("Confirmed password must match");
         }
-
-        //confirmPassword
-
     }
 }
