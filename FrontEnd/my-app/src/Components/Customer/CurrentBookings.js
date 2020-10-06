@@ -21,21 +21,21 @@ class CurrentBookings extends Component
     {
         GetBookings.cancelBooking(booking_id).then((res) => 
         {
+            alert("Booking id: " + booking_id + " has been cancelled");
             window.location.reload();
         }).catch((err) => 
         {
-            // if(String(err.response.status) === "401")
-            // {
-            //     console.log(err.response.status);
-            //     localStorage.clear();
-            //     alert("Session Expired");
-            //     this.props.history.push('/login');
-            // }
-            // else
-            // {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
                 console.log(err.response);
-                // this.setState({errorMessage: err.response.data.message});
-            // }
+            }
         });
     }
 

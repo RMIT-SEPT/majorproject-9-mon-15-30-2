@@ -72,7 +72,7 @@ class HandleBookings
   cancelBooking(booking_id)
   {
     console.log(stored.token);
-    return axios.put("http://localhost:8080/customer/cancelBooking/"+booking_id,
+    return axios.put("http://localhost:8080/customer/cancelBooking/"+booking_id, "'",
     { headers: {
       Authorization: stored.token
     }});
