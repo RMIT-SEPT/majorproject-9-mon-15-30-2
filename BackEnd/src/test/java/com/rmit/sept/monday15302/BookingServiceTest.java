@@ -149,6 +149,15 @@ public class BookingServiceTest {
     }
 
     @Test
+    public void sortBooking_CurrentDateButBookingTimeInThePast_throwException()
+            throws ParseException {
+        booking.setEndTime("00:01:00");
+        Mockito.doThrow(new BookingException("")).when(bookingRepository)
+                .updateBookingStatus(bookingId, BookingStatus.PAST_BOOKING);
+        bookingService.updateBookingStatus(bookings);
+    }
+
+    @Test
     public void sortBooking_CurrentDate_statusNotUpdated()
             throws ParseException {
         booking.setStartTime("23:00:00");
@@ -218,4 +227,65 @@ public class BookingServiceTest {
         bookingService.updateBooking(confirm, bookingId);
         Mockito.verify(bookingRepository, times(1)).save(booking);
     }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingIsPending()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.PENDING);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingIsCancelled()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CANCELLED);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingTimeWithin2Days()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test
+    public void cancelBooking_updateBooking_ifCancellationIsValid() throws ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStatus(BookingStatus.CANCELLED_BOOKING);
+        Mockito.when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(booking);
+        assert(bookingService.cancelBooking(bookingId).getStatus()
+                .equals(BookingStatus.CANCELLED_BOOKING));
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifCannotUpdateBooking()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        Mockito.doThrow(new BookingException("")).when(bookingRepository).save(booking);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test
+    public void isWithin2Days_returnTrue_ifLessThan48Hours() throws ParseException {
+        Date date = new Date(today.getTime() + 2*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStartTime("00:01:00");
+        assert(bookingService.isWithin2Days(booking));
+    }
+
+    @Test
+    public void isWithin2Days_returnFalse_ifMoreThan48Hours() throws ParseException {
+        Date date = new Date(today.getTime() + 2*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStartTime("23:59:00");
+        assert(!bookingService.isWithin2Days(booking));
+    }
+
 }
