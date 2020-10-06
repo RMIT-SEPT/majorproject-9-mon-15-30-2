@@ -73,6 +73,11 @@ class AdminDashboard extends Component
                                         Manage Bookings
                                     </a>
                                 </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/managessessions">
+                                        Manage Sessions
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul className="navbar-nav ml-auto">

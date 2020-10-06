@@ -59,7 +59,7 @@ public class SessionController {
     }
 
     @PutMapping("/editSession/{sessionId}")
-    public ResponseEntity<?> updateWorker(@PathVariable("sessionId") String sessionId,
+    public ResponseEntity<?> updateSessions(@PathVariable("sessionId") String sessionId,
                                           @Valid @RequestBody SessionCreated session,
                                           BindingResult result) throws ParseException {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
