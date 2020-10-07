@@ -60,15 +60,14 @@ class UpdatePassword extends Component
     UpdatePassword = (e) => 
     {
         e.preventDefault();
-        var stored = JSON.parse(localStorage.getItem("user"));
-        let updatedDetail = 
+        let updatedDetail =
         {
             oldPassword: this.state.oldPassword,
             newPassword: this.state.newPassword,
             confirmPassword: this.state.confirmPassword
         };
         console.log(updatedDetail);
-        CustomerAction.updatePassword(stored.id, updatedDetail).then((res) => 
+        CustomerAction.updatePassword(updatedDetail).then((res) =>
         { 
             this.props.history.push('/account');
             alert("Password updated successfully");
