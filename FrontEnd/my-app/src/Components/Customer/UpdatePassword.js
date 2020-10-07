@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import WorkerAction from '../../actions/HandleWorkers';
-import AdminDashboard from './AdminDashboard';
+import CustomerAction from '../../actions/HandleCustomer';
+import CustomerDashboard from './CustomerDashBoard';
 import { Redirect } from 'react-router-dom';
 
-class EditEmployee extends Component 
+class UpdatePassword extends Component 
 {
     constructor(props) 
     {
@@ -11,34 +11,25 @@ class EditEmployee extends Component
         this.state = 
         {
             id: this.props.match.params.id,
-            fName: "",
-            lName: "",
-            phoneNumber: "",
             username: "",
-            adminId: ""
+            oldPassword: "",
+            newPassword: "",
+            confirmPassword: ""
         }
-        this.changeWorkerId = this.changeWorkerId.bind(this);
-        this.changeWorkerFirstName = this.changeWorkerFirstName.bind(this);
-        this.changeWorkerLastName = this.changeWorkerLastName.bind(this);
-        this.changeWorkerPhoneNumber = this.changeWorkerPhoneNumber.bind(this);
-        this.changeWorkerUserName = this.changeWorkerUserName.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN") {
-            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => 
+        if (stored && stored.role === "ROLE_CUSTOMER" ) {
+            CustomerAction.getProfile(stored.id).then((res) =>
             {
-                let editEmployee = res.data;
+                let customerDetail = res.data;
                 this.setState(
                 {
-                    id: editEmployee.id,
-                    fName: editEmployee.fName,
-                    lName: editEmployee.lName,
-                    phoneNumber: editEmployee.phoneNumber,
-                    username: editEmployee.username,
-                    adminId: editEmployee.adminId
+                    id: this.state.id,
+                    username: customerDetail.username
                 });
             }).catch((err) => 
             {
@@ -51,8 +42,7 @@ class EditEmployee extends Component
                 }
                 else
                 {
-                    // Render page not found
-                    this.props.history.push('/employees');
+                    this.props.history.push('/account');
                 }
             });
         }
@@ -62,24 +52,26 @@ class EditEmployee extends Component
         }
     }
 
-    updateEmployee = (e) => 
+    onChange(e)
+    {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    UpdatePassword = (e) => 
     {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
-        let editEmployee = 
+        let updatedDetail = 
         {
-            id: this.state.id,
-            fName: this.state.fName,
-            lName: this.state.lName,
-            phoneNumber: this.state.phoneNumber,
-            username: this.state.username,
-            adminId: stored.id
+            oldPassword: this.state.oldPassword,
+            newPassword: this.state.newPassword,
+            confirmPassword: this.state.confirmPassword
         };
-        console.log(editEmployee);
-        WorkerAction.updateWorker(editEmployee, this.state.id, stored.id).then((res) =>
+        console.log(updatedDetail);
+        CustomerAction.updatePassword(stored.id, updatedDetail).then((res) => 
         { 
-            this.props.history.push('/employees');
-            alert("Employee details are updated successfully");
+            this.props.history.push('/account');
+            alert("Password updated successfully");
         }, (err) => 
         {
             if (String(err.response.status) === "401")
@@ -90,123 +82,121 @@ class EditEmployee extends Component
             }
             else
             {
-                // console.log(err.response.data.message);
                 console.log(err.response);
-                // console.log(err.response.data);
-                this.setState({errorMessage: err.response.data.message});
+                if (err.response.data.oldPassword)
+                {
+                    console.log(err.response.data.oldPassword);
+                    this.setState({errorMessage: "Old Password: "+err.response.data.oldPassword});
+                }
+                else if (err.response.data.newPassword)
+                {
+                    console.log(err.response.data.newPassword);
+                    this.setState({errorMessage: "New Password: "+err.response.data.newPassword});
+                }
+                else if (err.response.data.confirmPassword)
+                {
+                    console.log(err.response.data.confirmPassword);
+                    this.setState({errorMessage: "Confirm Password: "+err.response.data.confirmPassword});
+                }
+                else
+                {
+                    console.log(err.response.data.message);
+                    this.setState({errorMessage: err.response.data.message});
+                }
             }
         });
     }
 
-    changeWorkerId = (e) => 
-    {
-        this.setState({id: e.target.value});
-    }
-    changeWorkerFirstName = (e) => 
-    {
-        this.setState({fName: e.target.value});
-    }
-    changeWorkerLastName = (e) => 
-    {
-        this.setState({lName: e.target.value});
-    }
-    changeWorkerPhoneNumber = (e) => 
-    {
-        this.setState({phoneNumber: e.target.value});
-    }
-    changeWorkerUserName = (e) => 
-    {
-        this.setState({username: e.target.value});
-    }
-
     cancel()
     {
-        this.props.history.push('/employees');
+        this.props.history.push('/account');
     }
 
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN")
+        if (stored && stored.role === "ROLE_CUSTOMER" && this.state.id === stored.id)
         {
             return(
                 <React.Fragment>
-                    <AdminDashboard/>
+                    <CustomerDashboard/>
                     <div className="container">
                         <div className="row">
                         <div className="col-md-8 m-auto">
-                                <h5 className="display-4 text-center">Update Employee</h5>
+                                <h5 className="display-4 text-center">Update Password</h5>
                                 <hr />
-                                <form onSubmit={this.updateEmployee}>
+                                <form onSubmit={this.UpdatePassword}>
 
-                                    <h6>Employees ID</h6>
+                                    <h6>Customer ID</h6>
                                     <div className="form-group">
                                         <div className="row">
                                             <div className="col">
                                                 <input readOnly="readonly" 
                                                     className="form-control form-control-lg" 
-                                                    placeholder="Enter new Employees ID"
+                                                    placeholder="Enter new Customer ID"
                                                     name="id" 
                                                     value={this.state.id} 
-                                                    onChange={this.changeWorkerId} required/>
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <h6>First Name</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="text" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new First Name" 
-                                                    name="fName" 
-                                                    value={this.state.fName} 
-                                                    onChange={this.changeWorkerFirstName} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                                    <h6>Last Name</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="text" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new Last Name" 
-                                                    name="lName" 
-                                                    value={this.state.lName} 
-                                                    onChange={this.changeWorkerLastName} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <h6>Phone Number</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="tel" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new Phone Number"
-                                                    name="phoneNumber" 
-                                                    maxLength={10} minLength={10} pattern="[0-9]*"
-                                                    value={this.state.phoneNumber} 
-                                                    onChange={this.changeWorkerPhoneNumber} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    
                                     <h6>Username</h6>
                                     <div className="form-group">
                                         <div className="row">
                                             <div className="col">
-                                                <input type="text" 
+                                                <input readOnly="readonly" 
                                                     className="form-control form-control-lg" 
-                                                    placeholder="Enter new Username"
+                                                    placeholder="Enter Username"
                                                     name="username" 
-                                                    maxLength={24} minLength={3}
+                                                    max={21} min={3}
                                                     value={this.state.username} 
-                                                    onChange={this.changeWorkerUserName} required/>
+                                                    onChange={this.onChange} required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6>Old Password</h6>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="password" 
+                                                    className="form-control form-control-lg" 
+                                                    placeholder="Enter old Password" 
+                                                    name="oldPassword" 
+                                                    maxLength={24} minLength={6}
+                                                    value={this.state.oldPassword} 
+                                                    onChange={this.onChange} required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <h6>New Password</h6>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="password" 
+                                                    className="form-control form-control-lg" 
+                                                    placeholder="Enter new Password" 
+                                                    name="newPassword" 
+                                                    maxLength={24} minLength={6}
+                                                    value={this.state.newPassword} 
+                                                    onChange={this.onChange} required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6>Confirm Password</h6>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="password" 
+                                                    className="form-control form-control-lg" 
+                                                    placeholder="Enter confirm Password" 
+                                                    name="confirmPassword" 
+                                                    maxLength={24} minLength={6}
+                                                    value={this.state.confirmPassword} 
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -235,4 +225,4 @@ class EditEmployee extends Component
         }
     }
 }
-export default EditEmployee;
+export default UpdatePassword;
