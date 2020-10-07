@@ -144,6 +144,10 @@ class Account extends Component
                                 <h3 className = "text-center">Account Details</h3>
                                     <div className = "card-body">
                                         <div className = "row">
+                                            <label> Username: </label>
+                                            <div> &nbsp; {this.state.profile.username} </div>
+                                        </div>
+                                        <div className = "row">
                                             <label> First Name: </label>
                                             <div> &nbsp; {this.state.profile.fName} </div>
                                         </div>

@@ -44,7 +44,7 @@ class EditSession extends Component
             this.props.history.push('/managessessions');
         }).catch((err) =>
         {
-            if(String(err.responese.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 console.log(err.response.status);
                 localStorage.clear();

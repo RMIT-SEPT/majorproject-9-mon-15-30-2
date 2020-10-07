@@ -34,6 +34,7 @@ class CurrentBookings extends Component
             }
             else
             {
+                alert(err.response.data.message);
                 console.log(err.response);
             }
         });
