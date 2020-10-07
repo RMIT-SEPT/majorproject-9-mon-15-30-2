@@ -15,6 +15,18 @@ class Account extends Component
         {
             profile: []
         }
+        this.editCustomer = this.editCustomer.bind(this);
+        this.updatePassword = this.updatePassword.bind(this);
+    }
+
+    editCustomer(id)
+    {
+        this.props.history.push(`/editCustomer/${id}`);
+    }
+
+    updatePassword(id)
+    {
+        this.props.history.push(`/updatePassword/${id}`);
     }
 
     componentDidMount()
@@ -151,6 +163,14 @@ class Account extends Component
                                             <label> Email: </label>
                                             <div> &nbsp; {this.state.profile.email} </div>
                                         </div>
+                                        <button className="btn btn-primary" 
+                                                onClick={() => this.editCustomer(stored.id)} 
+                                                style={{marginLeft: "10px"}}>Edit Details
+                                        </button>
+                                        <button className="btn btn-success" 
+                                                onClick={() => this.updatePassword(stored.id)} 
+                                                style={{marginLeft: "10px"}}>Update Password
+                                        </button>
                                     </div>
                                 </div>
                             </Container>

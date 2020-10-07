@@ -162,7 +162,7 @@ class NewBookings extends Component
 
                                     { 
                                         this.state.errorMessage &&
-                                        <h6 className="text-danger"> {this.state.errorMessage} </h6> 
+                                        <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
                                     }
                                     <input type="submit"
                                         className="btn-lg btn-dark btn-block" 

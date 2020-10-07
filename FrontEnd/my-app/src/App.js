@@ -14,6 +14,8 @@ import Employees from './Components/Admin/Employees';
 import AvailableWorkers from './Components/Admin/AvailableWorkers';
 import CreateSession from './Components/Admin/CreateSession';
 import ViewAllBookings from './Components/Admin/ViewAllBookings';
+import EditCustomer from './Components/Customer/EditCustomer';
+import UpdatePassword from './Components/Customer/UpdatePassword';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 function App() 
@@ -34,6 +36,8 @@ function App()
                 <Route exact path= "/availableworkers" component={AvailableWorkers}/>
                 <Route exact path= "/createsession" component={CreateSession}/>
                 <Route exact path= "/viewallbookings" component={ViewAllBookings}/>
+                <Route exact path= "/editCustomer/:id" component={EditCustomer}/>
+                <Route exact path= "/updatePassword/:id" component={UpdatePassword}/>
                 <Route exact path= "*" component={HomePage}/>
             </Switch>
         </Router>

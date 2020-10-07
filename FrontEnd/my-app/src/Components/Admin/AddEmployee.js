@@ -131,7 +131,7 @@ class AddEmployee extends Component
                                     </div>
                                     
                                     { this.state.errorMessage &&
-                                        <h6 className="text-danger"> {this.state.errorMessage} </h6> 
+                                        <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
                                     }
                                     <input type="submit" className="btn btn-primary btn-block mt-4" />
                                 </form>

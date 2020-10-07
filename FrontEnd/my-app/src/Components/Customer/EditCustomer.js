@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import WorkerAction from '../../actions/HandleWorkers';
-import AdminDashboard from './AdminDashboard';
+import CustomerAction from '../../actions/HandleCustomer';
+import CustomerDashboard from './CustomerDashBoard';
 import { Redirect } from 'react-router-dom';
 
-class EditEmployee extends Component 
+class EditCustomer extends Component 
 {
     constructor(props) 
     {
@@ -13,32 +13,30 @@ class EditEmployee extends Component
             id: this.props.match.params.id,
             fName: "",
             lName: "",
+            email: "",
+            address: "",
             phoneNumber: "",
-            username: "",
-            adminId: ""
+            username: ""
         }
-        this.changeWorkerId = this.changeWorkerId.bind(this);
-        this.changeWorkerFirstName = this.changeWorkerFirstName.bind(this);
-        this.changeWorkerLastName = this.changeWorkerLastName.bind(this);
-        this.changeWorkerPhoneNumber = this.changeWorkerPhoneNumber.bind(this);
-        this.changeWorkerUserName = this.changeWorkerUserName.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN") {
-            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => 
+        if (stored && stored.role === "ROLE_CUSTOMER") {
+            CustomerAction.getProfile(stored.id).then((res) =>
             {
-                let editEmployee = res.data;
+                let customerDetail = res.data;
                 this.setState(
                 {
-                    id: editEmployee.id,
-                    fName: editEmployee.fName,
-                    lName: editEmployee.lName,
-                    phoneNumber: editEmployee.phoneNumber,
-                    username: editEmployee.username,
-                    adminId: editEmployee.adminId
+                    id: this.state.id,
+                    fName: customerDetail.fName,
+                    lName: customerDetail.lName,
+                    email: customerDetail.email,
+                    address: customerDetail.address,
+                    phoneNumber: customerDetail.phoneNumber,
+                    username: customerDetail.username
                 });
             }).catch((err) => 
             {
@@ -51,8 +49,7 @@ class EditEmployee extends Component
                 }
                 else
                 {
-                    // Render page not found
-                    this.props.history.push('/employees');
+                    this.props.history.push('/account');
                 }
             });
         }
@@ -62,24 +59,29 @@ class EditEmployee extends Component
         }
     }
 
-    updateEmployee = (e) => 
+    onChange(e)
+    {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    updateCustomer = (e) => 
     {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
-        let editEmployee = 
+        let EditCustomer = 
         {
-            id: this.state.id,
             fName: this.state.fName,
             lName: this.state.lName,
+            email: this.state.email,
+            address: this.state.address,
             phoneNumber: this.state.phoneNumber,
-            username: this.state.username,
-            adminId: stored.id
+            username: this.state.username
         };
-        console.log(editEmployee);
-        WorkerAction.updateWorker(editEmployee, this.state.id, stored.id).then((res) =>
+        console.log(EditCustomer);
+        CustomerAction.updateProfile(stored.id, EditCustomer).then((res) => 
         { 
-            this.props.history.push('/employees');
-            alert("Employee details are updated successfully");
+            this.props.history.push('/account');
+            alert("Customer details are updated successfully");
         }, (err) => 
         {
             if (String(err.response.status) === "401")
@@ -90,65 +92,52 @@ class EditEmployee extends Component
             }
             else
             {
-                // console.log(err.response.data.message);
                 console.log(err.response);
-                // console.log(err.response.data);
-                this.setState({errorMessage: err.response.data.message});
+                
+                if (err.response.data.message)
+                {
+                    console.log(err.response.data.message)
+                    this.setState({errorMessage: err.response.data.message});
+                }
+                else if (err.response.data.phoneNumber)
+                {
+                    console.log(err.response.data.phoneNumber);
+                    this.setState({errorMessage: "Phone Number: "+err.response.data.phoneNumber});
+                }
             }
         });
     }
 
-    changeWorkerId = (e) => 
-    {
-        this.setState({id: e.target.value});
-    }
-    changeWorkerFirstName = (e) => 
-    {
-        this.setState({fName: e.target.value});
-    }
-    changeWorkerLastName = (e) => 
-    {
-        this.setState({lName: e.target.value});
-    }
-    changeWorkerPhoneNumber = (e) => 
-    {
-        this.setState({phoneNumber: e.target.value});
-    }
-    changeWorkerUserName = (e) => 
-    {
-        this.setState({username: e.target.value});
-    }
-
     cancel()
     {
-        this.props.history.push('/employees');
+        this.props.history.push('/account');
     }
 
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN")
+        if (stored && stored.role === "ROLE_CUSTOMER" && this.state.id === stored.id)
         {
             return(
                 <React.Fragment>
-                    <AdminDashboard/>
+                    <CustomerDashboard/>
                     <div className="container">
                         <div className="row">
                         <div className="col-md-8 m-auto">
-                                <h5 className="display-4 text-center">Update Employee</h5>
+                                <h5 className="display-4 text-center">Update Details</h5>
                                 <hr />
-                                <form onSubmit={this.updateEmployee}>
+                                <form onSubmit={this.updateCustomer}>
 
-                                    <h6>Employees ID</h6>
+                                    <h6>Customer ID</h6>
                                     <div className="form-group">
                                         <div className="row">
                                             <div className="col">
                                                 <input readOnly="readonly" 
                                                     className="form-control form-control-lg" 
-                                                    placeholder="Enter new Employees ID"
+                                                    placeholder="Enter new Customer ID"
                                                     name="id" 
                                                     value={this.state.id} 
-                                                    onChange={this.changeWorkerId} required/>
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -162,7 +151,7 @@ class EditEmployee extends Component
                                                     placeholder="Enter new First Name" 
                                                     name="fName" 
                                                     value={this.state.fName} 
-                                                    onChange={this.changeWorkerFirstName} required/>
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -176,7 +165,35 @@ class EditEmployee extends Component
                                                     placeholder="Enter new Last Name" 
                                                     name="lName" 
                                                     value={this.state.lName} 
-                                                    onChange={this.changeWorkerLastName} required/>
+                                                    onChange={this.onChange} required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6>Email</h6>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="email" 
+                                                    className="form-control form-control-lg" 
+                                                    placeholder="Enter new Email" 
+                                                    name="email" 
+                                                    value={this.state.email} 
+                                                    onChange={this.onChange} required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h6>Address</h6>
+                                    <div className="form-group">
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="text" 
+                                                    className="form-control form-control-lg" 
+                                                    placeholder="Enter new Address" 
+                                                    name="address" 
+                                                    value={this.state.address} 
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -191,7 +208,7 @@ class EditEmployee extends Component
                                                     name="phoneNumber" 
                                                     maxLength={10} minLength={10} pattern="[0-9]*"
                                                     value={this.state.phoneNumber} 
-                                                    onChange={this.changeWorkerPhoneNumber} required/>
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -206,7 +223,7 @@ class EditEmployee extends Component
                                                     name="username" 
                                                     maxLength={24} minLength={3}
                                                     value={this.state.username} 
-                                                    onChange={this.changeWorkerUserName} required/>
+                                                    onChange={this.onChange} required/>
                                             </div>
                                         </div>
                                     </div>
@@ -235,4 +252,4 @@ class EditEmployee extends Component
         }
     }
 }
-export default EditEmployee;
+export default EditCustomer;
