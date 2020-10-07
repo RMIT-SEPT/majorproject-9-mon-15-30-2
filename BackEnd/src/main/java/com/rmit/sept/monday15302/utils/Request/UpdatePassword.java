@@ -33,4 +33,12 @@ public class UpdatePassword {
     public String getConfirmPassword() {
         return confirmPassword;
     }
+
+    public void setOldPassword(String s) {
+        this.oldPassword = s;
+    }
+
+    public void setNewPassword(String s) {
+        this.newPassword = s;
+    }
 }

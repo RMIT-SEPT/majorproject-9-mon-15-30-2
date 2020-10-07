@@ -143,21 +143,17 @@ public class BookingControllerTest {
             throws Exception {
 
         Booking booking1 = new Booking();
-        booking1.setStatus(BookingStatus.PAST_BOOKING);
+        booking1.setStatus(BookingStatus.NEW_BOOKING);
 
-        Booking booking2 = new Booking();
-        booking2.setStatus(BookingStatus.CANCELLED_BOOKING);
-
-        List<Booking> bookings = Arrays.asList(booking1, booking2);
+        List<Booking> bookings = Arrays.asList(booking1);
 
         given(service.getNewBookingsByAdminID(adminId)).willReturn(bookings);
 
         mvc.perform(get("/admin/newBookingsAdmin/{adminID}", adminId)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].status", is(BookingStatus.PAST_BOOKING.toString())))
-                .andExpect(jsonPath("$[1].status", is(BookingStatus.CANCELLED_BOOKING.toString())));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].status", is(BookingStatus.NEW_BOOKING.toString())));
     }
 
     @Test
@@ -261,5 +257,16 @@ public class BookingControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    public void cancelBooking_returnStatusOK() throws Exception {
+        Booking booking = new Booking();
+        booking.setId(bookingId);
+        given(service.cancelBooking(bookingId)).willReturn(booking);
+        mvc.perform(put("/customer/cancelBooking/{bookingId}", bookingId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(bookingId)));
     }
 }

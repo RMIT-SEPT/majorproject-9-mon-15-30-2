@@ -28,5 +28,34 @@ class HandleSessions
             Authorization: stored.token
         }});
     }
+
+    getAllSessionsByAdminId(admin_id)
+    {
+        return axios.get("http://localhost:8080/admin/sessions/"+admin_id,
+        {
+            headers: {
+                Authorization: stored.token
+            }
+        });
+    }
+
+    getSessionBySessionIdAndAdminId(session_id, admin_id)
+    {
+        return axios.get("http://localhost:8080/admin/session/"+session_id+"/"+admin_id, 
+        {
+            headers: {
+                Authorization: stored.token
+            }
+        });
+    }
+
+    updateSession(session_id, session)
+    {
+        return axios.put("http://localhost:8080/admin/editSession/" + session_id, session,
+        {
+            headers: {
+                Authorization: stored.token
+        }});
+    }
 }
 export default new HandleSessions();

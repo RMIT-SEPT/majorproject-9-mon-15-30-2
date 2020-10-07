@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static org.mockito.Mockito.times;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SessionServiceTest {
@@ -63,6 +65,7 @@ public class SessionServiceTest {
     private static AdminDetails admin;
     private static List<Session> sessions;
     private static List<WorkerDetails> workers;
+    private static String sessionId = "s1";
 
     @Before
     public void setup() throws ParseException {
@@ -75,7 +78,7 @@ public class SessionServiceTest {
         worker.setId(workerId);
 
         session = new Session(worker, 1, "08:00:00", "09:00:00", service);
-        session.setId("s1");
+        session.setId(sessionId);
         sessionCreated = new SessionCreated(1,
                 "08:00:00", "09:00:00", workerId);
         sessions = Arrays.asList(session);
@@ -87,6 +90,8 @@ public class SessionServiceTest {
         Mockito.when(workerDetailsRepository.findByAdminId(adminId)).thenReturn(workers);
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1)).thenReturn(sessions);
         Mockito.when(workerDetailsRepository.getWorkerById(workerId)).thenReturn(worker);
+        Mockito.when(sessionRepository.findByWorkerId(workerId)).thenReturn(sessions);
+        Mockito.when(sessionRepository.getSessionById(sessionId)).thenReturn(session);
     }
 
     @Test
@@ -149,7 +154,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "08:30:00", "10:00:00", service));
+                "08:30:00", "10:00:00", service), false);
     }
 
     @Test(expected = AdminDetailsException.class)
@@ -158,7 +163,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "07:00:00", "08:30:00", service));
+                "07:00:00", "08:30:00", service), false);
     }
 
     @Test(expected = AdminDetailsException.class)
@@ -167,7 +172,7 @@ public class SessionServiceTest {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
         sessionService.validateSessionByTime(new Session(worker, 1,
-                "07:00:00", "10:00:00", service));
+                "07:00:00", "10:00:00", service), false);
     }
 
     @Test
@@ -220,6 +225,48 @@ public class SessionServiceTest {
 
         assert(!sessionService.getAvailableSession(workerId, service)
                 .contains(exclude));
+    }
+
+    @Test
+    public void getSessionsByWorkerId_returnSessions_ifSessionsFound() {
+        assert(sessionService.getSessionsByWorkerId(workerId).contains(session));
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void getSessionsByAdminId_throwException_ifNoSessionsFound() throws AdminDetailsException {
+        List<WorkerDetails> list = new ArrayList<>();
+        Mockito.when(workerDetailsRepository.findByAdminId("123")).thenReturn(list);
+        sessionService.getSessionsByAdminId("123");
+    }
+
+    @Test
+    public void getSessionsByAdminId_returnSessions_ifSessionFound() {
+        assert(!sessionService.getSessionsByAdminId(adminId).isEmpty());
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void getSessionById_throwException_ifSessionNotFound() {
+        sessionService.getSessionById("123");
+    }
+
+    @Test
+    public void getSessionById_returnSession_ifSessionFound() {
+        assert(sessionService.getSessionById(sessionId) != null);
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void updateSession_throwException_ifNoSessionFound()
+            throws AdminDetailsException, ParseException {
+        sessionService.updateSession(sessionCreated, "123");
+    }
+
+    @Test
+    public void updateSession_returnSession_ifSessionUpdated() throws ParseException {
+        Mockito.when(sessionRepository.save(session)).thenReturn(session);
+        // when
+        sessionService.updateSession(sessionCreated, sessionId);
+        // then
+        Mockito.verify(sessionRepository, times(1)).save(session);
     }
 
 }
