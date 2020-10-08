@@ -35,41 +35,59 @@ class Account extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            Customers.getProfile(stored.id).then((res) => 
-            {
-                this.setState(
-                {
-                    profile: res.data,
-                    id: stored.id
-                });
-                console.log(res.data);
-            });
+            this.getCustomerDetail(stored.id, stored.token);
         }
         else if (stored && stored.role === "ROLE_WORKER")
         {
-            Workers.getProfile(stored.id).then((res) => 
-            {
-                this.setState(
-                {
-                    profile: res.data,
-                    id: stored.id
-                });
-                console.log(res.data);
-            }, (err) => 
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
-                    localStorage.clear();
-                    alert("Session Expired");
-                    this.props.history.push('/login');
-                }
-            });
+            this.getWorkerDetail(stored.id, stored.token);
         }
         else
         {
             return <Redirect to="/"/>
         }
+    }
+
+    getCustomerDetail(storedId, token)
+    {
+        return Customers.getProfile(storedId, token).then((res) => 
+        {
+            this.setState(
+            {
+                profile: res.data,
+                id: storedId
+            });
+            console.log(res.data);
+        }, (err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+        });
+    }
+
+    getWorkerDetail(storedId, token)
+    {
+        return Workers.getProfile(storedId, token).then((res) => 
+        {
+            this.setState(
+            {
+                profile: res.data
+            });
+            console.log(res.data);
+        }, (err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+        });
     }
 
     render() 

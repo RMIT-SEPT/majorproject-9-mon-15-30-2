@@ -3,8 +3,10 @@ import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import Account from "../Components/Account";
+import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
+jest.mock('axios'); 
 
 const id1 = "1";
 const params1 = {
@@ -96,4 +98,21 @@ describe('<Account /> Unit Test', () => {
 
         expect(wrapper.instance().props.history).toHaveLength(1);
     });
-})
+
+    it('retrieve undefined data for getCustomerDetail', () => {       
+        const profile = {};    
+
+        const spy = jest.spyOn(axios, 'get').mockImplementationOnce(() => {
+            return Promise.resolve(profile)});
+        const wrapper = shallow(<Account/>);
+        wrapper.instance().getCustomerDetail().then(() => expect().toBeUndefined());
+    });
+
+    it('retrieve undefined data from getWorkerDetail', () => {
+        const spy = jest.spyOn(axios, 'get').mockImplementationOnce(() => 
+        Promise.resolve(""));
+        const wrapper = shallow(<Account/>);
+        wrapper.instance().getWorkerDetail().then(() => expect().toBeUndefined());
+    });
+
+});

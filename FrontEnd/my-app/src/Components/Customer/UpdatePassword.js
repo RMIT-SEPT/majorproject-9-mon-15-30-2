@@ -22,29 +22,9 @@ class UpdatePassword extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_CUSTOMER" ) {
-            CustomerAction.getProfile(stored.id).then((res) =>
-            {
-                let customerDetail = res.data;
-                this.setState(
-                {
-                    id: this.state.id,
-                    username: customerDetail.username
-                });
-            }).catch((err) => 
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
-                    localStorage.clear();
-                    alert("Session Expired");
-                    this.props.history.push('/login');
-                }
-                else
-                {
-                    this.props.history.push('/account');
-                }
-            });
+        if (stored && stored.role === "ROLE_CUSTOMER" ) 
+        {
+            this.getCustomerDetail(stored.id, stored.token);
         }
         else
         {
@@ -52,12 +32,38 @@ class UpdatePassword extends Component
         }
     }
 
+    getCustomerDetail(storedId, token)
+    {
+        return CustomerAction.getProfile(storedId, token).then((res) =>
+        {
+            let customerDetail = res.data;
+            this.setState(
+            {
+                id: this.state.id,
+                username: customerDetail.username
+            });
+        }).catch((err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                this.props.history.push('/account');
+            }
+        });
+    }
+
     onChange(e)
     {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    UpdatePassword = (e) => 
+    onSave = (e) => 
     {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
@@ -68,7 +74,12 @@ class UpdatePassword extends Component
             confirmPassword: this.state.confirmPassword
         };
         console.log(updatedDetail);
-        CustomerAction.updatePassword(stored.id, updatedDetail).then((res) => 
+        this.UpdatePassword(stored.id, stored.token, updatedDetail);
+    }
+
+    UpdatePassword(storedId, token, newPassword)
+    {
+        return CustomerAction.updatePassword(storedId, token, newPassword).then((res) => 
         { 
             this.props.history.push('/account');
             alert("Password updated successfully");
@@ -117,105 +128,10 @@ class UpdatePassword extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER" && this.state.id === stored.id)
         {
-            return(
+            return (
                 <React.Fragment>
                     <CustomerDashboard/>
-                    <div className="container">
-                        <div className="row">
-                        <div className="col-md-8 m-auto">
-                                <h5 className="display-4 text-center">Update Password</h5>
-                                <hr />
-                                <form onSubmit={this.UpdatePassword}>
-
-                                    <h6>Customer ID</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input readOnly="readonly" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new Customer ID"
-                                                    name="id" 
-                                                    value={this.state.id} 
-                                                    onChange={this.onChange} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <h6>Username</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input readOnly="readonly" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter Username"
-                                                    name="username" 
-                                                    max={21} min={3}
-                                                    value={this.state.username} 
-                                                    onChange={this.onChange} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <h6>Old Password</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="password" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter old Password" 
-                                                    name="oldPassword" 
-                                                    maxLength={24} minLength={6}
-                                                    value={this.state.oldPassword} 
-                                                    onChange={this.onChange} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
-                                    <h6>New Password</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="password" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter new Password" 
-                                                    name="newPassword" 
-                                                    maxLength={24} minLength={6}
-                                                    value={this.state.newPassword} 
-                                                    onChange={this.onChange} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <h6>Confirm Password</h6>
-                                    <div className="form-group">
-                                        <div className="row">
-                                            <div className="col">
-                                                <input type="password" 
-                                                    className="form-control form-control-lg" 
-                                                    placeholder="Enter confirm Password" 
-                                                    name="confirmPassword" 
-                                                    maxLength={24} minLength={6}
-                                                    value={this.state.confirmPassword} 
-                                                    onChange={this.onChange} required/>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {
-                                        this.state.errorMessage &&
-                                        <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
-                                    }
-                                    <button className="btn btn-success" 
-                                            type="submit" >Save
-                                    </button>
-                                    <button className="btn btn-danger" 
-                                            onClick={this.cancel.bind(this)} 
-                                            style={{marginLeft: "10px"}}>Cancel
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    {this.renderChangePassword()}
                 </React.Fragment>
             )
         }
@@ -223,6 +139,108 @@ class UpdatePassword extends Component
         {
             return <Redirect to="/"/>
         }
+    }
+
+    renderChangePassword()
+    {
+        return(
+            <div className="container">
+                <div className="row">
+                <div className="col-md-8 m-auto">
+                        <h5 className="display-4 text-center">Update Password</h5>
+                        <hr />
+                        <form onSubmit={this.onSave}>
+
+                            <h6>Customer ID</h6>
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col">
+                                        <input readOnly="readonly" 
+                                            className="form-control form-control-lg" 
+                                            placeholder="Enter new Customer ID"
+                                            name="id" 
+                                            value={this.state.id} 
+                                            onChange={this.onChange} required/>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h6>Username</h6>
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col">
+                                        <input readOnly="readonly" 
+                                            className="form-control form-control-lg" 
+                                            placeholder="Enter Username"
+                                            name="username" 
+                                            max={21} min={3}
+                                            value={this.state.username} 
+                                            onChange={this.onChange} required/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6>Old Password</h6>
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col">
+                                        <input type="password" 
+                                            className="form-control form-control-lg" 
+                                            placeholder="Enter old Password" 
+                                            name="oldPassword" 
+                                            maxLength={24} minLength={6}
+                                            value={this.state.oldPassword} 
+                                            onChange={this.onChange} required/>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <h6>New Password</h6>
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col">
+                                        <input type="password" 
+                                            className="form-control form-control-lg" 
+                                            placeholder="Enter new Password" 
+                                            name="newPassword" 
+                                            maxLength={24} minLength={6}
+                                            value={this.state.newPassword} 
+                                            onChange={this.onChange} required/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6>Confirm Password</h6>
+                            <div className="form-group">
+                                <div className="row">
+                                    <div className="col">
+                                        <input type="password" 
+                                            className="form-control form-control-lg" 
+                                            placeholder="Enter confirm Password" 
+                                            name="confirmPassword" 
+                                            maxLength={24} minLength={6}
+                                            value={this.state.confirmPassword} 
+                                            onChange={this.onChange} required/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {
+                                this.state.errorMessage &&
+                                <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
+                            }
+                            <button className="btn btn-success" 
+                                    type="submit" >Save
+                            </button>
+                            <button className="btn btn-danger" 
+                                    onClick={this.cancel.bind(this)} 
+                                    style={{marginLeft: "10px"}}>Cancel
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        )
     }
 }
 export default UpdatePassword;
