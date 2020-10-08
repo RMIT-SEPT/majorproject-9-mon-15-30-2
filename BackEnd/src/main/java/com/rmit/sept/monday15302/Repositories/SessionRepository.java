@@ -13,6 +13,7 @@ public interface SessionRepository extends CrudRepository<Session, String> {
 
     List<Session> findByWorkerIdAndDay(String id, int day);
 
+    @Query ("select session from Session session where session.worker.id = :workerId")
     List<Session> findByWorkerId(String workerId);
 
     @Query("select session from Session session where session.session_id = :sessionId")

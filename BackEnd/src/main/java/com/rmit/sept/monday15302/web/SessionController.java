@@ -66,4 +66,8 @@ public class SessionController {
         if(errorMap != null) return errorMap;
         return new ResponseEntity<>(sessionService.updateSession(session, sessionId), HttpStatus.OK);
     }
+    @GetMapping("/workerSessions/{workerId}")
+    public ResponseEntity<?> getSessionsByWorker(@PathVariable("workerId")String workerId){
+        return new ResponseEntity<>(sessionService.getSessionsByWorkerId(workerId), HttpStatus.OK);
+    }
 }

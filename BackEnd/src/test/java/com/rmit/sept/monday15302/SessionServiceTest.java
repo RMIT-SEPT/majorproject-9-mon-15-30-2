@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
@@ -267,6 +268,11 @@ public class SessionServiceTest {
         sessionService.updateSession(sessionCreated, sessionId);
         // then
         Mockito.verify(sessionRepository, times(1)).save(session);
+    }
+
+    @Test
+    public void getSessionsByWorkerId_returnSessions_ifSessionFound() {
+        assert(!sessionService.getSessionsByWorkerId(workerId).isEmpty());
     }
 
 }
