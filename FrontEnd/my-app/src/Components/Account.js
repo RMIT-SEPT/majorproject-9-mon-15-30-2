@@ -13,7 +13,8 @@ class Account extends Component
         super()
         this.state = 
         {
-            profile: []
+            profile: [],
+            id: ""
         }
         this.editCustomer = this.editCustomer.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
@@ -36,7 +37,11 @@ class Account extends Component
         {
             Customers.getProfile(stored.id).then((res) => 
             {
-                this.setState({profile: res.data});
+                this.setState(
+                {
+                    profile: res.data,
+                    id: stored.id
+                });
                 console.log(res.data);
             });
         }
@@ -44,7 +49,11 @@ class Account extends Component
         {
             Workers.getProfile(stored.id).then((res) => 
             {
-                this.setState({profile: res.data});
+                this.setState(
+                {
+                    profile: res.data,
+                    id: stored.id
+                });
                 console.log(res.data);
             }, (err) => 
             {
@@ -75,11 +84,7 @@ class Account extends Component
                     return(
                         <React.Fragment>
                             <WorkerDashboard/>
-                            <Container>
-                                <Alert variant='danger'>
-                                    Not Available
-                                </Alert>
-                            </Container>
+                                {this.renderNotAvailable()}
                         </React.Fragment>
                     )
                 }
@@ -88,11 +93,7 @@ class Account extends Component
                     return(
                         <React.Fragment>
                             <CustomerDashboard/>
-                            <Container>
-                                <Alert variant='danger'>
-                                    Not Available
-                                </Alert>
-                            </Container>
+                                {this.renderNotAvailable()}
                         </React.Fragment>
                     )
                 }
@@ -101,79 +102,19 @@ class Account extends Component
             {
                 if (stored.role === "ROLE_WORKER")
                 {
-                    return(
+                    return (
                         <React.Fragment>
-                            <WorkerDashboard/>
-                            <Container>
-                                <div className = "card col-md-6 offset-md-3">
-                                <h3 className = "text-center">Account Details</h3>
-                                <div className = "card-body">
-                                    <div className = "row">
-                                        <label> First Name: </label>
-                                        <div> &nbsp; {this.state.profile.fName} </div>
-                                    </div>
-                                    <div className = "row">
-                                        <label> Last Name: </label>
-                                        <div> &nbsp; {this.state.profile.lName} </div>
-                                    </div>
-                                    <div className = "row">
-                                        <label> Phone Number: </label>
-                                        <div> &nbsp; {this.state.profile.phoneNumber} </div>
-                                    </div>
-                                    <div className = "row">
-                                        <label> Business Name: </label>
-                                        <div> &nbsp; {this.state.profile.admin.adminName} </div>
-                                    </div>
-                                    <div className = "row">
-                                        <label> Service: </label>
-                                        <div> &nbsp; {this.state.profile.admin.service} </div>
-                                    </div>
-                                </div>
-                                </div>
-                            </Container>
+                            <CustomerDashboard/>
+                                {this.renderWorkerView()}
                         </React.Fragment>
                     )
                 }
                 else if (stored.role === "ROLE_CUSTOMER")
                 {
-                    return(
+                    return (
                         <React.Fragment>
                             <CustomerDashboard/>
-                            <Container>
-                                <div className = "card col-md-6 offset-md-3">
-                                <h3 className = "text-center">Account Details</h3>
-                                    <div className = "card-body">
-                                        <div className = "row">
-                                            <label> First Name: </label>
-                                            <div> &nbsp; {this.state.profile.fName} </div>
-                                        </div>
-                                        <div className = "row">
-                                            <label> Last Name: </label>
-                                            <div> &nbsp; {this.state.profile.lName} </div>
-                                        </div>
-                                        <div className = "row">
-                                            <label> Phone Number: </label>
-                                            <div> &nbsp; {this.state.profile.phoneNumber} </div>
-                                        </div>
-                                        <div className = "row">
-                                            <label> Address: </label>
-                                            <div> &nbsp; {this.state.profile.address} </div>
-                                        </div>
-                                        <div className = "row">
-                                            <label> Email: </label>
-                                            <div> &nbsp; {this.state.profile.email} </div>
-                                        </div>
-                                        <button className="btn btn-primary" 
-                                                onClick={() => this.editCustomer(stored.id)} 
-                                                style={{marginLeft: "10px"}}>Edit Details
-                                        </button>
-                                        <button className="btn btn-success" 
-                                                onClick={() => this.updatePassword(stored.id)} 
-                                                style={{marginLeft: "10px"}}>Update Password
-                                        </button>
-                                    </div>
-                                </div>
-                            </Container>
+                                {this.renderCustomerView()}
                         </React.Fragment>
                     )
                 }
@@ -183,6 +124,91 @@ class Account extends Component
         {
             return <Redirect to="/"/>
         }
+    }
+
+    renderNotAvailable()
+    {
+        return(
+            <Container>
+                <Alert variant='danger'>
+                    Not Available
+                </Alert>
+            </Container>
+        )
+    }
+
+    renderWorkerView()
+    {
+        return(
+            <Container>
+                <div className = "card col-md-6 offset-md-3">
+                <h3 className = "text-center">Account Details</h3>
+                <div className = "card-body">
+                    <div className = "row">
+                        <label> First Name: </label>
+                        <div> &nbsp; {this.state.profile.fName} </div>
+                    </div>
+                    <div className = "row">
+                        <label> Last Name: </label>
+                        <div> &nbsp; {this.state.profile.lName} </div>
+                    </div>
+                    <div className = "row">
+                        <label> Phone Number: </label>
+                        <div> &nbsp; {this.state.profile.phoneNumber} </div>
+                    </div>
+                    <div className = "row">
+                        <label> Business Name: </label>
+                        <div> &nbsp; {this.state.profile.admin.adminName} </div>
+                    </div>
+                    <div className = "row">
+                        <label> Service: </label>
+                        <div> &nbsp; {this.state.profile.admin.service} </div>
+                    </div>
+                </div>
+                </div>
+            </Container>
+        )
+    }
+
+    renderCustomerView()
+    {
+        return(
+            <Container>
+                <div className = "card col-md-6 offset-md-3">
+                <h3 className = "text-center">Account Details</h3>
+                    <div className = "card-body">
+                        <div className = "row">
+                            <label> First Name: </label>
+                            <div> &nbsp; {this.state.profile.fName} </div>
+                        </div>
+                        <div className = "row">
+                            <label> Last Name: </label>
+                            <div> &nbsp; {this.state.profile.lName} </div>
+                        </div>
+                        <div className = "row">
+                            <label> Phone Number: </label>
+                            <div> &nbsp; {this.state.profile.phoneNumber} </div>
+                        </div>
+                        <div className = "row">
+                            <label> Address: </label>
+                            <div> &nbsp; {this.state.profile.address} </div>
+                        </div>
+                        <div className = "row">
+                            <label> Email: </label>
+                            <div> &nbsp; {this.state.profile.email} </div>
+                        </div>
+                        <button className="btn btn-primary" 
+                                onClick={() => this.editCustomer(this.state.id)} 
+                                style={{marginLeft: "10px"}}>Edit Details
+                        </button>
+                        <button className="btn btn-success" 
+                                onClick={() => this.updatePassword(this.state.id)} 
+                                style={{marginLeft: "10px"}}>Update Password
+                        </button>
+                    </div>
+                </div>
+            </Container>
+        )
     }
 }
 export default Account;
