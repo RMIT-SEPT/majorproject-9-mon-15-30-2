@@ -34,6 +34,7 @@ class CurrentBookings extends Component
             }
             else
             {
+                alert(err.response.data.message);
                 console.log(err.response);
             }
         });
@@ -47,13 +48,7 @@ class CurrentBookings extends Component
         {
             GetBookings.getNewBookingById(stored.id).then((res) =>
             {
-                for(var i=0; i < res.data.length; i++)
-                {
-                    if(res.data[i].confirmation === "CONFIRMED")
-                    {
-                        this.setState({currentBookings: this.state.currentBookings.concat(res.data[i])});
-                    }
-                }
+                this.setState({currentBookings: res.data});
                 console.log(res.data);
             }).catch((err) =>
             {
@@ -110,6 +105,7 @@ class CurrentBookings extends Component
                                         <th className="th">Date</th>
                                         <th className="th">Start Time</th>
                                         <th className="th">End Time</th>
+                                        <th className="th">Confirmation</th>
                                         <th className="th">Action</th>
                                     </tr>
                                 </thead>
@@ -124,6 +120,7 @@ class CurrentBookings extends Component
                                             <td> {currentBookings.date}</td>   
                                             <td> {currentBookings.startTime}</td>
                                             <td> {currentBookings.endTime}</td>
+                                            <td> {currentBookings.confirmation}</td>
                                             <td>
                                                 <button onClick={() => this.cancelbooking(currentBookings.id)} className="btn btn-danger ml-3">
                                                     Cancel

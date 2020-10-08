@@ -186,6 +186,7 @@ class ViewAllBookings extends Component
                                             <th className="th">Date</th>
                                             <th className="th">Start Time</th>
                                             <th className="th">End Time</th>
+                                            <th className="th">Confirmation</th>
                                             <th className="th">Action</th>
                                         </tr>
                                     </thead>
@@ -202,6 +203,7 @@ class ViewAllBookings extends Component
                                                 <td> {pendingbookings.date}</td>   
                                                 <td> {pendingbookings.startTime}</td>
                                                 <td> {pendingbookings.endTime}</td>
+                                                <td> {pendingbookings.confirmation}</td>
                                                 <td> 
                                                     <button onClick={() => this.confirmBooking(pendingbookings.id)} className="btn btn-info ml-3">
                                                         Confirm
@@ -246,6 +248,8 @@ class ViewAllBookings extends Component
                                             <th className="th">Date</th>
                                             <th className="th">Start Time</th>
                                             <th className="th">End Time</th>
+                                            <th className="th">Status</th>
+                                            <th className="th">Confirmation</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -259,6 +263,8 @@ class ViewAllBookings extends Component
                                                 <td> {newbookings.date}</td>   
                                                 <td> {newbookings.startTime}</td>
                                                 <td> {newbookings.endTime}</td>
+                                                <td> {newbookings.status}</td>
+                                                <td> {newbookings.confirmation}</td>
                                             </tr>
                                         )
                                     }
@@ -295,6 +301,8 @@ class ViewAllBookings extends Component
                                             <th className="th">Date</th>
                                             <th className="th">Start Time</th>
                                             <th className="th">End Time</th>
+                                            <th className="th">Status</th>
+                                            <th className="th">Confirmation</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -308,6 +316,8 @@ class ViewAllBookings extends Component
                                                 <td> {pastbookings.date}</td>   
                                                 <td> {pastbookings.startTime}</td>
                                                 <td> {pastbookings.endTime}</td>
+                                                <td> {pastbookings.status}</td>
+                                                <td> {pastbookings.confirmation}</td>
                                             </tr>
                                         )
                                     }
