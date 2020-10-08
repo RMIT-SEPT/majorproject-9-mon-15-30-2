@@ -62,5 +62,13 @@ class HandleWorkers
         Authorization: token
       }});
   }
+
+  getSession(id, token)
+  {
+    return axios.get("http://localhost:8080/worker/sessions/" + id ,
+      {headers: {
+        Authorization: token
+      }});
+  }
 }
 export default new HandleWorkers();
