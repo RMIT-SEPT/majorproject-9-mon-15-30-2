@@ -7,10 +7,7 @@ import com.rmit.sept.monday15302.exception.AdminDetailsException;
 import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.exception.WorkerDetailsException;
 import com.rmit.sept.monday15302.exception.WorkingHoursException;
-import com.rmit.sept.monday15302.model.Booking;
-import com.rmit.sept.monday15302.model.Session;
-import com.rmit.sept.monday15302.model.WorkerDetails;
-import com.rmit.sept.monday15302.model.WorkingHours;
+import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.utils.Request.SessionCreated;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import com.rmit.sept.monday15302.utils.Utility;
@@ -114,7 +111,7 @@ public class SessionService {
         // Validate hours
         validateStartAndEndTime(newSession);
         validateSessionByWorkingHours(newSession, adminId);
-        validateSessionByTime(newSession);
+        validateSessionByTime(newSession, false);
         return sessionRepository.save(newSession);
     }
 
@@ -145,21 +142,23 @@ public class SessionService {
     }
 
 
-    public void validateSessionByTime(Session newSession) {
+    public void validateSessionByTime(Session newSession, boolean isUpdated) {
         List<Session> sessions = sessionRepository.findByWorkerIdAndDay(newSession
                         .getWorker().getId(), newSession.getDay());
         if(!sessions.isEmpty()) {
             for(Session session : sessions) {
-                Date newStartTime = newSession.getStartTime();
-                Date newEndTime = newSession.getEndTime();
-                Date startTime = session.getStartTime();
-                Date endTime = session.getEndTime();
-                if(isWithinRange(newStartTime, startTime, endTime)
-                        || isWithinRange(newEndTime, startTime, endTime)
-                        || (newStartTime.getTime() < startTime.getTime() && newEndTime.getTime() > endTime.getTime())) {
-                    if(!newEndTime.equals(startTime) && !newStartTime.equals(endTime)) {
-                        throw new AdminDetailsException("New session is collapsed with session "
-                                + Utility.getTimeAsString(startTime) + "-" + Utility.getTimeAsString(endTime));
+                if(!(isUpdated && session.getId().equals(newSession.getId()))) {
+                    Date newStartTime = newSession.getStartTime();
+                    Date newEndTime = newSession.getEndTime();
+                    Date startTime = session.getStartTime();
+                    Date endTime = session.getEndTime();
+                    if (isWithinRange(newStartTime, startTime, endTime)
+                            || isWithinRange(newEndTime, startTime, endTime)
+                            || (newStartTime.getTime() < startTime.getTime() && newEndTime.getTime() > endTime.getTime())) {
+                        if (!newEndTime.equals(startTime) && !newStartTime.equals(endTime)) {
+                            throw new AdminDetailsException("New session is collapsed with session "
+                                    + Utility.getTimeAsString(startTime) + "-" + Utility.getTimeAsString(endTime));
+                        }
                     }
                 }
             }
@@ -176,5 +175,58 @@ public class SessionService {
             throw new WorkerDetailsException("No sessions found");
         }
         return sessions;
+    }
+
+    public List<Session> getSessionsByWorkerId(String workerId) {
+        return sessionRepository.findByWorkerId(workerId);
+    }
+
+    public List<SessionCreated> getSessionsByAdminId(String adminId) {
+        List<SessionCreated> sessions = new ArrayList<>();
+        List<WorkerDetails> workers = workerDetailsRepository.findByAdminId(adminId);
+        if(!workers.isEmpty()) {
+            for (WorkerDetails worker : workers) {
+                List<Session> wSessions = getSessionsByWorkerId(worker.getId());
+                if(!wSessions.isEmpty()) {
+                    for (Session session : wSessions) {
+                        SessionCreated toReturn = new SessionCreated(session.getDay(),
+                                session.getStartTime(), session.getEndTime(), worker.getfName(),
+                                worker.getlName(), session.getId());
+                        sessions.add(toReturn);
+                    }
+                }
+            }
+        }
+        if(sessions.isEmpty()) {
+            throw new AdminDetailsException("No session found");
+        }
+        return sessions;
+    }
+
+    public Session getSessionById(String sessionId) {
+        Session session = sessionRepository.getSessionById(sessionId);
+        if(session == null) {
+            throw new AdminDetailsException("Session with id " + sessionId + " not found");
+        }
+        return session;
+    }
+
+    public Session updateSession(SessionCreated session, String sessionId) throws ParseException {
+        WorkerDetails worker = workerDetailsRepository.getWorkerById(session.getWorkerId());
+        Session updatedSession = sessionRepository.getSessionById(sessionId);
+
+        if(worker == null || updatedSession == null) {
+            throw new AdminDetailsException("No worker or session found");
+        }
+
+        updatedSession.setStartTime(session.getStartTime());
+        updatedSession.setEndTime(session.getEndTime());
+        updatedSession.setDay(session.getDay());
+
+        validateStartAndEndTime(updatedSession);
+        validateSessionByWorkingHours(updatedSession, worker.getAdmin().getId());
+        validateSessionByTime(updatedSession, true);
+
+        return sessionRepository.save(updatedSession);
     }
 }

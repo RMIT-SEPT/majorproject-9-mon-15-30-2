@@ -98,4 +98,10 @@ public class BookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @PutMapping("/customer/cancelBooking/{bookingId}")
+    public ResponseEntity<?> cancelBooking(@PathVariable("bookingId") String id) throws ParseException {
+        Booking updatedBooking = bookingService.cancelBooking(id);
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
+    }
+
 }

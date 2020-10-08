@@ -27,8 +27,5 @@ public class UserValidator implements Validator {
             throw new UserException("Confirmed password must match");
 
         }
-
-        //confirmPassword
-
     }
 }

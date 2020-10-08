@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BookingService {
@@ -153,5 +151,49 @@ public class BookingService {
         updatedBooking.setStatus(status);
         updatedBooking.setConfirmation(confirm);
         return bookingRepository.save(updatedBooking);
+    }
+
+    public Booking cancelBooking(String id) throws ParseException {
+        Booking booking = getBookingById(id);
+        if(!booking.getConfirmation().equals(Confirmation.CONFIRMED)) {
+            throw new BookingException("Booking is rejected or pending " +
+                    "cannot be cancelled by customer");
+        }
+        if(!isWithin2Days(booking)) {
+            booking.setStatus(BookingStatus.CANCELLED_BOOKING);
+            try {
+                return bookingRepository.save(booking);
+            } catch (BookingException e) {
+                throw new BookingException("Cannot cancel booking");
+            }
+        } else {
+            throw new BookingException("Cannot cancel a booking. It is not within 48 hours");
+        }
+    }
+
+    public boolean isWithin2Days(Booking booking) throws ParseException {
+        boolean within = true;
+        Date currentDate = new Date();
+        Date bookingDate = booking.getDate();
+
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Australia/Sydney"));
+        cal.setTime(currentDate);
+        int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        cal.setTime(bookingDate);
+        int bookingDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        int days = bookingDay - currentDay;
+        if(days > 2) {
+            within = false;
+        } else if(days == 2) {
+            String timeAsString = Utility.getTimeAsString(currentDate);
+            Date currentTime = Utility.convertStringToTime(timeAsString);
+            Date bookingTime = booking.getStartTime();
+            if(currentTime.getTime() <= bookingTime.getTime()) {
+                within = false;
+            }
+        }
+        return within;
     }
 }
