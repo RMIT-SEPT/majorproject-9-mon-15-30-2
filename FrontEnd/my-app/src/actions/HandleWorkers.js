@@ -55,11 +55,11 @@ class HandleWorkers
     }});
   }
 
-  getProfile(id)
+  getProfile(id, token)
   {
     return axios.get("http://localhost:8080/worker/profile/" + id ,
       {headers: {
-        Authorization: stored.token
+        Authorization: token
       }});
   }
 }
