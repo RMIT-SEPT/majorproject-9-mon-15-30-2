@@ -4,7 +4,9 @@ import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.services.BookingService;
+import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
+import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +40,16 @@ public class BookingServiceTest {
     private static List<Booking> bookings;
     private static BookingConfirmation confirm =
             new BookingConfirmation(BookingStatus.NEW_BOOKING, Confirmation.CONFIRMED);
+    private static String adminId = "a1";
 
     @Autowired
     private BookingService bookingService;
 
     @MockBean
     private BookingRepository bookingRepository;
+
+    @MockBean
+    private WorkerDetailsService workerDetailsService;
 
     @Before
     public void setup() throws ParseException {
@@ -78,10 +84,15 @@ public class BookingServiceTest {
 
         bookings = Arrays.asList(booking);
 
+        EditWorker worker = new EditWorker(workerId, "worker",
+                "John", "Smith", "0123456789");
+        List<EditWorker> workers = Arrays.asList(worker);
+
         Mockito.when(bookingRepository.findNewBookingByWorkerAndDate(workerId,
                 booking2.getDate())).thenReturn(newBookings);
 
         Mockito.when(bookingRepository.getBookingById(bookingId)).thenReturn(booking);
+        Mockito.when(workerDetailsService.getWorkersByAdminId(adminId)).thenReturn(workers);
     }
 
     @Test(expected = BookingException.class)
@@ -288,4 +299,31 @@ public class BookingServiceTest {
         assert(!bookingService.isWithin2Days(booking));
     }
 
+    @Test(expected = BookingException.class)
+    public void getPastBookingsByAdminId_throwException_ifNoBookingsFound()
+            throws BookingException {
+        bookingService.getPastBookingsByAdminID(adminId);
+    }
+
+    @Test
+    public void getPastBookingsByAdminId_returnBookings_ifBookingsFound() {
+        Mockito.when(bookingRepository.findPastBookingByWorkerID(workerId)).thenReturn(bookings);
+        List<Booking> returns = bookingService.getPastBookingsByAdminID(adminId);
+        assert(!returns.isEmpty());
+    }
+
+    @Test(expected = BookingException.class)
+    public void getNewBookingsByAdminId_throwException_ifNoBookingsFound()
+            throws BookingException, ParseException {
+        bookingService.getNewBookingsByAdminID(adminId);
+    }
+
+    @Test
+    public void getNewBookingsByAdminId_returnBookings_ifBookingsFound() throws ParseException {
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        Mockito.when(bookingRepository.findNewBookingByWorkerID(workerId)).thenReturn(bookings);
+        List<Booking> returns = bookingService.getNewBookingsByAdminID(adminId);
+        assert(!returns.isEmpty());
+    }
 }
