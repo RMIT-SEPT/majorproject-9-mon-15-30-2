@@ -15,7 +15,7 @@ class Account extends Component
         this.state = 
         {
             profile: [],
-            session: [],
+            workingHour: [],
             id: ""
         }
         this.editCustomer = this.editCustomer.bind(this);
@@ -42,7 +42,7 @@ class Account extends Component
         else if (stored && stored.role === "ROLE_WORKER")
         {
             this.getWorkerDetail(stored.id, stored.token);
-            this.getWorkerSession(stored.id, stored.token);
+            this.getWorkerWorkingHour(stored.id, stored.token);
         }
         else
         {
@@ -93,13 +93,13 @@ class Account extends Component
         });
     }
 
-    getWorkerSession(storedId, token)
+    getWorkerWorkingHour(storedId, token)
     {
         return Workers.getSession(storedId, token).then((res) => 
         {
             this.setState(
             {
-                session: res.data
+                workingHour: res.data
             });
             console.log(res.data);
         }, (err) => 
@@ -157,8 +157,7 @@ class Account extends Component
                     return (
                         <React.Fragment>
                             <CustomerDashboard/>
-                                {this.renderCustomerView() 
-}
+                                {this.renderCustomerView()}
                         </React.Fragment>
                     )
                 }
@@ -209,7 +208,7 @@ class Account extends Component
                             <div> &nbsp; {this.state.profile.admin.service} </div>
                         </div>
                         {
-                            this.state.session.length > 0 &&
+                            this.state.workingHour.length > 0 &&
                         <div className="container">
                             <h3 className = "text-center">Working Hour</h3>
                             <Table className="table" striped bordered hover size="sm">
@@ -222,13 +221,13 @@ class Account extends Component
                                 </thead>
                                 <tbody>
                                 {
-                                    this.state.session.sort((a,b) => a.day > b.day).map(
-                                        (session,i) => 
+                                    this.state.workingHour.sort((a,b) => a.day > b.day).map(
+                                        (workingHour,i) => 
                                         <tr key = {i}>
                                         {}
-                                            <td className="day"> {this.displayDay(session.day)}</td>
-                                            <td className="startTime"> {session.startTime}</td>
-                                            <td className="endTime"> {session.id}</td>
+                                            <td className="day"> {this.displayDay(workingHour.day)}</td>
+                                            <td className="startTime"> {workingHour.startTime}</td>
+                                            <td className="endTime"> {workingHour.id}</td>
                                         </tr>
                                         
                                     )
