@@ -177,6 +177,9 @@ public class SessionService {
         return sessions;
     }
 
+    public List<Session> getSessionsByWorkerId(String workerId) {
+        return sessionRepository.findByWorkerId(workerId);
+    }
 
     public List<SessionCreated> getSessionsByAdminId(String adminId) {
         List<SessionCreated> sessions = new ArrayList<>();
@@ -227,12 +230,30 @@ public class SessionService {
         return sessionRepository.save(updatedSession);
     }
 
-    public List<Session> getSessionsByWorkerId(String workerId) {
-        List<Session> sessions = sessionRepository.findByWorkerId(workerId);
-        if (sessions.isEmpty()) {
-            throw new WorkerDetailsException("No sessions found for worker ID: " + workerId);
+    public List<SessionReturn> getSessionsWithinAWeekByWorkerId(String workerId) {
+        List<Session> sessions = getSessionsByWorkerId(workerId);
+        List<SessionReturn> returns = new ArrayList<>();
+        if(sessions.isEmpty()) {
+            throw new AdminDetailsException("No sessions found for worker ID " + workerId);
         }
-        return sessions;
+        Date currentDate = new Date();
+        Date lastDate = new Date(currentDate.getTime() + 7*(1000 * 60 * 60 * 24));
+
+        Calendar cStart = Calendar.getInstance(); cStart.setTime(currentDate);
+        Calendar cEnd = Calendar.getInstance(); cEnd.setTime(lastDate);
+
+        while (cStart.before(cEnd)) {
+            for(Session session : sessions) {
+                if(Utility.convertDateToDay(cStart.getTime()) == session.getDay()) {
+                    returns.add(new SessionReturn(cStart.getTime(), session.getStartTime(), session.getEndTime()));
+                }
+            }
+            cStart.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        if(returns.isEmpty()) {
+            throw new AdminDetailsException("No sessions found for worker ID " + workerId);
+        }
+        return returns;
     }
 }
 

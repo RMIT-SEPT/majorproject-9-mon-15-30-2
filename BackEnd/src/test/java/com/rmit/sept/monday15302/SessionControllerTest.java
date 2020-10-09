@@ -170,16 +170,4 @@ public class SessionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }
-
-    @Test
-    public void getSessionsByWorker_returnSessions_ifAuthorized() throws Exception {
-        List<Session> sessions = Arrays.asList(session);
-        given(service.getSessionsByWorkerId(workerId)).willReturn(sessions);
-        mvc.perform(get("/admin/workerSessions/{workerId}", workerId)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].day", is(1)))
-                .andExpect(jsonPath("$[0].startTime", is("08:00:00")));
-    }
 }
