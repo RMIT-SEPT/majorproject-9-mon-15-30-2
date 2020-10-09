@@ -268,5 +268,4 @@ public class SessionServiceTest {
         // then
         Mockito.verify(sessionRepository, times(1)).save(session);
     }
-
 }
