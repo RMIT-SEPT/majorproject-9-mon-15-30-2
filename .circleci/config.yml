@@ -73,20 +73,34 @@ integration-test-override-ci:
       docker:
         - image: circleci/node@4.0.0
           environment:
-            POSTGRES_USER: root
-            POSTGRES_DB: circle_test
+            ECR_REPOSITORY_NAME: deployment0
+            FULL_IMAGE_NAME: 208811493786.dkr.ecr.us-east-1.amazonaws.com/deploment0
       test:
         executor: node/default
         steps:
           - checkout
+          - setup_remote_docker
           - node/install-packages:
               override-ci-command: npm install
               cache-path: ~/FrontEnd/my-app/node_modules
               cache-version: override-v3
               app-dir: "~/FrontEnd/my-app"
           - run: cd ~/FrontEnd/my-app && npm run test
-  orbs:
-    node: circleci/node@4.0.0
+          - run:
+              name: Install dependencies for AWS
+              command: |
+                npm install aws-sdk
+                npm install uuid
+          - run:
+              name: Build image
+              command: |
+                docker build -t $FULL_IMAGE_NAME .
+          - run:
+              name: Push image
+              command: |
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 208811493786.dkr.ecr.us-east-1.amazonaws.com
+                docker push $FULL_IMAGE_NAME
+
   workflows:
     test_my_app:
       jobs:
