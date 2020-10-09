@@ -66,39 +66,33 @@ public class SessionService {
                 }
             }
         }
-
-        List<Integer> indexes = new ArrayList<>();
-
         // Filter list of sessions by worker's current bookings
-        for (int i = 0; i != toReturn.size(); i++) {
-            SessionReturn s = toReturn.get(i);
-            List<Booking> bookings = bookingService.getUnavailableSessions(workerId,
-                    Utility.getDateAsString(s.getDate()));
-            if (!bookings.isEmpty()) {
-                for (Booking booking : bookings) {
-                    if (booking.getStartTime().equals(s.getStartTime())
-                            && booking.getEndTime().equals(s.getEndTime())) {
-                        indexes.add(i);
-                    }
-                }
-            }
-        }
-
-        if (!indexes.isEmpty()) {
-            for (int x = indexes.size() - 1; x >= 0; x--) {
-                toReturn.remove(indexes.get(x));
-            }
-        }
-
-        if (toReturn.isEmpty()) {
-            throw new BookingException("Worker id " + workerId + " has no available sessions");
-        }
+        filterSessions(toReturn, workerId);
 
         for (int i = 0; i != toReturn.size(); i++) {
             toReturn.get(i).setId(i);
         }
 
         return toReturn;
+    }
+
+    public void filterSessions(List<SessionReturn> sessions, String workerId) throws ParseException {
+        for (int i = sessions.size() - 1; i >= 0; i--) {
+            SessionReturn s = sessions.get(i);
+            List<Booking> bookings = bookingService.getUnavailableSessions(workerId,
+                    Utility.getDateAsString(s.getDate()));
+            if (!bookings.isEmpty()) {
+                for (Booking booking : bookings) {
+                    if (booking.getStartTime().equals(s.getStartTime())
+                            && booking.getEndTime().equals(s.getEndTime())) {
+                        sessions.remove(s);
+                    }
+                }
+            }
+        }
+        if(sessions.isEmpty()) {
+            throw new BookingException("Worker id " + workerId + " has no available sessions");
+        }
     }
 
     public Session saveSession(SessionCreated session) throws ParseException {
@@ -230,7 +224,7 @@ public class SessionService {
         return sessionRepository.save(updatedSession);
     }
 
-    public List<SessionReturn> getSessionsWithinAWeekByWorkerId(String workerId) {
+    public List<SessionReturn> getSessionsWithinAWeekByWorkerId(String workerId) throws ParseException {
         List<Session> sessions = getSessionsByWorkerId(workerId);
         List<SessionReturn> returns = new ArrayList<>();
         if(sessions.isEmpty()) {
@@ -250,6 +244,7 @@ public class SessionService {
             }
             cStart.add(Calendar.DAY_OF_MONTH, 1);
         }
+        filterSessions(returns, workerId);
         return returns;
     }
 }

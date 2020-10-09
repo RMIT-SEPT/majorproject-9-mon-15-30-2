@@ -73,7 +73,7 @@ public class SessionController {
 
     @GetMapping("/availableSessions/{workerId}/{adminId}")
     public ResponseEntity<?> getSessionsWithinAWeekByWorkerId(@PathVariable("workerId") String workerId,
-                                                   @PathVariable("adminId") String adminId) {
+                                                   @PathVariable("adminId") String adminId) throws ParseException {
         workerDetailsService.getWorkerById(workerId, adminId);
         if(utility.isCurrentLoggedInUser(adminId)) {
             return new ResponseEntity<>(sessionService.getSessionsWithinAWeekByWorkerId(workerId), HttpStatus.OK);
