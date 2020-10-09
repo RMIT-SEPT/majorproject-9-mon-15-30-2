@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 import HandleWorkers from '../../actions/HandleWorkers';
 import HandleSessions from '../../actions/HandleSessions';
+import { UncontrolledCollapse} from 'reactstrap';
 
 class AvailableWorkers extends Component 
 {
@@ -14,13 +15,38 @@ class AvailableWorkers extends Component
         this.state = 
         {
             allworkersbyadminid: [],
-            allsessionsbyworker: []
+            sessionbyworkerid: [],
+            isOpened: ""
         }
+        this.handleGetSessionByWorkerID = this.handleGetSessionByWorkerID.bind(this);
+    }
+
+    handleGetSessionByWorkerID(worker_id, admin_id)
+    {
+        HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id).then((res) =>
+        {
+            this.setState({sessionbyworkerid: res.data});
+            console.log(res.data);
+        }).catch((err) =>
+        {
+            // if(String(err.response.status) === "401")
+            // {
+            //     console.log(err.response.status);
+            //     localStorage.clear();
+            //     alert("Session Expired");
+            //     this.props.history.push('/login');
+            // }
+            // else
+            // {
+                console.log(err.response.data.message);
+            // }
+        });
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleWorkers.getWorkersByAdmin(stored.id).then((res) =>
@@ -36,11 +62,18 @@ class AvailableWorkers extends Component
                     alert("Session Expired");
                     this.props.history.push('/login');
                 }
+                else if(String(err.response.status) === "404")
+                {
+                    alert("Not Found");
+                    this.props.history.push('/');
+                }
                 else
                 {
                     console.log(err.response.data.message);
                 }
             });
+
+            
         }
         else
         {
@@ -72,35 +105,44 @@ class AvailableWorkers extends Component
                         <AdminDashboard/>
                         <div className="container">
                             <h3>Available Workers</h3>
-                            <Table className="table" striped bordered hover size="sm">
-                                    <thead>
-                                        <tr>
-                                            <th className="th">Booking ID</th>
-                                            <th className="th">Service</th>
-                                            <th className="th">Worker</th>
-                                            <th className="th">Date</th>
-                                            <th className="th">Start Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            {
+                                this.state.allworkersbyadminid.map(
+                                    allworkersbyadminid => 
+                                    <React.Fragment>
+                                    <div>
+                                        <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id)}>
+                                            {allworkersbyadminid.fName}     {allworkersbyadminid.lName}
+                                        </button>
+                                    </div>
+                                    <UncontrolledCollapse toggler={"#toggler"+allworkersbyadminid.id}>
                                     {
-                                        
-                                        this.state.allworkersbyadminid.map(
-                                            
-                                            allworkersbyadminid => 
-                                            <tr key = {allworkersbyadminid.id}>
-                                                <td> {allworkersbyadminid.id}</td>
-                                                <td> {allworkersbyadminid.phoneNumber}</td>
-                                                <td> {allworkersbyadminid.fName}</td>
-                                                <td> {allworkersbyadminid.lName}</td>   
-                                                <td> {allworkersbyadminid.username}</td>
-                                                
+                                        this.state.sessionbyworkerid.length > 0 &&
+                                        <Table className="table" striped bordered hover size="sm">
+                                        <thead>
+                                            <tr>
+                                                <th className="th">Date</th>
+                                                <th className="th">Start Time</th>
+                                                <th className="th">End Time</th>
                                             </tr>
-                                        )
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                this.state.sessionbyworkerid.map(
+                                                    sessionbyworkerid => 
+                                                    <tr>
+                                                        <td> {sessionbyworkerid.date}</td>
+                                                        <td> {sessionbyworkerid.startTime}</td>
+                                                        <td> {sessionbyworkerid.endTime}</td>
+                                                    </tr>
+                                                )
+                                            }
+                                        </tbody>
+                                    </Table>
                                     }
-                                    </tbody>
-                                </Table>
-                            
+                                    </UncontrolledCollapse>
+                                    </React.Fragment>
+                                )
+                            }
                         </div>
                     </React.Fragment>
                 )
