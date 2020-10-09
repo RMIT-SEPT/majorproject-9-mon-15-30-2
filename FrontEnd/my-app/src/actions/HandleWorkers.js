@@ -35,7 +35,8 @@ class HandleWorkers
     }});
   }
 
-  deleteWorker(id, admin_id){
+  deleteWorker(id, admin_id)
+  {
     return axios.delete("http://localhost:8080/admin/deleteWorker/" + id + "/" + admin_id,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
@@ -44,7 +45,8 @@ class HandleWorkers
     }});
   }
 
-  createNewWorker(worker) {
+  createNewWorker(worker) 
+  {
     return axios.post("http://localhost:8080/admin/createWorker",worker,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
@@ -52,5 +54,13 @@ class HandleWorkers
       Authorization: stored.token
     }});
   }
+
+  getProfile(id)
+  {
+    return axios.get("http://localhost:8080/worker/profile/" + id ,
+      {headers: {
+        Authorization: stored.token
+      }});
+  }
 }
-export default new HandleWorkers()
+export default new HandleWorkers();

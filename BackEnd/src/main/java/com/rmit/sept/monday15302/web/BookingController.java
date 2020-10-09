@@ -33,7 +33,7 @@ public class BookingController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
+    
     @GetMapping(value="/customer/historybookings/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookings(@PathVariable("id") String id) {
         List<Booking> bookings = bookingService.getPastBookingsByCustomerId(id);
@@ -70,7 +70,7 @@ public class BookingController {
         return new ResponseEntity<>(toReturn, HttpStatus.OK);
     }
 
-    @PutMapping("/confirmBooking/{bookingId}")
+    @PutMapping("/admin/confirmBooking/{bookingId}")
     public ResponseEntity<?> updateWorker(@PathVariable("bookingId") String id,
                                           @Valid @RequestBody BookingConfirmation booking,
                                           BindingResult result) {
@@ -81,21 +81,27 @@ public class BookingController {
         return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 
-    @GetMapping(value="/booking/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/admin/booking/{bookingId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getBookingById(@PathVariable("bookingId") String id) {
         return new ResponseEntity<>(bookingService.getBookingById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value="pastBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/admin/pastBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getPastBookingsByAdminID(@PathVariable("adminID") String adminID) {
         List<Booking> bookings = bookingService.getPastBookingsByAdminID(adminID);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
-    @GetMapping(value="newBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/admin/newBookingsAdmin/{adminID}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getNewBookingsByAdminID(@PathVariable("adminID") String adminID) throws ParseException {
         List<Booking> bookings = bookingService.getNewBookingsByAdminID(adminID);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @PutMapping("/customer/cancelBooking/{bookingId}")
+    public ResponseEntity<?> cancelBooking(@PathVariable("bookingId") String id) throws ParseException {
+        Booking updatedBooking = bookingService.cancelBooking(id);
+        return new ResponseEntity<>(updatedBooking, HttpStatus.OK);
     }
 
 }

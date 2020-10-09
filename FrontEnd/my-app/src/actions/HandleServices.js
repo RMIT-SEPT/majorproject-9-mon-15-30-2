@@ -19,4 +19,4 @@ class HandleServices
     }});
   }
 }
-export default new HandleServices()
+export default new HandleServices();

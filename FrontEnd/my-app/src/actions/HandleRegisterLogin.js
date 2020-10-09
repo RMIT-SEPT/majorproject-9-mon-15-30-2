@@ -19,19 +19,7 @@ class HandleRegisterLogin
         {
             token: stored.token
         }
-        return axios.put("http://localhost:8080/api/users/logout", token).then((response) =>
-        {
-            console.log(localStorage.getItem("user"));
-            window.localStorage.clear();
-            console.log(response);
-            alert("Logout successful");
-        },(error) =>
-        {
-            console.log(localStorage.getItem("user"));
-            window.localStorage.clear();
-            console.log(error);
-            alert("Session expired");
-        });
+        return axios.put("http://localhost:8080/api/users/logout", token);
     }
 
     Registering(newCustomer) 
@@ -43,6 +31,5 @@ class HandleRegisterLogin
             'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
         }});
     }
-  
 }
-export default new HandleRegisterLogin()
+export default new HandleRegisterLogin();

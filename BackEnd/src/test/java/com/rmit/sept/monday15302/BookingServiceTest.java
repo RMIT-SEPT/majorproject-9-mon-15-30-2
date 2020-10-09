@@ -4,7 +4,9 @@ import com.rmit.sept.monday15302.Repositories.BookingRepository;
 import com.rmit.sept.monday15302.exception.BookingException;
 import com.rmit.sept.monday15302.model.*;
 import com.rmit.sept.monday15302.services.BookingService;
+import com.rmit.sept.monday15302.services.WorkerDetailsService;
 import com.rmit.sept.monday15302.utils.Request.BookingConfirmation;
+import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,12 +40,16 @@ public class BookingServiceTest {
     private static List<Booking> bookings;
     private static BookingConfirmation confirm =
             new BookingConfirmation(BookingStatus.NEW_BOOKING, Confirmation.CONFIRMED);
+    private static String adminId = "a1";
 
     @Autowired
     private BookingService bookingService;
 
     @MockBean
     private BookingRepository bookingRepository;
+
+    @MockBean
+    private WorkerDetailsService workerDetailsService;
 
     @Before
     public void setup() throws ParseException {
@@ -78,10 +84,15 @@ public class BookingServiceTest {
 
         bookings = Arrays.asList(booking);
 
+        EditWorker worker = new EditWorker(workerId, "worker",
+                "John", "Smith", "0123456789");
+        List<EditWorker> workers = Arrays.asList(worker);
+
         Mockito.when(bookingRepository.findNewBookingByWorkerAndDate(workerId,
                 booking2.getDate())).thenReturn(newBookings);
 
         Mockito.when(bookingRepository.getBookingById(bookingId)).thenReturn(booking);
+        Mockito.when(workerDetailsService.getWorkersByAdminId(adminId)).thenReturn(workers);
     }
 
     @Test(expected = BookingException.class)
@@ -143,8 +154,18 @@ public class BookingServiceTest {
     @Test
     public void sortBooking_CurrentDateButBookingTimeInThePast_updateBookingStatus()
             throws ParseException {
+        booking.setEndTime("00:01:00");
         List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
         assert(sortedBookings.isEmpty());
+    }
+
+    @Test
+    public void sortBooking_CurrentDateButBookingTimeInThePast_throwException()
+            throws ParseException {
+        booking.setEndTime("00:01:00");
+        Mockito.doThrow(new BookingException("")).when(bookingRepository)
+                .updateBookingStatus(bookingId, BookingStatus.PAST_BOOKING);
+        bookingService.updateBookingStatus(bookings);
     }
 
     @Test
@@ -216,5 +237,93 @@ public class BookingServiceTest {
         Mockito.when(bookingRepository.save(booking)).thenReturn(booking);
         bookingService.updateBooking(confirm, bookingId);
         Mockito.verify(bookingRepository, times(1)).save(booking);
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingIsPending()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.PENDING);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingIsCancelled()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CANCELLED);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifBookingTimeWithin2Days()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test
+    public void cancelBooking_updateBooking_ifCancellationIsValid() throws ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStatus(BookingStatus.CANCELLED_BOOKING);
+        Mockito.when(bookingRepository.save(Mockito.any(Booking.class))).thenReturn(booking);
+        assert(bookingService.cancelBooking(bookingId).getStatus()
+                .equals(BookingStatus.CANCELLED_BOOKING));
+    }
+
+    @Test(expected = BookingException.class)
+    public void cancelBooking_throwException_ifCannotUpdateBooking()
+            throws BookingException, ParseException {
+        booking.setConfirmation(Confirmation.CONFIRMED);
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        Mockito.doThrow(new BookingException("")).when(bookingRepository).save(booking);
+        bookingService.cancelBooking(bookingId);
+    }
+
+    @Test
+    public void isWithin2Days_returnTrue_ifLessThan48Hours() throws ParseException {
+        Date date = new Date(today.getTime() + 2*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStartTime("00:01:00");
+        assert(bookingService.isWithin2Days(booking));
+    }
+
+    @Test
+    public void isWithin2Days_returnFalse_ifMoreThan48Hours() throws ParseException {
+        Date date = new Date(today.getTime() + 2*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        booking.setStartTime("23:59:00");
+        assert(!bookingService.isWithin2Days(booking));
+    }
+
+    @Test(expected = BookingException.class)
+    public void getPastBookingsByAdminId_throwException_ifNoBookingsFound()
+            throws BookingException {
+        bookingService.getPastBookingsByAdminID(adminId);
+    }
+
+    @Test
+    public void getPastBookingsByAdminId_returnBookings_ifBookingsFound() {
+        Mockito.when(bookingRepository.findPastBookingByWorkerID(workerId)).thenReturn(bookings);
+        List<Booking> returns = bookingService.getPastBookingsByAdminID(adminId);
+        assert(!returns.isEmpty());
+    }
+
+    @Test(expected = BookingException.class)
+    public void getNewBookingsByAdminId_throwException_ifNoBookingsFound()
+            throws BookingException, ParseException {
+        bookingService.getNewBookingsByAdminID(adminId);
+    }
+
+    @Test
+    public void getNewBookingsByAdminId_returnBookings_ifBookingsFound() throws ParseException {
+        Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
+        booking.setDate(Utility.getDateAsString(date));
+        Mockito.when(bookingRepository.findNewBookingByWorkerID(workerId)).thenReturn(bookings);
+        List<Booking> returns = bookingService.getNewBookingsByAdminID(adminId);
+        assert(!returns.isEmpty());
     }
 }

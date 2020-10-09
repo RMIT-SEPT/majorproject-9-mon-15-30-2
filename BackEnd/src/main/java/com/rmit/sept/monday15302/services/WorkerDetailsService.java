@@ -100,4 +100,12 @@ public class WorkerDetailsService {
         }
         return workers;
     }
+
+    public WorkerDetails getWorkerProfileById(String id) {
+        WorkerDetails worker = workerDetailsRepository.getWorkerById(id);
+        if(worker == null) {
+            throw new WorkerDetailsException("No worker with id " + id + " found");
+        }
+        return worker;
+    }
 }

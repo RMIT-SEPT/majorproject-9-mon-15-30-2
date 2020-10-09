@@ -14,11 +14,36 @@ class CurrentBookings extends Component
         {
             currentBookings: []
         }
+        this.cancelbooking = this.cancelbooking.bind(this);
+    }
+
+    cancelbooking(booking_id)
+    {
+        GetBookings.cancelBooking(booking_id).then((res) => 
+        {
+            alert("Booking id: " + booking_id + " has been cancelled");
+            window.location.reload();
+        }).catch((err) => 
+        {
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else
+            {
+                alert(err.response.data.message);
+                console.log(err.response);
+            }
+        });
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             GetBookings.getNewBookingById(stored.id).then((res) =>
@@ -27,7 +52,17 @@ class CurrentBookings extends Component
                 console.log(res.data);
             }).catch((err) =>
             {
-                console.log(err.response.data.message);
+                if(String(err.response.status) === "401")
+                {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                }
+                else
+                {
+                    console.log(err.response);
+                }
             });
         }
         else
@@ -39,6 +74,7 @@ class CurrentBookings extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             if(this.state.currentBookings <= 0)
@@ -69,6 +105,8 @@ class CurrentBookings extends Component
                                         <th className="th">Date</th>
                                         <th className="th">Start Time</th>
                                         <th className="th">End Time</th>
+                                        <th className="th">Confirmation</th>
+                                        <th className="th">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -82,6 +120,12 @@ class CurrentBookings extends Component
                                             <td> {currentBookings.date}</td>   
                                             <td> {currentBookings.startTime}</td>
                                             <td> {currentBookings.endTime}</td>
+                                            <td> {currentBookings.confirmation}</td>
+                                            <td>
+                                                <button onClick={() => this.cancelbooking(currentBookings.id)} className="btn btn-danger ml-3">
+                                                    Cancel
+                                                </button>
+                                            </td>
                                         </tr>
                                     )
                                 }

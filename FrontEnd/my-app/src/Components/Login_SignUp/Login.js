@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import SignUp from '../../actions/HandleRegisterLogin';
@@ -34,15 +35,12 @@ class Login extends Component
         console.log(loginDetail);
         SignUp.Login(loginDetail).then((res) => 
         {
-            // alert("Register successful");
             localStorage.clear();
-            localStorage.setItem("user", JSON.stringify(res.data))
-            console.log(res.data);
-            console.log(localStorage.getItem("user"));
+            localStorage.setItem("user", JSON.stringify(res.data)) 
             this.props.history.push("/");
         },(err) => 
         {
-            if(err.response.status === 401)
+            if(String(err.response.status) === "401")
             {
                 this.setState({errorMessage: "Username or password is incorrect."});
                 console.log("error "+err.response.status+": Username or password is incorrect.");
@@ -59,9 +57,9 @@ class Login extends Component
                     <div className="col-md-12">
                         <div className="card card-container">
                             <h4 className="display-5 text-center pb-3">Login</h4>
-                            <Container>
-                                <Form onSubmit={this.onSubmit}>
-                                    <Form.Group controlId="formBasicUsername">
+                            <Container className="container">
+                                <Form className="form" onSubmit={this.onSubmit}>
+                                    <Form.Group className="username" controlId="formBasicUsername">
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control type="username" 
                                             placeholder="Username" 
@@ -70,7 +68,7 @@ class Login extends Component
                                             onChange={this.onChange} required/>
                                     </Form.Group>
 
-                                    <Form.Group controlId="formBasicPassword">
+                                    <Form.Group className="password" controlId="formBasicPassword">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" 
                                             placeholder="Password"
@@ -85,15 +83,21 @@ class Login extends Component
                                     }
                                     <input type="submit" className="btn-lg btn-dark" value="Login"/> 
                                         
-                                    <Form.Text>
-                                        Don't have an account? <a href="/register">Register here </a>
-                                    </Form.Text>
-                                </Form>
-                            </Container>
+                                        {
+                                            this.state.errorMessage &&
+                                            <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
+                                        }
+                                        <input type="submit" className="btn-lg btn-dark" value="Login"/> 
+                                            
+                                        <Form.Text>
+                                            Don't have an account? <a href="/register">Register here </a>
+                                        </Form.Text>
+                                    </Form>
+                                </Container>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </React.Fragment>
+                </React.Fragment>
         )
     }
 }

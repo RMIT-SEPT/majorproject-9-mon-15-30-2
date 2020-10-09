@@ -103,4 +103,12 @@ public class CustomerSignup {
     public String getConfirmPassword() {
         return this.confirmPassword;
     }
+
+    public void setPassword(String s) {
+        this.password = s;
+    }
+
+    public void setConfirmPassword(String s) {
+        this.confirmPassword = s;
+    }
 }
