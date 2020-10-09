@@ -30,6 +30,16 @@ public class SessionReturn {
         setEndTime(endTime);
     }
 
+    public SessionReturn(Date time, Date startTime, Date endTime) {
+        this.date = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public SessionReturn() {
+
+    }
+
     public Date getDate() {
         return date;
     }

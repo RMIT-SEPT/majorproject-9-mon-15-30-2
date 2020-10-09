@@ -198,36 +198,6 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void getAvailableSession_removeSession_ifWorkerAlreadyBooked() throws ParseException {
-        Date today = new Date();
-        Date date = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-        String dateAsString = Utility.getDateAsString(date);
-        int day = Utility.convertDateToDay(date);
-
-        Session session = new Session(worker, day,
-                "08:00:00", "09:00:00", service);
-        List<Session> mockedSessions = Arrays.asList(session);
-
-        Booking booking = new Booking(new CustomerDetails(), worker,
-                BookingStatus.NEW_BOOKING, dateAsString, "08:00:00",
-                "09:00:00", service, Confirmation.PENDING);
-        List<Booking> bookings = Arrays.asList(booking);
-
-        SessionReturn exclude = new SessionReturn(dateAsString,
-                "08:00:00", "09:00:00");
-
-        Mockito.when(bookingService
-                .getUnavailableSessions(workerId, dateAsString))
-                .thenReturn(bookings);
-        Mockito.when(sessionRepository
-                .findByWorkerIdAndService(workerId, service))
-                .thenReturn(mockedSessions);
-
-        assert(!sessionService.getAvailableSession(workerId, service)
-                .contains(exclude));
-    }
-
-    @Test
     public void getSessionsByWorkerId_returnSessions_ifSessionsFound() {
         assert(sessionService.getSessionsByWorkerId(workerId).contains(session));
     }
@@ -269,4 +239,52 @@ public class SessionServiceTest {
         Mockito.verify(sessionRepository, times(1)).save(session);
     }
 
+    @Test(expected = AdminDetailsException.class)
+    public void getSessionsWithinAWeekByWorkerId_throwException_ifSessionNotFound()
+            throws AdminDetailsException, ParseException {
+        sessionService.getSessionsWithinAWeekByWorkerId("123");
+    }
+
+    @Test
+    public void getSessionsWithinAWeekByWorkerId_returnSessions_ifSessionFound()
+            throws AdminDetailsException, ParseException {
+        List<SessionReturn> sessionReturns = sessionService.getSessionsWithinAWeekByWorkerId(workerId);
+        boolean isValid = true;
+        for(SessionReturn session : sessionReturns) {
+            if(Utility.convertDateToDay(session.getDate()) != 1) {
+                isValid = false;
+            }
+        }
+        assert(isValid);
+    }
+
+    @Test
+    public void filterSession_removeSession_ifWorkerAlreadyBooked() throws ParseException {
+        Date today = new Date();
+        Date date = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+        String dateAsString = Utility.getDateAsString(date);
+        int day = Utility.convertDateToDay(date);
+
+        Session session = new Session(worker, day,
+                "08:00:00", "09:00:00", service);
+        List<Session> mockedSessions = Arrays.asList(session);
+
+        Booking booking = new Booking(new CustomerDetails(), worker,
+                BookingStatus.NEW_BOOKING, dateAsString, "08:00:00",
+                "09:00:00", service, Confirmation.PENDING);
+        List<Booking> bookings = Arrays.asList(booking);
+
+        SessionReturn exclude = new SessionReturn(dateAsString,
+                "08:00:00", "09:00:00");
+
+        Mockito.when(bookingService
+                .getUnavailableSessions(workerId, dateAsString))
+                .thenReturn(bookings);
+        Mockito.when(sessionRepository
+                .findByWorkerIdAndService(workerId, service))
+                .thenReturn(mockedSessions);
+
+        assert(!sessionService.getAvailableSession(workerId, service)
+                .contains(exclude));
+    }
 }
