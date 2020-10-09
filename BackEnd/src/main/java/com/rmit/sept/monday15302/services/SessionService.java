@@ -250,9 +250,6 @@ public class SessionService {
             }
             cStart.add(Calendar.DAY_OF_MONTH, 1);
         }
-        if(returns.isEmpty()) {
-            throw new AdminDetailsException("No sessions found for worker ID " + workerId);
-        }
         return returns;
     }
 }

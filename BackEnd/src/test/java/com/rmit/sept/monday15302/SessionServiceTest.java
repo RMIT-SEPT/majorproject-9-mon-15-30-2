@@ -268,4 +268,21 @@ public class SessionServiceTest {
         // then
         Mockito.verify(sessionRepository, times(1)).save(session);
     }
+
+    @Test(expected = AdminDetailsException.class)
+    public void getSessionsWithinAWeekByWorkerId_throwException_ifSessionNotFound() throws AdminDetailsException {
+        sessionService.getSessionsWithinAWeekByWorkerId("123");
+    }
+
+    @Test
+    public void getSessionsWithinAWeekByWorkerId_returnSessions_ifSessionFound() throws AdminDetailsException {
+        List<SessionReturn> sessionReturns = sessionService.getSessionsWithinAWeekByWorkerId(workerId);
+        boolean isValid = true;
+        for(SessionReturn session : sessionReturns) {
+            if(Utility.convertDateToDay(session.getDate()) != 1) {
+                isValid = false;
+            }
+        }
+        assert(isValid);
+    }
 }

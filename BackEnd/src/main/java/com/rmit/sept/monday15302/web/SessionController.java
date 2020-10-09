@@ -74,8 +74,8 @@ public class SessionController {
     @GetMapping("/availableSessions/{workerId}/{adminId}")
     public ResponseEntity<?> getSessionsWithinAWeekByWorkerId(@PathVariable("workerId") String workerId,
                                                    @PathVariable("adminId") String adminId) {
-        if(utility.isCurrentLoggedInUser(adminId)
-                && workerDetailsService.getWorkerById(workerId, adminId) != null) {
+        workerDetailsService.getWorkerById(workerId, adminId);
+        if(utility.isCurrentLoggedInUser(adminId)) {
             return new ResponseEntity<>(sessionService.getSessionsWithinAWeekByWorkerId(workerId), HttpStatus.OK);
         }
         return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
