@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import SignUp from '../../actions/HandleRegisterLogin';
@@ -79,25 +78,19 @@ class Login extends Component
                                     
                                     {
                                         this.state.errorMessage &&
-                                        <h6 className="text-danger"> {this.state.errorMessage} </h6> 
+                                        <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
                                     }
                                     <input type="submit" className="btn-lg btn-dark" value="Login"/> 
                                         
-                                        {
-                                            this.state.errorMessage &&
-                                            <h6 className="alert alert-danger"> {this.state.errorMessage} </h6> 
-                                        }
-                                        <input type="submit" className="btn-lg btn-dark" value="Login"/> 
-                                            
-                                        <Form.Text>
-                                            Don't have an account? <a href="/register">Register here </a>
-                                        </Form.Text>
-                                    </Form>
-                                </Container>
-                            </div>
+                                    <Form.Text>
+                                        Don't have an account? <a href="/register">Register here </a>
+                                    </Form.Text>
+                                </Form>
+                            </Container>
                         </div>
                     </div>
-                </React.Fragment>
+                </div>
+            </React.Fragment>
         )
     }
 }
