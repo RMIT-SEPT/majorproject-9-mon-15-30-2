@@ -31,6 +31,8 @@ class AddEmployee extends Component
     {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored);
+        console.log(stored.token);
         const newEmployee =
         {
             id: "",
@@ -42,10 +44,10 @@ class AddEmployee extends Component
             adminId: stored.id
         }
         console.log(newEmployee);
-        WorkerAction.createNewWorker(newEmployee).then((res) =>
+        WorkerAction.createNewWorker(newEmployee, stored.token).then((res) =>
         {
-            this.props.history.push('/employees');
             alert("Employee successfully created");
+            this.props.history.push('/employees');
         }).catch((err) =>
         {
             if(String(err.response.status) === "401")
@@ -57,6 +59,7 @@ class AddEmployee extends Component
             }
             else
             {
+                alert("Employee unsuccessfully created");
                 console.log(err.response.data.message);
                 this.setState({errorMessage: err.response.data.message});
             }
