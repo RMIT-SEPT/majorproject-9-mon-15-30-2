@@ -11,11 +11,11 @@ class HandleWorkers
     }});
   }
 
-  getWorkerByID(worker_id, admin_id)
+  getWorkerByID(worker_id, admin_id, token)
   {
     return axios.get("http://localhost:8080/admin/worker/" + worker_id + "/" + admin_id,
     {headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
@@ -27,11 +27,11 @@ class HandleWorkers
     }});
   }
 
-  updateWorker(worker, id, admin_id)
+  updateWorker(worker, id, admin_id, token)
   {
     return axios.put("http://localhost:8080/admin/editWorker/" + id + "/" + admin_id, worker,
     {headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
