@@ -3,6 +3,7 @@ package com.rmit.sept.monday15302.web;
 import com.rmit.sept.monday15302.services.MapValidationErrorService;
 import com.rmit.sept.monday15302.services.SessionService;
 import com.rmit.sept.monday15302.services.WorkerDetailsService;
+import com.rmit.sept.monday15302.services.WorkingHoursService;
 import com.rmit.sept.monday15302.utils.Request.SessionCreated;
 import com.rmit.sept.monday15302.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -30,6 +32,9 @@ public class SessionController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private WorkingHoursService workingHoursService;
 
     @PostMapping("/createSession")
     public ResponseEntity<?> createNewSession(@Valid @RequestBody SessionCreated session,
@@ -79,5 +84,16 @@ public class SessionController {
             return new ResponseEntity<>(sessionService.getSessionsWithinAWeekByWorkerId(workerId), HttpStatus.OK);
         }
         return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+    }
+
+    @PutMapping("/resetSessions/{adminId}")
+    public boolean resetSession(@PathVariable("adminId") String adminId,
+                                @RequestBody Map<String,Integer> json) {
+        boolean isReset = json.get("isReset") == 0 ? false : true;
+        if(isReset) {
+            sessionService.resetSessions(adminId);
+        }
+        workingHoursService.resetNotifiedDate(adminId);
+        return isReset;
     }
 }
