@@ -21,15 +21,15 @@ class Employees extends Component
     deleteWorker(worker_id)
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        WorkerAction.deleteWorker(worker_id, stored.id).then((res) =>
+        WorkerAction.deleteWorker(worker_id, stored.id, stored.token).then((res) =>
         { 
             this.setState(
             {
                 allemployee: this.state.allemployee.filter(
                     allemployee => allemployee.id !== worker_id)
             });
-            this.props.history.push('/employees');
             alert("Employee is deleted successfully");
+            this.props.history.push('/employees');
         }, (err) => 
         {
             if(String(err.response.status) === "401")

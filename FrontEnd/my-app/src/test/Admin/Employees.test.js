@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {shallow, mount} from "enzyme";
+import {shallow, mount, ShallowWrapper} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import Employees from "../../Components/Admin/Employees";
@@ -17,6 +17,12 @@ const match1 =
     params:params1
 }
 
+var stored = {
+    success:"true",
+    token: "token",
+    role: "ROLE_ADMIN",
+    id:"1" }
+    localStorage.setItem("user", JSON.stringify(stored))
 
 class Ev extends Component{
     constructor(){
@@ -51,7 +57,7 @@ describe('<Employees /> Unit Test', () =>
 
     it('renders table', () => 
     {
-        const employee1 = 
+        const employee2 = 
         {
             id: "id",
             username: "username",
@@ -59,13 +65,13 @@ describe('<Employees /> Unit Test', () =>
             lName: "lname",
             phoneNumber: "phone"
         }
+        
+        const allemployee = [ employee2 ];
 
-        const employees = new Employees();
-        employees.state.allemployee.push(employee1);
-        const wrapper = mount(employees.render());
+        const wrapper = shallow(<Employees {...allemployee}/>);
+        wrapper.instance().state.allemployee.push(employee2);
 
-        expect(wrapper.find('.container')).toHaveLength(2);
-        expect(wrapper.find('.alert')).toHaveLength(0);
+        expect(wrapper.find('.container')).toHaveLength(1);
         expect(wrapper.find('.table')).toHaveLength(2);
         expect(wrapper.find('.th')).toHaveLength(4);
         expect(wrapper.find('.username')).toHaveLength(1);
@@ -87,7 +93,7 @@ describe('<Employees /> Unit Test', () =>
             match: match1,
             history: []
         }
-        const wrapper = mount(<Employees {...props1}/>);
+        const wrapper = shallow(<Employees {...props1}/>);
 
         const ev = new Ev;
         wrapper.instance().state.allemployee.push(employee1);
@@ -95,31 +101,27 @@ describe('<Employees /> Unit Test', () =>
 
         expect(axios.delete).toHaveBeenCalled();
 
-        //expect(wrapper.instance().state).toBe(1);
-        //expect(window.alert).toHaveBeenCalled();
-        //expect(console.log).toHaveBeenCalled();
+        expect(wrapper.instance().state).toStrictEqual(responce1);
+        expect(console.log).toHaveBeenCalled();
 
-        //expect(wrapper.instance().props.history).toHaveLength(0);
-        //expect(wrapper.instance().state).toBe(1);
+        expect(wrapper.instance().props.history).toHaveLength(0);
     });
 
     it('editWorker', () =>
     {
         jest.spyOn(axios, 'delete').mockResolvedValueOnce(responce1);
 
-        // const newBooking = new NewBookings();
         const props1 = 
         {
             match: match1,
             history: []
         }
-        const wrapper = mount(<Employees {...props1}/>);
+        const wrapper = shallow(<Employees {...props1}/>);
 
         const ev = new Ev;
         wrapper.instance().state.allemployee.push(employee1);
         wrapper.instance().editWorker(id1);
 
         expect(wrapper.instance().props.history).toHaveLength(1);
-        //expect(wrapper.instance().state).toBe(1);
     });
 })

@@ -3,11 +3,11 @@ var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleWorkers 
 {
-  getWorkersByAdmin(admin_id)
+  getWorkersByAdmin(admin_id, token)
   {
     return axios.get("http://localhost:8080/admin/workers/" + admin_id, 
     {headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
@@ -35,13 +35,13 @@ class HandleWorkers
     }});
   }
 
-  deleteWorker(id, admin_id)
+  deleteWorker(id, admin_id, token)
   {
     return axios.delete("http://localhost:8080/admin/deleteWorker/" + id + "/" + admin_id,
     {headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      Authorization: stored.token
+      Authorization: stored
     }});
   }
 
