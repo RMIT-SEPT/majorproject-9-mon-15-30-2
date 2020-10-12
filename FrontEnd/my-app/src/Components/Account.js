@@ -228,7 +228,7 @@ class Account extends Component
                                         {}
                                             <td className="day"> {this.displayDay(session.day)}</td>
                                             <td className="startTime"> {session.startTime}</td>
-                                            <td className="endTime"> {session.id}</td>
+                                            <td className="endTime"> {session.endTime}</td>
                                         </tr>
                                         
                                     )

@@ -29,31 +29,20 @@ class AvailableWorkers extends Component
             console.log(res.data);
         }).catch((err) =>
         {
-            // if(String(err.response.status) === "401")
-            // {
-            //     console.log(err.response.status);
-            //     localStorage.clear();
-            //     alert("Session Expired");
-            //     this.props.history.push('/login');
-            // }
-            // else
-            // {
-                console.log(err.response.data.message);
-            // }
+            console.log(err.response.data.message);
         });
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleWorkers.getWorkersByAdmin(stored.id).then((res) =>
             {
                 this.setState({allworkersbyadminid: res.data});
                 console.log(res.data);
-            }).catch((err) => 
+            }).catch((err) =>
             {
                 if(String(err.response.status) === "401")
                 {
@@ -72,8 +61,6 @@ class AvailableWorkers extends Component
                     console.log(err.response.data.message);
                 }
             });
-
-            
         }
         else
         {

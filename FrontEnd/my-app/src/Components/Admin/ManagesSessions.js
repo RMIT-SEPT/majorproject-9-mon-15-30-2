@@ -83,12 +83,12 @@ class ManagesSessions extends Component
         {
             if(resetNumber === 1)
             {
-                console.log(res.response)
+                alert("All current sessions are deleted");
                 this.props.history.push('/createsession');
             }
             else 
             {
-                console.log(res.response)
+                alert("All current sessions are kept");
                 window.location.reload();
             }
         }, (err) =>
@@ -153,7 +153,7 @@ class ManagesSessions extends Component
                             <Table className="table" striped bordered hover size="sm">
                                 <thead>
                                     <tr>
-                                        <th className="th">Booking ID</th>
+                                        <th className="th">Session ID</th>
                                         <th className="th">Worker</th>
                                         <th className="th">Day</th>
                                         <th className="th">Start Time</th>
