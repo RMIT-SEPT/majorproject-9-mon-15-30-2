@@ -1,60 +1,59 @@
 import axios from "axios";
-var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleSessions 
 {
-    createNewSession (session) 
+    createNewSession (session, token) 
     {
         return axios.post("http://localhost:8080/admin/createSession", session,
         {headers: {
         'Access-Control-Allow-Origin' : '*',
         'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        Authorization: stored.token
+        Authorization: token
         }});
     }
 
-    getOpeningHoursByAdminAndDay(admin_id, day)
+    getOpeningHoursByAdminAndDay(admin_id, day, token)
     {
         return axios.get("http://localhost:8080/admin/openinghours/"+ admin_id + "/" + day,
         {headers: {
-            Authorization: stored.token
+            Authorization: token
         }});
     }
 
-    getAvailableSessionByWorkerIdAndDay(worker_id, day)
+    getAvailableSessionByWorkerIdAndDay(worker_id, day, token)
     {
         return axios.get("http://localhost:8080/admin/sessions/" + worker_id + "/" + day, 
         {headers: {
-            Authorization: stored.token
+            Authorization: token
         }});
     }
 
-    getAllSessionsByAdminId(admin_id)
+    getAllSessionsByAdminId(admin_id, token)
     {
         return axios.get("http://localhost:8080/admin/sessions/"+admin_id,
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
             }
         });
     }
 
-    getSessionBySessionIdAndAdminId(session_id, admin_id)
+    getSessionBySessionIdAndAdminId(session_id, admin_id, token)
     {
-        return axios.get("http://localhost:8080/admin/session/"+session_id+"/"+admin_id, 
+        return axios.get("http://localhost:8080/admin/session/"+session_id+"/"+ admin_id, 
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
             }
         });
     }
 
-    updateSession(session_id, session)
+    updateSession(session_id, session, token)
     {
         return axios.put("http://localhost:8080/admin/editSession/" + session_id, session,
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
         }});
     }
 }

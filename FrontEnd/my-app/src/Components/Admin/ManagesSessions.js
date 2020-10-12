@@ -27,7 +27,7 @@ class ManagesSessions extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleSessions.getAllSessionsByAdminId(stored.id).then((res) =>
+            HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
             {
                 this.setState({availablesessions: res.data});
                 console.log(res.data);

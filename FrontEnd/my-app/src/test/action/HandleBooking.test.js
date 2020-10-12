@@ -6,7 +6,17 @@ jest.mock('axios');
 Enzyme.configure({ adapter: new Adapter() });
 import HandleBookings from '../../actions/HandleBookings';
 
-describe('fetchData', () => {
+var stored = {
+    success: "true",
+    token: "dsfadf",
+    id: "1",
+    role: "ROLE_CUSTOMER"
+}
+
+localStorage.setItem("user", JSON.stringify(stored));
+
+describe('fetchData', () => 
+{
     it('get new bookings successfully from server', async () => {
         const data = {
             data: {
@@ -45,9 +55,9 @@ describe('fetchData', () => {
             },
         };
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
-        await expect(HandleBookings.getNewBookingById("5")).resolves.toEqual(data);
+        await expect(HandleBookings.getNewBookingById("5", stored.token)).resolves.toEqual(data);
 
-        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/newbookings/5",
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/newbookings/5", {"headers": {"Authorization": "dsfadf"}}
         );
     });
 
@@ -98,9 +108,9 @@ describe('fetchData', () => {
             },
         };
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
-        await expect(HandleBookings.getPastBookingById("5")).resolves.toEqual(data);
+        await expect(HandleBookings.getPastBookingById("5", stored.token)).resolves.toEqual(data);
 
-        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/historybookings/5",
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/historybookings/5", {"headers": {"Authorization": "dsfadf"}}
         );
     });
 
@@ -132,11 +142,9 @@ describe('fetchData', () => {
         };
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
         await expect(HandleBookings
-            .getAvailableSessionsByWorkerAndService("7", "Haircut"))
+            .getAvailableSessionsByWorkerAndService("7", "Haircut", stored.token))
             .resolves.toEqual(data);
-
-        expect(axios.get)
-            .toHaveBeenCalledWith("http://localhost:8080//customer/makebooking/sessions/7/Haircut",
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/makebooking/sessions/7/Haircut", {"headers": {"Authorization": "dsfadf"}}
         );
     });
 
@@ -148,6 +156,116 @@ describe('fetchData', () => {
         );
         await expect(HandleBookings
             .getAvailableSessionsByWorkerAndService("123", "123"))
+            .rejects.toThrow(errorMessage);
+    });
+
+    it('get new booking by admin successfully', async () => {
+        const data = {
+            data: {
+                hits: [
+                    {
+                        "id": "1",
+                        "customer": {
+                            "id": "3",
+                            "fName": "Tom",
+                            "lName": "Hall",
+                            "address": "77 Latrobe St, Melbourne, Australia",
+                            "phoneNumber": "1117788890",
+                            "email": "tomHall@gmail.com",
+                            "hibernateLazyInitializer": {}
+                        },
+                        "worker": {
+                            "id": "6",
+                            "fName": "Alex",
+                            "lName": "Flinn",
+                            "phoneNumber": "477889998",
+                            "admin": {
+                                "id": "4",
+                                "adminName": "Melbourne Salon",
+                                "service": "Haircut",
+                                "hibernateLazyInitializer": {}
+                            }
+                        },
+                        "status": "NEW_BOOKING",
+                        "confirmation": "CONFIRMED",
+                        "date": "2020-11-06",
+                        "startTime": "13:00:00",
+                        "endTime": "14:00:00",
+                        "service": "Haircut"
+                    }
+                ],
+            },
+        };
+        axios.get.mockImplementationOnce(() => Promise.resolve(data));
+        await expect(HandleBookings
+            .getNewBookingsByAdminID("4", stored.token))
+            .resolves.toEqual(data);
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/admin/newBookingsAdmin/4", {"headers": {"Authorization": "dsfadf"}}
+        );
+    });
+
+    it('get error message from server for no newbookings by admin id is found', async () => {
+        const errorMessage = 'Network Error';
+
+        axios.get.mockImplementationOnce(() =>
+            Promise.reject(new Error(errorMessage)),
+        );
+        await expect(HandleBookings.getNewBookingsByAdminID("1", stored.token))
+            .rejects.toThrow(errorMessage);
+    });
+
+    it('get past booking by admin successfully', async () => {
+        const data = {
+            data: {
+                hits: [
+                    {
+                        "id": "1",
+                        "customer": {
+                            "id": "3",
+                            "fName": "Tom",
+                            "lName": "Hall",
+                            "address": "77 Latrobe St, Melbourne, Australia",
+                            "phoneNumber": "1117788890",
+                            "email": "tomHall@gmail.com",
+                            "hibernateLazyInitializer": {}
+                        },
+                        "worker": {
+                            "id": "6",
+                            "fName": "Alex",
+                            "lName": "Flinn",
+                            "phoneNumber": "477889998",
+                            "admin": {
+                                "id": "4",
+                                "adminName": "Melbourne Salon",
+                                "service": "Haircut",
+                                "hibernateLazyInitializer": {}
+                            }
+                        },
+                        "status": "PAST_BOOKING",
+                        "confirmation": "CONFIRMED",
+                        "date": "2020-11-06",
+                        "startTime": "13:00:00",
+                        "endTime": "14:00:00",
+                        "service": "Haircut"
+                    }
+                ],
+            },
+        };
+        axios.get.mockImplementationOnce(() => Promise.resolve(data));
+        await expect(HandleBookings
+            .getPastBookingsByAdminID("4", stored.token))
+            .resolves.toEqual(data);
+        expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/admin/pastBookingsAdmin/4", {"headers": {"Authorization": "dsfadf"}}
+        );
+    });
+
+    it('get error message from server for no pastbooking by admin id is found', async () => {
+        const errorMessage = 'Network Error';
+
+        axios.get.mockImplementationOnce(() =>
+            Promise.reject(new Error(errorMessage)),
+        );
+        await expect(HandleBookings.getPastBookingsByAdminID("1", stored.token))
             .rejects.toThrow(errorMessage);
     });
 });

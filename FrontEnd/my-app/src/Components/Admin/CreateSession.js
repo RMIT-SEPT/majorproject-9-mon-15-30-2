@@ -40,7 +40,7 @@ class CreateSession extends Component
         const selectedworker_id = this.state.workerId;
         var stored = JSON.parse(localStorage.getItem("user"));
 
-        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay).then((res) => 
+        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay, stored.token).then((res) => 
         {
             this.setState({allavailablesessions: res.data});
         }).catch((err) => 
@@ -59,7 +59,7 @@ class CreateSession extends Component
             }
         });
         
-        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay).then((res) =>
+        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) =>
         {
             this.setState({openinghours: res.data});
         }).catch((err) => 
@@ -81,6 +81,7 @@ class CreateSession extends Component
 
     onSubmit(e){
         e.preventDefault();
+        var stored = JSON.parse(localStorage.getItem("user"));
         let message = "Invalid start time or end time";
         try 
         {
@@ -105,7 +106,7 @@ class CreateSession extends Component
                     workerId : this.state.workerId
                 }
                 console.log(newsession);
-                HandleSession.createNewSession(newsession).then((res) => 
+                HandleSession.createNewSession(newsession, stored.token).then((res) => 
                 {
                     this.props.history.push('/');
                     alert("New session is created successfully");
@@ -139,7 +140,7 @@ class CreateSession extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") 
         {
-            Workers.getWorkersByAdmin(stored.id).then((res) =>
+            Workers.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 if(!res.data.empty)
                 {
@@ -160,7 +161,7 @@ class CreateSession extends Component
                     this.props.history.push('/login');
                 }
             });
-            Service.getServiceByAdmin(stored.id).then((res) => 
+            Service.getServiceByAdmin(stored.id, stored.token).then((res) => 
             {
                 if(!res.data.empty)
                 {

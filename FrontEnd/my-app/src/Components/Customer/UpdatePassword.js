@@ -65,6 +65,7 @@ class UpdatePassword extends Component
 
     onSave = (e) => 
     {
+        var stored = JSON.parse(localStorage.getItem("user"));
         e.preventDefault();
         let updatedDetail =
         {

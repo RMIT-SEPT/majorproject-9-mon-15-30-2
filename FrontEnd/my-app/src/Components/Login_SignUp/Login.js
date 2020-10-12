@@ -38,7 +38,7 @@ class Login extends Component
             localStorage.clear();
             localStorage.setItem("user", JSON.stringify(res.data)) 
             this.props.history.push("/");
-        },(err) => 
+        }).catch((err) => 
         {
             if(String(err.response.status) === "401")
             {
