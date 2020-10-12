@@ -18,7 +18,7 @@ class AdminDashboard extends Component
             window.localStorage.clear();
             console.log(response);
             this.props.history.push("/");
-            alert("Logout successful");
+            alert("Logout successfully");
         }, (error) =>
         {
             console.log(localStorage.getItem("user"));
@@ -50,12 +50,7 @@ class AdminDashboard extends Component
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link" href="/employees">
-                                        View Employee
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" href="/customer"  hidden>
-                                        View Customer
+                                        View Employees
                                     </a>
                                 </li>
                                 <li className="nav-item">

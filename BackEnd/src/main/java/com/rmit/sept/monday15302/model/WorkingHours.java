@@ -78,4 +78,8 @@ public class WorkingHours {
     public void setEndTime(String endTime) throws ParseException {
         this.endTime = Utility.convertStringToTime(endTime);
     }
+
+    public void setDateByDate(Date reset) {
+        this.date = reset;
+    }
 }

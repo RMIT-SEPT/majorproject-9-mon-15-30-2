@@ -237,7 +237,7 @@ class EditSession extends Component
                                     {
                                         this.state.allavailablesessions.length > 0 &&
                                         <div>
-                                            <h5>Available Sessions</h5>
+                                            <h5>Unavailable Sessions</h5>
                                             <Table className="table pb-4" striped bordered hover size="sm">
                                             <thead>
                                                 <tr>

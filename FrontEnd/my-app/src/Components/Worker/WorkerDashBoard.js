@@ -17,7 +17,7 @@ class DashboardWorker extends Component
             console.log(localStorage.getItem("user"));
             window.localStorage.clear();
             console.log(response);
-            alert("Logout successful");
+            alert("Logout successfully");
             this.props.history.push('/');
         }).catch((error) =>
         {

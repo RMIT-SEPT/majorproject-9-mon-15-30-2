@@ -49,13 +49,12 @@ class NewBookings extends Component
         console.log(newCustomer);
         SignUp.Registering(newCustomer).then((res) => 
         {
-            alert("Register successful");
+            alert("Register successfully");
             this.props.history.push("/login");
         }, (err) => 
         {
             console.log(err.response.data);
             this.setState({errorMessage: err.response.data.message});
-            // alert(err.response.data.message);
         });
     }
     

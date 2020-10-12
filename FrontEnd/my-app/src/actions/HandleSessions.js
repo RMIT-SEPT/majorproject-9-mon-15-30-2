@@ -67,5 +67,25 @@ class HandleSessions
             }
         });
     }
+
+    getNotifiedDate(id, token)
+    {
+        return axios.get("http://localhost:8080/admin/checkNotifiedDate/" + id, 
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+    }
+
+    resetSession(reset, id, token)
+    {
+        return axios.put("http://localhost:8080/admin/resetSessions/" +id, reset, 
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+    }
 }
 export default new HandleSessions();

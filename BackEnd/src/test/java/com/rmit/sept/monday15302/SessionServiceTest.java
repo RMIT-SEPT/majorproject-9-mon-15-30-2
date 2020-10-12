@@ -287,4 +287,24 @@ public class SessionServiceTest {
         assert(!sessionService.getAvailableSession(workerId, service)
                 .contains(exclude));
     }
+
+    @Test
+    public void findSessionsForReset_returnSessions_ifSessionsFound() {
+        assert(!sessionService.findSessionsForReset(adminId).isEmpty());
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void findSessionsForReset_throwException_ifNoSessionsFound() {
+        List<Session> nSessions = new ArrayList<>();
+        Mockito.when(sessionRepository.findByWorkerId(workerId)).thenReturn(nSessions);
+        sessionService.findSessionsForReset(adminId);
+    }
+
+    @Test
+    public void reSetSessions_returnTrue_ifSessionsDeleted() {
+        // when
+        sessionService.resetSessions(adminId);
+        // then
+        Mockito.verify(sessionRepository, times(1)).delete(session);
+    }
 }
