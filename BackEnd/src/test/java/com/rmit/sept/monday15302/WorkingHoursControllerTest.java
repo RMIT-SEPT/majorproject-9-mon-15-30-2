@@ -7,6 +7,7 @@ import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.CustomUserService;
 import com.rmit.sept.monday15302.services.WorkingHoursService;
+import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.WorkingHoursController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,12 +52,16 @@ public class WorkingHoursControllerTest {
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @MockBean
+    private Utility utility;
+
+    private static String adminId = "a1";
+
     @Test
     public void givenHours_whenGetOpeningHoursByAdminIdAndDay_thenReturnJsonArray()
             throws Exception {
 
         int day = 1;
-        String adminId = "a1";
         AdminDetails admin = new AdminDetails();
         admin.setId(adminId);
 
@@ -70,6 +75,24 @@ public class WorkingHoursControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.day", is(day)))
                 .andExpect(jsonPath("$.startTime", is("08:00:00")));
+    }
+
+    @Test
+    public void checkNotifiedDate_returnTrueOrFalse_ifAuthorized() throws Exception {
+        given(service.isNotifiedDate(adminId)).willReturn(true);
+        given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
+        mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(true)));
+    }
+
+    @Test
+    public void checkNotifiedDate_throw401_ifUnauthorized() throws Exception {
+        given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
+        mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 
 

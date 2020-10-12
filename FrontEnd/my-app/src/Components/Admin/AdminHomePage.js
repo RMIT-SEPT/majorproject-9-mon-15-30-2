@@ -58,8 +58,8 @@ class AdminHomePage extends Component
                                 <Card style={{ width: '18rem' }}>
                                 <Card.Img variant="top" src={BookingHistory} />
                                     <Card.Body>
-                                        <Card.Title>View Employee</Card.Title>
-                                        <Button variant="dark" href="/employees">View Employee</Button>
+                                        <Card.Title>View Employees</Card.Title>
+                                        <Button variant="dark" href="/employees">View Employees</Button>
                                     </Card.Body>
                                 </Card>
                             </div>

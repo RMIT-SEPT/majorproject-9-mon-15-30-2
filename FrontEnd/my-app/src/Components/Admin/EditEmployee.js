@@ -75,7 +75,6 @@ class EditEmployee extends Component
             username: this.state.username,
             adminId: stored.id
         };
-        console.log(editEmployee);
         WorkerAction.updateWorker(editEmployee, this.state.id, stored.id).then((res) =>
         { 
             this.props.history.push('/employees');
@@ -90,9 +89,7 @@ class EditEmployee extends Component
             }
             else
             {
-                // console.log(err.response.data.message);
                 console.log(err.response);
-                // console.log(err.response.data);
                 this.setState({errorMessage: err.response.data.message});
             }
         });

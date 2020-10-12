@@ -77,7 +77,7 @@ class BookingHistory extends Component
                                         <tr key = {pastBookings.id}>
                                             <td> {pastBookings.id}</td>
                                             <td> {pastBookings.service}</td>
-                                            <td> {pastBookings.worker.fName}</td>
+                                            <td> {pastBookings.worker.fName} {pastBookings.worker.lName}</td>
                                             <td> {pastBookings.date}</td>   
                                             <td> {pastBookings.startTime}</td>
                                             <td> {pastBookings.endTime}</td>

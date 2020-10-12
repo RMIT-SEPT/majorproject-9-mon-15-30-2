@@ -6,10 +6,10 @@ import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
-import com.rmit.sept.monday15302.services.CustomUserService;
-import com.rmit.sept.monday15302.services.MapValidationErrorService;
-import com.rmit.sept.monday15302.services.SessionService;
+import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Request.SessionCreated;
+import com.rmit.sept.monday15302.utils.Response.SessionReturn;
 import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.SessionController;
 import org.junit.Before;
@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,6 +69,12 @@ public class SessionControllerTest {
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @MockBean
+    private WorkerDetailsService workerDetailsService;
+
+    @MockBean
+    private WorkingHoursService workingHoursService;
 
     private static Session session;
     private static String workerId = "w1";
@@ -169,5 +176,36 @@ public class SessionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    public void getSessionsWithinAWeekByWorkerId_throw401_ifUnAuthorized() throws Exception {
+        EditWorker worker = new EditWorker();
+        given(workerDetailsService.getWorkerById(workerId, adminId)).willReturn(worker);
+        given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
+        mvc.perform(get("/admin/availableSessions/{workerId}/{adminId}", workerId, adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void getSessionsWithinAWeekByWorkerId_returnSessions_ifAuthorized() throws Exception {
+        given(workerDetailsService.getWorkerById(workerId, adminId)).willReturn(new EditWorker());
+        given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
+        List<SessionReturn> sessions = new ArrayList<>();
+        given(service.getSessionsWithinAWeekByWorkerId(workerId)).willReturn(sessions);
+        mvc.perform(get("/admin/availableSessions/{workerId}/{adminId}", workerId, adminId)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void resetSession_returnTrueOfFalse_ifSuccessfully() throws Exception {
+        String request = "{\"isReset\":1}";
+        mvc.perform(put("/admin/resetSessions/{adminId}", adminId)
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

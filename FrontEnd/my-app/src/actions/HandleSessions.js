@@ -56,5 +56,35 @@ class HandleSessions
                 Authorization: token
         }});
     }
+
+    getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id)
+    {
+        return axios.get("http://localhost:8080/admin/availableSessions/"+worker_id+"/"+admin_id, 
+        {
+            headers: {
+                Authorization: stored.token
+            }
+        });
+    }
+
+    getNotifiedDate(id, token)
+    {
+        return axios.get("http://localhost:8080/admin/checkNotifiedDate/" + id, 
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+    }
+
+    resetSession(reset, id, token)
+    {
+        return axios.put("http://localhost:8080/admin/resetSessions/" +id, reset, 
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+    }
 }
 export default new HandleSessions();

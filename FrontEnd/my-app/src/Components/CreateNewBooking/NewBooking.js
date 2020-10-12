@@ -85,8 +85,8 @@ class NewBookings extends Component
     {
         this.setState({[e.target.name]: e.target.value});
         const worker_id = e.target.value;
-        const servicevalue = this.state.service;
-        Booking.getAvailableSessionsByWorkerAndService(worker_id, servicevalue).then((res) => 
+        const service = this.state.service;
+        Booking.getAvailableSessionsByWorkerAndService(worker_id, service).then((res) =>
         {
             if(!res.data.empty)
             {
@@ -154,7 +154,7 @@ class NewBookings extends Component
         console.log(newbooking);
         CreateBooking.createBooking(newbooking, stored.token).then((res) => 
         {
-            alert("Booking successful");
+            alert("New booking is created successfully");
             this.props.history.push("/currentbookings");
         }).catch((err) => 
         {
@@ -218,9 +218,6 @@ class NewBookings extends Component
 
                                 <h5 className="display-4 text-center pb-5">Create New Booking</h5>
                                 <form onSubmit={this.onSubmit}>
-
-                                    <h5>Select Service and Worker</h5>
-                                    <hr/>
                                     <h6>Service</h6>
                                     <div className="form-group">
                                         <select id="inputState" 

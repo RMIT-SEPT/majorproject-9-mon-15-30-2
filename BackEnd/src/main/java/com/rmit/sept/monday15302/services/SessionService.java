@@ -53,52 +53,46 @@ public class SessionService {
         // Loop from current date to the end of the month and convert session from day to date
         int numDays = Utility.getWorkingDaysInMonth(month, year);
 
-        for(int index = (day+1); index <= numDays; index++) {
+        for (int index = (day + 1); index <= numDays; index++) {
             // Check with the day in sessions
             Date date = Date.from(LocalDate.of(year, month, index)
                     .atStartOfDay(ZoneId.systemDefault()).toInstant());
             int currentDay = Utility.convertDateToDay(date);
-            for(Session session : sessions) {
-                if(session.getDay() == currentDay) {
+            for (Session session : sessions) {
+                if (session.getDay() == currentDay) {
                     toReturn.add(new SessionReturn(Utility.getDateAsString(date),
                             Utility.getTimeAsString(session.getStartTime()),
                             Utility.getTimeAsString(session.getEndTime())));
                 }
             }
         }
-
-        List<Integer> indexes = new ArrayList<>();
-
         // Filter list of sessions by worker's current bookings
-        for(int i = 0; i != toReturn.size(); i++) {
-            SessionReturn s = toReturn.get(i);
-            List<Booking> bookings = bookingService.getUnavailableSessions(workerId,
-                    Utility.getDateAsString(s.getDate()));
-            if(!bookings.isEmpty()) {
-                for(Booking booking : bookings) {
-                    if(booking.getStartTime().equals(s.getStartTime())
-                        && booking.getEndTime().equals(s.getEndTime())) {
-                        indexes.add(i);
-                    }
-                }
-            }
-        }
+        filterSessions(toReturn, workerId);
 
-        if(!indexes.isEmpty()) {
-            for(int x = indexes.size() - 1; x >= 0; x--) {
-                toReturn.remove(indexes.get(x));
-            }
-        }
-
-        if(toReturn.isEmpty()) {
-            throw new BookingException("Worker id " + workerId + " has no available sessions");
-        }
-
-        for(int i = 0; i != toReturn.size(); i++) {
+        for (int i = 0; i != toReturn.size(); i++) {
             toReturn.get(i).setId(i);
         }
 
         return toReturn;
+    }
+
+    public void filterSessions(List<SessionReturn> sessions, String workerId) throws ParseException {
+        for (int i = sessions.size() - 1; i >= 0; i--) {
+            SessionReturn s = sessions.get(i);
+            List<Booking> bookings = bookingService.getUnavailableSessions(workerId,
+                    Utility.getDateAsString(s.getDate()));
+            if (!bookings.isEmpty()) {
+                for (Booking booking : bookings) {
+                    if (booking.getStartTime().equals(s.getStartTime())
+                            && booking.getEndTime().equals(s.getEndTime())) {
+                        sessions.remove(s);
+                    }
+                }
+            }
+        }
+        if(sessions.isEmpty()) {
+            throw new BookingException("Worker id " + workerId + " has no available sessions");
+        }
     }
 
     public Session saveSession(SessionCreated session) throws ParseException {
@@ -118,12 +112,12 @@ public class SessionService {
     public void validateSessionByWorkingHours(Session newSession, String adminId) {
         WorkingHours hours = workingHoursService.getOpeningHoursByDayAndAdmin(newSession.getDay(),
                 adminId);
-        if(hours != null) {
+        if (hours != null) {
             Date startTime = hours.getStartTime();
             Date endTime = hours.getEndTime();
             Date newStartTime = newSession.getStartTime();
             Date newEndTime = newSession.getEndTime();
-            if(!(isWithinRange(newStartTime, startTime, endTime)
+            if (!(isWithinRange(newStartTime, startTime, endTime)
                     && isWithinRange(newEndTime, startTime, endTime))) {
                 throw new WorkingHoursException("Session is not within working hours (From "
                         + Utility.getTimeAsString(startTime) + " to "
@@ -135,7 +129,7 @@ public class SessionService {
     public void validateStartAndEndTime(Session newSession) {
         Date startTime = newSession.getStartTime();
         Date endTime = newSession.getEndTime();
-        if(startTime.getTime() >= endTime.getTime()) {
+        if (startTime.getTime() >= endTime.getTime()) {
             throw new AdminDetailsException("Start time cannot happen at the " +
                     "same time or before end time");
         }
@@ -144,10 +138,10 @@ public class SessionService {
 
     public void validateSessionByTime(Session newSession, boolean isUpdated) {
         List<Session> sessions = sessionRepository.findByWorkerIdAndDay(newSession
-                        .getWorker().getId(), newSession.getDay());
-        if(!sessions.isEmpty()) {
-            for(Session session : sessions) {
-                if(!(isUpdated && session.getId().equals(newSession.getId()))) {
+                .getWorker().getId(), newSession.getDay());
+        if (!sessions.isEmpty()) {
+            for (Session session : sessions) {
+                if (!(isUpdated && session.getId().equals(newSession.getId()))) {
                     Date newStartTime = newSession.getStartTime();
                     Date newEndTime = newSession.getEndTime();
                     Date startTime = session.getStartTime();
@@ -171,7 +165,7 @@ public class SessionService {
 
     public List<Session> getSessionsByWorkerIdAndDay(String workerId, int day) {
         List<Session> sessions = sessionRepository.findByWorkerIdAndDay(workerId, day);
-        if(sessions.isEmpty()) {
+        if (sessions.isEmpty()) {
             throw new WorkerDetailsException("No sessions found");
         }
         return sessions;
@@ -184,10 +178,10 @@ public class SessionService {
     public List<SessionCreated> getSessionsByAdminId(String adminId) {
         List<SessionCreated> sessions = new ArrayList<>();
         List<WorkerDetails> workers = workerDetailsRepository.findByAdminId(adminId);
-        if(!workers.isEmpty()) {
+        if (!workers.isEmpty()) {
             for (WorkerDetails worker : workers) {
                 List<Session> wSessions = getSessionsByWorkerId(worker.getId());
-                if(!wSessions.isEmpty()) {
+                if (!wSessions.isEmpty()) {
                     for (Session session : wSessions) {
                         SessionCreated toReturn = new SessionCreated(session.getDay(),
                                 session.getStartTime(), session.getEndTime(), worker.getfName(),
@@ -197,7 +191,7 @@ public class SessionService {
                 }
             }
         }
-        if(sessions.isEmpty()) {
+        if (sessions.isEmpty()) {
             throw new AdminDetailsException("No session found");
         }
         return sessions;
@@ -205,7 +199,7 @@ public class SessionService {
 
     public Session getSessionById(String sessionId) {
         Session session = sessionRepository.getSessionById(sessionId);
-        if(session == null) {
+        if (session == null) {
             throw new AdminDetailsException("Session with id " + sessionId + " not found");
         }
         return session;
@@ -215,7 +209,7 @@ public class SessionService {
         WorkerDetails worker = workerDetailsRepository.getWorkerById(session.getWorkerId());
         Session updatedSession = sessionRepository.getSessionById(sessionId);
 
-        if(worker == null || updatedSession == null) {
+        if (worker == null || updatedSession == null) {
             throw new AdminDetailsException("No worker or session found");
         }
 
@@ -229,4 +223,50 @@ public class SessionService {
 
         return sessionRepository.save(updatedSession);
     }
+
+    public List<SessionReturn> getSessionsWithinAWeekByWorkerId(String workerId) throws ParseException {
+        List<Session> sessions = getSessionsByWorkerId(workerId);
+        List<SessionReturn> returns = new ArrayList<>();
+        if(sessions.isEmpty()) {
+            throw new AdminDetailsException("No sessions found for worker ID " + workerId);
+        }
+        Date currentDate = new Date();
+        Date lastDate = new Date(currentDate.getTime() + 7*(1000 * 60 * 60 * 24));
+
+        Calendar cStart = Calendar.getInstance(); cStart.setTime(currentDate);
+        Calendar cEnd = Calendar.getInstance(); cEnd.setTime(lastDate);
+
+        while (cStart.before(cEnd)) {
+            for(Session session : sessions) {
+                if(Utility.convertDateToDay(cStart.getTime()) == session.getDay()) {
+                    returns.add(new SessionReturn(cStart.getTime(), session.getStartTime(), session.getEndTime()));
+                }
+            }
+            cStart.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        filterSessions(returns, workerId);
+        return returns;
+    }
+
+    public List<Session> findSessionsForReset(String adminId) {
+        List<WorkerDetails> workers = workerDetailsRepository.findByAdminId(adminId);
+        List<Session> sessions = new ArrayList<>();
+        if (!workers.isEmpty()) {
+            for (WorkerDetails worker : workers) {
+                sessions.addAll(getSessionsByWorkerId(worker.getId()));
+            }
+        }
+        if (sessions.isEmpty()) {
+            throw new AdminDetailsException("No session found");
+        }
+        return sessions;
+    }
+
+    public void resetSessions(String adminId) {
+        List<Session> sessions = findSessionsForReset(adminId);
+        for(Session session : sessions) {
+            sessionRepository.delete(session);
+        }
+    }
 }
+

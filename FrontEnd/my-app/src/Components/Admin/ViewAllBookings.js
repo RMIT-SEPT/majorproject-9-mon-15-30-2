@@ -23,7 +23,7 @@ class ViewAllBookings extends Component
     confirmBooking(booking_id, token)
     {
         console.log("confirm: "+booking_id);
-        let bookingResponse = 
+        let bookingResponse =
         {
             status: "NEW_BOOKING",
             confirmation: "CONFIRMED"
@@ -51,7 +51,7 @@ class ViewAllBookings extends Component
     rejectBooking(booking_id, token)
     {
         console.log("reject: "+ booking_id);
-        let bookingResponse = 
+        let bookingResponse =
         {
             status: "CANCELLED_BOOKING",
             confirmation: "CANCELLED"
@@ -201,7 +201,7 @@ class ViewAllBookings extends Component
                                             <tr key = {pendingbookings.id}>
                                                 <td> {pendingbookings.id}</td>
                                                 <td> {pendingbookings.service}</td>
-                                                <td> {pendingbookings.worker.fName}</td>
+                                                <td> {pendingbookings.worker.fName} {pendingbookings.worker.lName}</td>
                                                 <td> {pendingbookings.date}</td>   
                                                 <td> {pendingbookings.startTime}</td>
                                                 <td> {pendingbookings.endTime}</td>
@@ -261,7 +261,7 @@ class ViewAllBookings extends Component
                                             <tr key = {newbookings.id}>
                                                 <td> {newbookings.id}</td>
                                                 <td> {newbookings.service}</td>
-                                                <td> {newbookings.worker.fName}</td>
+                                                <td> {newbookings.worker.fName} {newbookings.worker.lName}</td>
                                                 <td> {newbookings.date}</td>   
                                                 <td> {newbookings.startTime}</td>
                                                 <td> {newbookings.endTime}</td>
@@ -314,7 +314,7 @@ class ViewAllBookings extends Component
                                             <tr key = {pastbookings.id}>
                                                 <td> {pastbookings.id}</td>
                                                 <td> {pastbookings.service}</td>
-                                                <td> {pastbookings.worker.fName}</td>
+                                                <td> {pastbookings.worker.fName} {pastbookings.worker.lName}</td>
                                                 <td> {pastbookings.date}</td>   
                                                 <td> {pastbookings.startTime}</td>
                                                 <td> {pastbookings.endTime}</td>
