@@ -18,10 +18,10 @@ class Employees extends Component
         this.deleteWorker = this.deleteWorker.bind(this);
     }
 
-    deleteWorker(worker_id)
+    deleteWorker(worker_id, token)
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        WorkerAction.deleteWorker(worker_id, stored.id).then((res) =>
+        WorkerAction.deleteWorker(worker_id, stored.id, token).then((res) =>
         { 
             this.setState(
             {
@@ -57,7 +57,7 @@ class Employees extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") 
         {
-            WorkerAction.getWorkersByAdmin(stored.id).then((res) =>
+            WorkerAction.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 this.setState({allemployee: res.data});
             },(err) =>

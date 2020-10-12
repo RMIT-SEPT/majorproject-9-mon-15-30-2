@@ -83,10 +83,11 @@ class NewBookings extends Component
 
     handleWorkerSelection(e)
     {
+        var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const worker_id = e.target.value;
         const service = this.state.service;
-        Booking.getAvailableSessionsByWorkerAndService(worker_id, service).then((res) =>
+        Booking.getAvailableSessionsByWorkerAndService(worker_id, service, stored.token).then((res) =>
         {
             if(!res.data.empty)
             {

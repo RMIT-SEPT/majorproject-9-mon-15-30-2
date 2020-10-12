@@ -21,9 +21,9 @@ class AvailableWorkers extends Component
         this.handleGetSessionByWorkerID = this.handleGetSessionByWorkerID.bind(this);
     }
 
-    handleGetSessionByWorkerID(worker_id, admin_id)
+    handleGetSessionByWorkerID(worker_id, admin_id, token)
     {
-        HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id).then((res) =>
+        HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id, token).then((res) =>
         {
             this.setState({sessionbyworkerid: res.data});
             console.log(res.data);
@@ -38,7 +38,7 @@ class AvailableWorkers extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleWorkers.getWorkersByAdmin(stored.id).then((res) =>
+            HandleWorkers.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 this.setState({allworkersbyadminid: res.data});
                 console.log(res.data);
@@ -97,7 +97,7 @@ class AvailableWorkers extends Component
                                     allworkersbyadminid => 
                                     <React.Fragment>
                                     <div>
-                                        <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id)}>
+                                        <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id, stored.token)}>
                                             {allworkersbyadminid.fName}     {allworkersbyadminid.lName}
                                         </button>
                                     </div>

@@ -1,5 +1,4 @@
 import axios from "axios";
-var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleWorkers 
 {

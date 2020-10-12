@@ -41,7 +41,7 @@ class AddEmployee extends Component
             username: this.state.username,
             adminId: stored.id
         }
-        WorkerAction.createNewWorker(newEmployee).then((res) =>
+        WorkerAction.createNewWorker(newEmployee, stored.token).then((res) =>
         {
             this.props.history.push('/employees');
             alert("Employee successfully created");

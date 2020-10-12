@@ -57,12 +57,12 @@ class HandleSessions
         }});
     }
 
-    getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id)
+    getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id, token)
     {
         return axios.get("http://localhost:8080/admin/availableSessions/"+worker_id+"/"+admin_id, 
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
             }
         });
     }

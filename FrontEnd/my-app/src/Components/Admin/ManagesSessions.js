@@ -28,12 +28,11 @@ class ManagesSessions extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-
             HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
             {
                 this.setState({notifiedDate: res.data});
                 console.log(res.data)
-            }, (err) => 
+            }).catch((err) => 
             {
                 if(String(err.response.status) === "401")
                 {
@@ -47,7 +46,7 @@ class ManagesSessions extends Component
                     console.log(err.response.data.message);
                 }
             });
-            HandleSessions.getAllSessionsByAdminId(stored.id).then((res) =>
+            HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
             {
                 this.setState({availablesessions: res.data});
                 console.log(res.data);
@@ -92,7 +91,7 @@ class ManagesSessions extends Component
                 alert("All current sessions are kept");
                 window.location.reload();
             }
-        }, (err) =>
+        }).catch((err) =>
         {
             if(String(err.response.status) === "401")
             {
