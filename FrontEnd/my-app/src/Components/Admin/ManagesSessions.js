@@ -28,7 +28,8 @@ class ManagesSessions extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleSessions.getNotifiedDate(stored.id, stored.token).then((res) =>
+
+            HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
             {
                 this.setState({notifiedDate: res.data});
                 console.log(res.data)

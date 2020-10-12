@@ -55,9 +55,10 @@ class NewBookings extends Component
 
     handleServiceChange(e)
     {
+        var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const servicevalue = e.target.value;
-        Workers.getWorkerByService(servicevalue).then((res) => 
+        Workers.getWorkerByService(servicevalue, stored.token).then((res) => 
         {
             if(!res.data.empty)
             {
@@ -151,7 +152,7 @@ class NewBookings extends Component
             confirmation: "PENDING"
         }
         console.log(newbooking);
-        CreateBooking.createBooking(newbooking).then((res) => 
+        CreateBooking.createBooking(newbooking, stored.token).then((res) => 
         {
             alert("New booking is created successfully");
             this.props.history.push("/currentbookings");
@@ -178,9 +179,11 @@ class NewBookings extends Component
     {
         var stored = JSON.parse(localStorage.getItem("user"));
         console.log(stored.token);
+        console.log(stored);
+        console.log(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            Services.getAllServices().then((res) => 
+            Services.getAllServices(stored.token).then((res) => 
             {
                 this.setState({allservices: res.data});
                 console.log(res.data);

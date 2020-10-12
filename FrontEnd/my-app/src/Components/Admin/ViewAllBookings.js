@@ -20,7 +20,7 @@ class ViewAllBookings extends Component
         this.rejectBooking = this.rejectBooking.bind(this);
     }
 
-    confirmBooking(booking_id)
+    confirmBooking(booking_id, token)
     {
         console.log("confirm: "+booking_id);
         let bookingResponse =
@@ -28,7 +28,7 @@ class ViewAllBookings extends Component
             status: "NEW_BOOKING",
             confirmation: "CONFIRMED"
         }
-        HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
+        HandleBookings.confirmBooking(booking_id, bookingResponse, token).then((res) => 
         {
             window.location.reload();
         }).catch((err) => 
@@ -48,7 +48,7 @@ class ViewAllBookings extends Component
         });
     }
 
-    rejectBooking(booking_id)
+    rejectBooking(booking_id, token)
     {
         console.log("reject: "+ booking_id);
         let bookingResponse =
@@ -56,7 +56,7 @@ class ViewAllBookings extends Component
             status: "CANCELLED_BOOKING",
             confirmation: "CANCELLED"
         }
-        HandleBookings.confirmBooking(booking_id, bookingResponse).then((res) => 
+        HandleBookings.confirmBooking(booking_id, bookingResponse, token).then((res) => 
         {
             window.location.reload();
         }).catch((err) => 
@@ -79,14 +79,16 @@ class ViewAllBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleBookings.getNewBookingsByAdminID(stored.id).then((res) => 
+            HandleBookings.getNewBookingsByAdminID(stored.id, stored.token).then((res) => 
             {
                 for(var i=0; i < res.data.length; i++)
                 {
                     if(res.data[i].confirmation === "CONFIRMED")
                     {
+                        console.log(res.data[i]);
                         this.setState({newbookings: this.state.newbookings.concat(res.data[i])});
                     }
                     else if(res.data[i].confirmation === "PENDING")
@@ -110,7 +112,7 @@ class ViewAllBookings extends Component
                 }
             });
 
-            HandleBookings.getPastBookingsByAdminID(stored.id).then((res) => 
+            HandleBookings.getPastBookingsByAdminID(stored.id, stored.token).then((res) => 
             {   
                 this.setState({pastbookings: res.data});
             }).catch((err) => 
@@ -205,10 +207,10 @@ class ViewAllBookings extends Component
                                                 <td> {pendingbookings.endTime}</td>
                                                 <td> {pendingbookings.confirmation}</td>
                                                 <td> 
-                                                    <button onClick={() => this.confirmBooking(pendingbookings.id)} className="btn btn-info ml-3">
+                                                    <button onClick={() => this.confirmBooking(pendingbookings.id, stored.token)} className="btn btn-info ml-3">
                                                         Confirm
                                                     </button>
-                                                    <button onClick={() => this.rejectBooking(pendingbookings.id)} className="btn btn-danger ml-3">
+                                                    <button onClick={() => this.rejectBooking(pendingbookings.id, stored.token)} className="btn btn-danger ml-3">
                                                         Reject
                                                     </button>
                                                 </td>

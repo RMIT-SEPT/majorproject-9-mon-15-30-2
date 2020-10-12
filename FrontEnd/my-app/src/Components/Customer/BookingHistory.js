@@ -12,8 +12,7 @@ class BookingHistory extends Component
         super(props)
         this.state = 
         {
-            pastBookings: [],
-            customer: []
+            pastBookings: []
         }
     }
 
@@ -22,7 +21,7 @@ class BookingHistory extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            GetPastBookings.getPastBookingById(stored.id).then((res) =>
+            GetPastBookings.getPastBookingById(stored.id, stored.token).then((res) =>
             {
                 this.setState({pastBookings: res.data});
                 console.log(res.data);
@@ -50,27 +49,16 @@ class BookingHistory extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.role);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            if(this.state.pastBookings <= 0)
-            {
-                return(
-                    <React.Fragment>
-                        <CustomerDashboard/>
-                        <div className="container">
-                            <Alert className="alert" variant='danger'>
-                                No Past Booking Available
-                            </Alert>
-                        </div>
-                    </React.Fragment>
-                )
-            }
-            else
-            {
-                return(
-                    <React.Fragment>
-                        <CustomerDashboard/>
-                        <div className="container">
+            return(
+                <React.Fragment>
+                    <CustomerDashboard/>
+                    <div className = "container">
+
+                        {
+                            this.state.pastBookings.length > 0 && 
                             <Table className="table" striped bordered hover size="sm">
                                 <thead>
                                     <tr>
@@ -98,15 +86,23 @@ class BookingHistory extends Component
                                 }
                                 </tbody>
                             </Table>
-                        </div>
-                    </React.Fragment>
-                )
-            }
+                        }
+                        {
+                            this.state.pastBookings.length <= 0 && 
+                            <Alert className="alert" variant='danger'>
+                                No Past Bookings
+                            </Alert>
+                            
+                        }
+                    </div>
+                </React.Fragment>
+            )
         }
         else 
         {
             return <Redirect to="/"/>
         }
     }
+                
 }
 export default BookingHistory;
