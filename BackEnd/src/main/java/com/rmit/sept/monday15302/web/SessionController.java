@@ -87,13 +87,13 @@ public class SessionController {
     }
 
     @PutMapping("/resetSessions/{adminId}")
-    public boolean resetSession(@PathVariable("adminId") String adminId,
+    public ResponseEntity<?> resetSession(@PathVariable("adminId") String adminId,
                                 @RequestBody Map<String,Integer> json) {
         boolean isReset = json.get("isReset") == 0 ? false : true;
         if(isReset) {
             sessionService.resetSessions(adminId);
         }
         workingHoursService.resetNotifiedDate(adminId);
-        return isReset;
+        return new ResponseEntity<>(isReset, HttpStatus.OK);
     }
 }

@@ -30,8 +30,7 @@ public class WorkingHoursService {
 
     public void resetNotifiedDate(String adminId) {
         Date today = new Date();
-        long secondsToAdd = 30*(1000*60*60*24);
-        Date reset = new Date(today.getTime() + secondsToAdd);
+        Date reset = new Date(today.getTime() +  (long) 30 * 1000L * 60 * 60 * 24);
         List<WorkingHours> workingHoursList = workingHoursRepository.findByAdmin_id(adminId);
         if (!workingHoursList.isEmpty()) {
             for(WorkingHours workingHours : workingHoursList) {
