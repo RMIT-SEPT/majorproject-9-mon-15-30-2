@@ -249,7 +249,7 @@ class CreateSession extends Component
                                     {
                                         this.state.openinghours &&
                                         <div>
-                                            <h5>Opening Hours</h5>
+                                            <h6>Opening Hours</h6>
                                             <p>{this.state.openinghours.startTime} - {this.state.openinghours.endTime}</p>
                                         </div>
                                     }
@@ -257,7 +257,7 @@ class CreateSession extends Component
                                     {
                                         this.state.allavailablesessions &&
                                         <div>
-                                            <h5>Unavailable Sessions</h5>
+                                            <h6>Unavailable Sessions</h6>
                                             <Table className="table pb-4" striped bordered hover size="sm">
                                             <thead>
                                                 <tr>
