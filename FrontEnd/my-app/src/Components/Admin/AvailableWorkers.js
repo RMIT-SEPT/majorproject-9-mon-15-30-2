@@ -29,7 +29,22 @@ class AvailableWorkers extends Component
             console.log(res.data);
         }).catch((err) =>
         {
-            console.log(err.response.data.message);
+            if(String(err.response.status) === "401")
+            {
+                console.log(err.response.status);
+                localStorage.clear();
+                alert("Session Expired");
+                this.props.history.push('/login');
+            }
+            else if(String(err.response.status) === "404")
+            {
+                alert("Not Found");
+                this.props.history.push('/');
+            }
+            else
+            {
+                console.log(err.response.data.message);
+            }
         });
     }
 
