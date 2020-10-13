@@ -1,6 +1,6 @@
 package com.rmit.sept.monday15302.security;
 
-import com.rmit.sept.monday15302.services.CustomUserService;
+import com.rmit.sept.monday15302.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,18 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private CustomAuthenticationSuccessHandler successHandler;
-
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder)
             throws Exception {
-        authenticationManagerBuilder.userDetailsService(customUserService)
+        authenticationManagerBuilder.userDetailsService(userService)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
 
@@ -59,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(customUserService);
+        authenticationProvider.setUserDetailsService(userService);
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return authenticationProvider;
     }
@@ -102,7 +99,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and().csrf().disable().formLogin()
-                .successHandler(successHandler)
                 .loginPage("/login")
                 .and()
                 //.formLogin().disable()

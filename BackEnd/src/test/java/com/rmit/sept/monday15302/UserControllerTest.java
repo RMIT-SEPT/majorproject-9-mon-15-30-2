@@ -7,7 +7,6 @@ import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.JwtBlacklist;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.security.JwtTokenProvider;
@@ -52,9 +51,6 @@ public class UserControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
     private CustomerDetailsService customerDetailsService;
 
     @MockBean
@@ -72,13 +68,10 @@ public class UserControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtTokenProvider tokenProvider;
@@ -161,7 +154,6 @@ public class UserControllerTest {
         String request = "{\"token\":\"Bearer abc\"}";
         mvc.perform(put("/api/users/logout")
                 .content(request)
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .equals(jwt);
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
     }
 }

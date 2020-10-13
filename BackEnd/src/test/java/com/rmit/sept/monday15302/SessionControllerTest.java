@@ -3,7 +3,6 @@ package com.rmit.sept.monday15302;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.Session;
 import com.rmit.sept.monday15302.model.WorkerDetails;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.*;
@@ -59,13 +58,10 @@ public class SessionControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;

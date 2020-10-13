@@ -2,10 +2,9 @@ package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.WorkingHours;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
-import com.rmit.sept.monday15302.services.CustomUserService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.services.WorkingHoursService;
 import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.WorkingHoursController;
@@ -41,13 +40,10 @@ public class WorkingHoursControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;

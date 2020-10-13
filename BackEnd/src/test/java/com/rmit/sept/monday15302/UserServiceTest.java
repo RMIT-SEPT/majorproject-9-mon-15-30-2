@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -131,6 +132,17 @@ public class UserServiceTest {
     public void changeUserPassword_throwException_ifOldPasswordNotMatch() throws UserException {
         passwordRequest.setOldPassword("123456");
         userService.changeUserPassword(passwordRequest, userId);
+    }
+
+    @Test
+    public void loadUserByUsername_returnUser_ifUserFound() {
+        Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
+        assert(userService.loadUserByUsername(username) != null);
+    }
+
+    @Test(expected = UsernameNotFoundException.class)
+    public void loadUserById_returnUser_ifUserFound() throws UsernameNotFoundException{
+        userService.loadUserByUsername("123");
     }
 
 }

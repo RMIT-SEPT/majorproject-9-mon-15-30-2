@@ -2,7 +2,6 @@ package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.*;
@@ -50,9 +49,6 @@ public class WorkerControllerTest {
     private MapValidationErrorService mapValidationErrorService;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
     private AdminDetailsService adminDetailsService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -61,13 +57,10 @@ public class WorkerControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
