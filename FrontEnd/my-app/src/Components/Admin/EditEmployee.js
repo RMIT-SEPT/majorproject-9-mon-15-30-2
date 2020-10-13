@@ -75,6 +75,7 @@ class EditEmployee extends Component
             username: this.state.username,
             adminId: stored.id
         };
+        console.log(editEmployee);
         WorkerAction.updateWorker(editEmployee, this.state.id, stored.id, stored.token).then((res) =>
         { 
             this.props.history.push('/employees');

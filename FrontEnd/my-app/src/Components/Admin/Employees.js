@@ -85,7 +85,7 @@ class Employees extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN")
         {
-            if(this.state.allemployee <= 0)
+            if(this.state.allemployee.length <= 0)
             {
                 return(
                     <React.Fragment>

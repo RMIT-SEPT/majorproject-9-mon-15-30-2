@@ -7,8 +7,21 @@ import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+var stored = {
+    success:"true",
+    token: "token",
+    role: "ROLE_ADMIN",
+    id:"1" }
+    localStorage.setItem("user", JSON.stringify(stored))
+    jest.spyOn(JSON, 'parse').mockImplementation(() => {
+        return stored;
+    });
+
+
 describe('<AddEmployee /> Unit Test', () => 
 {
+    
+
     it('able to submit form', () =>
     {
         const add = new AddEmployee();
@@ -36,7 +49,7 @@ describe('<AddEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<AddEmployee />);
+        const wrapper = shallow(<AddEmployee />);
         expect(wrapper.instance().state.id).toBe("");
         wrapper.instance().onChange(e1);
         expect(wrapper.instance().state.id).toBe(target1.value);
@@ -44,7 +57,7 @@ describe('<AddEmployee /> Unit Test', () =>
 
     it('onSubmit', () =>
     {
-        const wrapper = mount(<AddEmployee />);
+        const wrapper = shallow(<AddEmployee />);
         const responce1 = {
             id: "1",
             password: "this.state.password",
@@ -102,9 +115,10 @@ describe('If onSubmit, alert are being called and successfully pushed', () => {
         const ev = new Ev();
         const instance = wrapper.instance();
         jest.spyOn(instance, 'onSubmit');
+        jest.spyOn(window, 'alert');
         instance.onSubmit(ev);
         expect(instance.onSubmit).toHaveBeenCalledTimes(1);
-        expect(window.alert).toHaveBeenCalledWith("Employees successfully created");
+        expect(window.alert).toHaveBeenCalledWith("Employee successfully created");
     });
 });
 
@@ -138,9 +152,10 @@ describe('If onSubmit, alert are being called and unsuccessfully pushed', () => 
         const ev = new Ev();
         const instance = wrapperfail.instance();
         jest.spyOn(instance, 'onSubmit');
+        jest.spyOn(window, 'alert');
         instance.onSubmit(ev);
         expect(instance.onSubmit).toHaveBeenCalledTimes(1);
-        expect(window.alert).toHaveBeenLastCalledWith("Employees unsuccessfully created");
+        expect(window.alert).toHaveBeenCalled();
     });
 });
 
