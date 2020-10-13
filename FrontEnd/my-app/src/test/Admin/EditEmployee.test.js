@@ -22,6 +22,16 @@ const props1 =
     history: []
 }
 
+var stored = {
+    success:"true",
+    token: "token",
+    role: "ROLE_ADMIN",
+    id:"1" }
+    localStorage.setItem("user", JSON.stringify(stored))
+    // jest.spyOn(JSON, 'parse').mockImplementation(() => {
+    //     return stored;
+    // });
+
 describe('<EditEmployee /> Unit Test', () => 
 {
     it('renders container', () => 
@@ -36,7 +46,7 @@ describe('<EditEmployee /> Unit Test', () =>
     {
 
         const wrapper = shallow(<EditEmployee {...props1}/>);
-        expect(wrapper.find('.form-group')).toHaveLength(6);
+        expect(wrapper.find('.form-group')).toHaveLength(5);
     });
 
     it('changeWorkerId', () =>
@@ -47,7 +57,7 @@ describe('<EditEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().changeWorkerId(e1);
         expect(wrapper.instance().state.id).toBe(target1.value);
     });
@@ -60,7 +70,7 @@ describe('<EditEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().changeWorkerFirstName(e1);
         expect(wrapper.instance().state.fName).toBe(target1.value);
     });
@@ -73,7 +83,7 @@ describe('<EditEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().changeWorkerLastName(e1);
         expect(wrapper.instance().state.lName).toBe(target1.value);
     });
@@ -86,22 +96,9 @@ describe('<EditEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().changeWorkerPhoneNumber(e1);
         expect(wrapper.instance().state.phoneNumber).toBe(target1.value);
-    });
-
-    it('changeWorkerPassword', () =>
-    {
-        const target1 = {
-            value: "p1"
-        };
-        const e1 = {
-            target: target1
-        };
-        const wrapper = mount(<EditEmployee {...props1}/>);
-        wrapper.instance().changeWorkerPassword(e1);
-        expect(wrapper.instance().state.password).toBe(target1.value);
     });
 
     it('changeWorkerUserName', () =>
@@ -112,14 +109,14 @@ describe('<EditEmployee /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().changeWorkerUserName(e1);
         expect(wrapper.instance().state.username).toBe(target1.value);
     });
 
     it('cancel', () =>
     {
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
         wrapper.instance().cancel();
         expect(wrapper.instance().props.history).toHaveLength(1);
     });
@@ -138,7 +135,7 @@ describe('<EditEmployee /> Unit Test', () =>
 
         jest.spyOn(axios, 'put').mockResolvedValueOnce(responce1);
         jest.spyOn(window, 'alert').mockImplementation(() => {});
-        const wrapper = mount(<EditEmployee {...props1}/>);
+        const wrapper = shallow(<EditEmployee {...props1}/>);
 
         class Ev extends Component{
             constructor(){
@@ -189,6 +186,6 @@ describe('Test for success update and alert message', () => {
         instance.updateEmployee(ev);
         expect(instance.updateEmployee).toHaveBeenCalledTimes(1);
         expect(window.alert).toHaveBeenCalled();
-        expect(window.alert).toHaveBeenCalledWith("Update successful");
+        expect(window.alert).toHaveBeenCalledWith("Employee details are updated successfully");
     });
 });

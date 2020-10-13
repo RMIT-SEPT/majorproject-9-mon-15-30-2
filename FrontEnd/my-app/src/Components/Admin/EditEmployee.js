@@ -28,7 +28,7 @@ class EditEmployee extends Component
     {
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_ADMIN") {
-            WorkerAction.getWorkerByID(this.state.id, stored.id).then((res) => 
+            WorkerAction.getWorkerByID(this.state.id, stored.id, stored.token).then((res) => 
             {
                 let editEmployee = res.data;
                 this.setState(
@@ -76,7 +76,7 @@ class EditEmployee extends Component
             adminId: stored.id
         };
         console.log(editEmployee);
-        WorkerAction.updateWorker(editEmployee, this.state.id, stored.id).then((res) =>
+        WorkerAction.updateWorker(editEmployee, this.state.id, stored.id, stored.token).then((res) =>
         { 
             this.props.history.push('/employees');
             alert("Employee details are updated successfully");
