@@ -31,6 +31,7 @@ class EditSession extends Component
     updateSession(e)
     {
         e.preventDefault();
+        var stored = JSON.parse(localStorage.getItem("user"));
         let editsession = 
         {
             startTime: this.state.startTime,
@@ -38,7 +39,7 @@ class EditSession extends Component
             day: this.state.day,
             workerId: this.state.workerId
         };
-        HandleSession.updateSession(this.state.id, editsession).then((res) => 
+        HandleSession.updateSession(this.state.id, editsession, stored.token).then((res) => 
         {
             alert("Session updated successfully");
             this.props.history.push('/managessessions');
@@ -66,7 +67,7 @@ class EditSession extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleSession.getSessionBySessionIdAndAdminId(this.state.id, stored.id).then((res) => 
+            HandleSession.getSessionBySessionIdAndAdminId(this.state.id, stored.id, stored.token).then((res) => 
             {
                 let editsession = res.data;
                 this.setState({
@@ -80,7 +81,7 @@ class EditSession extends Component
                     service: editsession.service
                 });
 
-                HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, this.state.day).then((res) => 
+                HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, this.state.day, stored.token).then((res) => 
                 {
                     this.setState({allavailablesessions: res.data});
                 }).catch((err) => 
@@ -99,7 +100,7 @@ class EditSession extends Component
                     }
                 });
 
-                HandleSession.getOpeningHoursByAdminAndDay(stored.id, this.state.day).then((res) =>
+                HandleSession.getOpeningHoursByAdminAndDay(stored.id, this.state.day, stored.token).then((res) =>
                 {
                     this.setState({openinghours: res.data});
 
@@ -150,7 +151,7 @@ class EditSession extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const selectedDay = e.target.value;
-        HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, selectedDay).then((res) => 
+        HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, selectedDay, stored.token).then((res) => 
         {
             this.setState({allavailablesessions: res.data});
         }).catch((err) => 
@@ -169,7 +170,7 @@ class EditSession extends Component
             }
         });
 
-        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay).then((res) =>
+        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) =>
         {
             this.setState({openinghours: res.data});
 
@@ -237,7 +238,7 @@ class EditSession extends Component
                                     {
                                         this.state.allavailablesessions.length > 0 &&
                                         <div>
-                                            <h5>Available Sessions</h5>
+                                            <h5>Unavailable Sessions</h5>
                                             <Table className="table pb-4" striped bordered hover size="sm">
                                             <thead>
                                                 <tr>

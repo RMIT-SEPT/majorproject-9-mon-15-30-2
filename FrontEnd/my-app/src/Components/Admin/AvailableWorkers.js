@@ -21,39 +21,28 @@ class AvailableWorkers extends Component
         this.handleGetSessionByWorkerID = this.handleGetSessionByWorkerID.bind(this);
     }
 
-    handleGetSessionByWorkerID(worker_id, admin_id)
+    handleGetSessionByWorkerID(worker_id, admin_id, token)
     {
-        HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id).then((res) =>
+        HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id, token).then((res) =>
         {
             this.setState({sessionbyworkerid: res.data});
             console.log(res.data);
         }).catch((err) =>
         {
-            // if(String(err.response.status) === "401")
-            // {
-            //     console.log(err.response.status);
-            //     localStorage.clear();
-            //     alert("Session Expired");
-            //     this.props.history.push('/login');
-            // }
-            // else
-            // {
-                console.log(err.response.data.message);
-            // }
+            console.log(err.response.data.message);
         });
     }
 
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
-            HandleWorkers.getWorkersByAdmin(stored.id).then((res) =>
+            HandleWorkers.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 this.setState({allworkersbyadminid: res.data});
                 console.log(res.data);
-            }).catch((err) => 
+            }).catch((err) =>
             {
                 if(String(err.response.status) === "401")
                 {
@@ -72,8 +61,6 @@ class AvailableWorkers extends Component
                     console.log(err.response.data.message);
                 }
             });
-
-            
         }
         else
         {
@@ -110,7 +97,7 @@ class AvailableWorkers extends Component
                                     allworkersbyadminid => 
                                     <React.Fragment>
                                     <div>
-                                        <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id)}>
+                                        <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id, stored.token)}>
                                             {allworkersbyadminid.fName}     {allworkersbyadminid.lName}
                                         </button>
                                     </div>

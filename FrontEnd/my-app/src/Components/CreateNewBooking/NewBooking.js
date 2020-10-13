@@ -55,9 +55,10 @@ class NewBookings extends Component
 
     handleServiceChange(e)
     {
+        var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const servicevalue = e.target.value;
-        Workers.getWorkerByService(servicevalue).then((res) => 
+        Workers.getWorkerByService(servicevalue, stored.token).then((res) => 
         {
             if(!res.data.empty)
             {
@@ -82,10 +83,11 @@ class NewBookings extends Component
 
     handleWorkerSelection(e)
     {
+        var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const worker_id = e.target.value;
-        const servicevalue = this.state.service;
-        Booking.getAvailableSessionsByWorkerAndService(worker_id, servicevalue).then((res) => 
+        const service = this.state.service;
+        Booking.getAvailableSessionsByWorkerAndService(worker_id, service, stored.token).then((res) =>
         {
             if(!res.data.empty)
             {
@@ -151,9 +153,9 @@ class NewBookings extends Component
             confirmation: "PENDING"
         }
         console.log(newbooking);
-        CreateBooking.createBooking(newbooking).then((res) => 
+        CreateBooking.createBooking(newbooking, stored.token).then((res) => 
         {
-            alert("Booking successful");
+            alert("New booking is created successfully");
             this.props.history.push("/currentbookings");
         }).catch((err) => 
         {
@@ -178,9 +180,11 @@ class NewBookings extends Component
     {
         var stored = JSON.parse(localStorage.getItem("user"));
         console.log(stored.token);
+        console.log(stored);
+        console.log(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            Services.getAllServices().then((res) => 
+            Services.getAllServices(stored.token).then((res) => 
             {
                 this.setState({allservices: res.data});
                 console.log(res.data);
@@ -215,9 +219,6 @@ class NewBookings extends Component
 
                                 <h5 className="display-4 text-center pb-5">Create New Booking</h5>
                                 <form onSubmit={this.onSubmit}>
-
-                                    <h5>Select Service and Worker</h5>
-                                    <hr/>
                                     <h6>Service</h6>
                                     <div className="form-group">
                                         <select id="inputState" 

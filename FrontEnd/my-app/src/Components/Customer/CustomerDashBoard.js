@@ -14,16 +14,12 @@ class NavigationBar extends Component
     {   
         HandleLogout.Logout().then((response) =>
         {
-            console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(response);
-            alert("Logout successful");
+            alert("Logout successfully");
             this.props.history.push('/');
         }).catch((error) =>
         {
-            console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(error);
             alert("Session expired");
             this.props.history.push('/');
         });
@@ -45,22 +41,12 @@ class NavigationBar extends Component
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
                                     <a className="nav-link" href="/newbooking">
-                                        New Bookings
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" href="/newbookingsbyservices" hidden>
-                                        New Bookings by Services
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" href="/newbookingsbyworkers" hidden>
-                                        New Bookings by Workers
+                                        Create New Booking
                                     </a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link" href="/currentbookings">
-                                        View Current Bookings
+                                        Current Bookings
                                     </a>
                                 </li>
                                 <li className="nav-item">

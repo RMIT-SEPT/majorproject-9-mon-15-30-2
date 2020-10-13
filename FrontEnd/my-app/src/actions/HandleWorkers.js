@@ -1,5 +1,4 @@
 import axios from "axios";
-var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleWorkers 
 {
@@ -19,11 +18,11 @@ class HandleWorkers
     }});
   }
 
-  getWorkerByService(service)
+  getWorkerByService(service, token)
   {
     return axios.get("http://localhost:8080/customer/makebooking/workers/" + service, 
     {headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
@@ -41,7 +40,7 @@ class HandleWorkers
     {headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      Authorization: stored
+      Authorization: token
     }});
   }
 

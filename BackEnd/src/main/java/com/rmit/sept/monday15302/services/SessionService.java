@@ -247,5 +247,26 @@ public class SessionService {
         filterSessions(returns, workerId);
         return returns;
     }
+
+    public List<Session> findSessionsForReset(String adminId) {
+        List<WorkerDetails> workers = workerDetailsRepository.findByAdminId(adminId);
+        List<Session> sessions = new ArrayList<>();
+        if (!workers.isEmpty()) {
+            for (WorkerDetails worker : workers) {
+                sessions.addAll(getSessionsByWorkerId(worker.getId()));
+            }
+        }
+        if (sessions.isEmpty()) {
+            throw new AdminDetailsException("No session found");
+        }
+        return sessions;
+    }
+
+    public void resetSessions(String adminId) {
+        List<Session> sessions = findSessionsForReset(adminId);
+        for(Session session : sessions) {
+            sessionRepository.delete(session);
+        }
+    }
 }
 

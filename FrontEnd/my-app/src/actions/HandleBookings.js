@@ -3,78 +3,78 @@ var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleBookings 
 {
-  createBooking(booking)
+  createBooking(booking, token)
   {
     return axios.post("http://localhost:8080/customer/createbooking", booking,
     {
       headers: {
       'Access-Control-Allow-Origin' : '*',
       'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
-  getNewBookingById(customer_id)
+  getNewBookingById(customer_id, token)
   {
     return axios.get("http://localhost:8080/customer/newbookings/" + customer_id, 
     {
       headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
-  getPastBookingById(customer_id)
+  getPastBookingById(customer_id, token)
   {
     return axios.get("http://localhost:8080/customer/historybookings/" + customer_id, 
     {
       headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
-  getAvailableSessionsByWorkerAndService(worker_id, service)
+  getAvailableSessionsByWorkerAndService(worker_id, service, token)
   {
     return axios.get("http://localhost:8080/customer/makebooking/sessions/" + worker_id + "/" + service, 
     {
       headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
-  getNewBookingsByAdminID(admin_id)
+  getNewBookingsByAdminID(admin_id, token)
   {
     return axios.get("http://localhost:8080/admin/newBookingsAdmin/"+admin_id,
     {
       headers: {
-        Authorization: stored.token
+        Authorization: token
       }
     });
   }
 
-  getPastBookingsByAdminID(admin_id)
+  getPastBookingsByAdminID(admin_id, token)
   {
     return axios.get("http://localhost:8080/admin/pastBookingsAdmin/" + admin_id,
     {
       headers: {
-        Authorization: stored.token
+        Authorization: token
       }
     });
   }
 
-  confirmBooking(booking_id, booking)
+  confirmBooking(booking_id, booking, token)
   {
     return axios.put("http://localhost:8080/admin/confirmBooking/"+booking_id, booking,
     { headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 
-  cancelBooking(booking_id)
+  cancelBooking(booking_id, token)
   {
     console.log(stored.token);
     return axios.put("http://localhost:8080/customer/cancelBooking/"+booking_id, "'",
     { headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 }

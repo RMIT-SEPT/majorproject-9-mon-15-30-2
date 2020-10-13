@@ -6,10 +6,7 @@ import com.rmit.sept.monday15302.model.WorkerDetails;
 import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
-import com.rmit.sept.monday15302.services.CustomUserService;
-import com.rmit.sept.monday15302.services.MapValidationErrorService;
-import com.rmit.sept.monday15302.services.SessionService;
-import com.rmit.sept.monday15302.services.WorkerDetailsService;
+import com.rmit.sept.monday15302.services.*;
 import com.rmit.sept.monday15302.utils.Request.EditWorker;
 import com.rmit.sept.monday15302.utils.Request.SessionCreated;
 import com.rmit.sept.monday15302.utils.Response.SessionReturn;
@@ -75,6 +72,9 @@ public class SessionControllerTest {
 
     @MockBean
     private WorkerDetailsService workerDetailsService;
+
+    @MockBean
+    private WorkingHoursService workingHoursService;
 
     private static Session session;
     private static String workerId = "w1";
@@ -198,5 +198,14 @@ public class SessionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void resetSession_returnTrueOfFalse_ifSuccessfully() throws Exception {
+        String request = "{\"isReset\":1}";
+        mvc.perform(put("/admin/resetSessions/{adminId}", adminId)
+                .content(request)
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

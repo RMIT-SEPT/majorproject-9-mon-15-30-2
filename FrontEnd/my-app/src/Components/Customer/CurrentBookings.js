@@ -43,10 +43,9 @@ class CurrentBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            GetBookings.getNewBookingById(stored.id).then((res) =>
+            GetBookings.getNewBookingById(stored.id, stored.token).then((res) =>
             {
                 this.setState({currentBookings: res.data});
                 console.log(res.data);
@@ -74,7 +73,7 @@ class CurrentBookings extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
+
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             if(this.state.currentBookings <= 0)
@@ -116,7 +115,7 @@ class CurrentBookings extends Component
                                         <tr key = {currentBookings.id}>
                                             <td> {currentBookings.id}</td>
                                             <td> {currentBookings.service}</td>
-                                            <td> {currentBookings.worker.fName}</td>
+                                            <td> {currentBookings.worker.fName} {currentBookings.worker.lName}</td>
                                             <td> {currentBookings.date}</td>   
                                             <td> {currentBookings.startTime}</td>
                                             <td> {currentBookings.endTime}</td>

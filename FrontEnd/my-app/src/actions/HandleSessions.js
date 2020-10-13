@@ -1,15 +1,14 @@
 import axios from "axios";
-var stored = JSON.parse(localStorage.getItem("user"));
 
 class HandleSessions 
 {
-    createNewSession (session) 
+    createNewSession (session, token) 
     {
         return axios.post("http://localhost:8080/admin/createSession", session,
         {headers: {
         'Access-Control-Allow-Origin' : '*',
         'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        Authorization: stored.token
+        Authorization: token
         }});
     }
 
@@ -29,41 +28,61 @@ class HandleSessions
         }});
     }
 
-    getAllSessionsByAdminId(admin_id)
+    getAllSessionsByAdminId(admin_id, token)
     {
         return axios.get("http://localhost:8080/admin/sessions/"+admin_id,
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
             }
         });
     }
 
-    getSessionBySessionIdAndAdminId(session_id, admin_id)
+    getSessionBySessionIdAndAdminId(session_id, admin_id, token)
     {
-        return axios.get("http://localhost:8080/admin/session/"+session_id+"/"+admin_id, 
+        return axios.get("http://localhost:8080/admin/session/"+session_id+"/"+ admin_id, 
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
             }
         });
     }
 
-    updateSession(session_id, session)
+    updateSession(session_id, session, token)
     {
         return axios.put("http://localhost:8080/admin/editSession/" + session_id, session,
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
         }});
     }
 
-    getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id)
+    getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id, token)
     {
         return axios.get("http://localhost:8080/admin/availableSessions/"+worker_id+"/"+admin_id, 
         {
             headers: {
-                Authorization: stored.token
+                Authorization: token
+            }
+        });
+    }
+
+    getNotifiedDate(id, token)
+    {
+        return axios.get("http://localhost:8080/admin/checkNotifiedDate/" + id, 
+        {
+            headers: {
+                Authorization: token
+            }
+        });
+    }
+
+    resetSession(reset, id, token)
+    {
+        return axios.put("http://localhost:8080/admin/resetSessions/" +id, reset, 
+        {
+            headers: {
+                Authorization: token
             }
         });
     }
