@@ -73,8 +73,7 @@ public class BookingControllerTest {
     private static String bookingId = "b1";
 
     @Test
-    public void givenPastBookingsForCustomer_whenGetPastBookingsForCustomer_thenReturnJsonArray()
-            throws Exception {
+    public void testGetPastBookingsForCustomer() throws Exception {
 
         Booking booking1 = new Booking();
         booking1.setStatus(BookingStatus.PAST_BOOKING);
@@ -95,8 +94,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void givenNewBookingsForCustomer_whenGetNewBookingsForCustomer_thenReturnJsonArray()
-            throws Exception {
+    public void testGetNewBookingsForCustomer() throws Exception {
 
         Booking booking = new Booking();
         booking.setStatus(BookingStatus.NEW_BOOKING);
@@ -113,8 +111,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void givenPastBookingsForAdmin_whenGetPastBookingsForAdmin_thenReturnJsonArray()
-            throws Exception {
+    public void testGetPastBookingsForAdmin() throws Exception {
 
         Booking booking1 = new Booking();
         booking1.setStatus(BookingStatus.PAST_BOOKING);
@@ -135,8 +132,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void givenNewBookingsForAdmin_whenGetNewBookingsForAdmin_thenReturnJsonArray()
-            throws Exception {
+    public void testGetNewBookingsForAdmin() throws Exception {
 
         Booking booking1 = new Booking();
         booking1.setStatus(BookingStatus.NEW_BOOKING);
@@ -153,7 +149,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void givenWorkersWithService_whenGetWorkersByService_thenReturnJsonArray()
+    public void testGetWorkersByService()
             throws Exception {
         String workerId2 = "w2";
         String service = "Haircut";
@@ -180,7 +176,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void fetchAvailableSessionsByWorkerAndService() throws Exception {
+    public void testGetAvailableSessions() throws Exception {
         String service = "Haircut";
         SessionReturn session1 = new SessionReturn("2020-09-12",
                 "08:00:00", "09:00:00");
@@ -195,7 +191,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void saveBooking_itShouldReturnStatusOk() throws Exception {
+    public void testCreateNewBooking() throws Exception {
         User user1 = new User("customer", "******", UserType.ROLE_CUSTOMER);
         user1.setId(customerId);
         User user2 = new User("admin", "******", UserType.ROLE_ADMIN);
@@ -240,7 +236,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void updateBookingStatus_returnStatusOK() throws Exception {
+    public void testUpdateBooking() throws Exception {
         Booking booking = new Booking();
 
         given(service.updateBooking(Mockito.any(BookingConfirmation.class), eq(bookingId)))
@@ -256,7 +252,7 @@ public class BookingControllerTest {
     }
 
     @Test
-    public void cancelBooking_returnStatusOK() throws Exception {
+    public void testCancelBooking() throws Exception {
         Booking booking = new Booking();
         booking.setId(bookingId);
         given(service.cancelBooking(bookingId)).willReturn(booking);

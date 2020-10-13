@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -58,24 +59,26 @@ public class WorkingHoursServiceTest {
     }
 
     @Test
-    public void isNotifiedDate_returnTrue_ifCurrentIsNotifiedDate() {
+    public void isNotifiedDate_returnTrue_ifCurrentDateIsNotifiedDate() {
         Date today = new Date();
         hour.setDateByDate(today);
         assert(workingHoursService.isNotifiedDate(adminId));
     }
 
     @Test
-    public void isNotifiedDate_returnFalse_ifCurrentIsNotNotifiedDate() {
+    public void isNotifiedDate_returnFalse_ifCurrentDateIsNotNotifiedDate() {
         assert(!workingHoursService.isNotifiedDate(adminId));
     }
 
     @Test
     public void isNotifiedDate_returnFalse_ifNoWorkingHoursFound() {
+        List<WorkingHours> hours = new ArrayList<>();
+        Mockito.when(workingHoursRepository.findByAdmin_id(adminId)).thenReturn(hours);
         assert(!workingHoursService.isNotifiedDate(adminId));
     }
 
     @Test
-    public void resetNotifiedDate() {
+    public void testResetNotifiedDate() {
         Mockito.when(workingHoursRepository.save(hour)).thenReturn(hour);
         // when
         workingHoursService.resetNotifiedDate(adminId);

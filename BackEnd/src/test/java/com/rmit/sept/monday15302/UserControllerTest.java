@@ -12,7 +12,6 @@ import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.security.JwtTokenProvider;
 import com.rmit.sept.monday15302.services.CustomerDetailsService;
 import com.rmit.sept.monday15302.services.MapValidationErrorService;
-import com.rmit.sept.monday15302.services.SessionService;
 import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import com.rmit.sept.monday15302.utils.Request.LoginRequest;
@@ -83,9 +82,6 @@ public class UserControllerTest {
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @MockBean
-    private SessionService sessionService;
 
     private static CustomerSignup signUp = new CustomerSignup("customer", "******",
             UserType.ROLE_CUSTOMER, "John", "Smith", "Melbourne",

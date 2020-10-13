@@ -71,9 +71,9 @@ public class BookingController {
     }
 
     @PutMapping("/admin/confirmBooking/{bookingId}")
-    public ResponseEntity<?> updateWorker(@PathVariable("bookingId") String id,
-                                          @Valid @RequestBody BookingConfirmation booking,
-                                          BindingResult result) {
+    public ResponseEntity<?> updateBooking(@PathVariable("bookingId") String id,
+                                           @Valid @RequestBody BookingConfirmation booking,
+                                           BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
 

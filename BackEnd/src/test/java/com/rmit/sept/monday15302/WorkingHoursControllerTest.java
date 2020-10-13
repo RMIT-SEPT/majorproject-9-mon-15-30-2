@@ -54,8 +54,7 @@ public class WorkingHoursControllerTest {
     private static String adminId = "a1";
 
     @Test
-    public void givenHours_whenGetOpeningHoursByAdminIdAndDay_thenReturnJsonArray()
-            throws Exception {
+    public void testGetOpeningHoursByAdminIdAndDay() throws Exception {
 
         int day = 1;
         AdminDetails admin = new AdminDetails();
@@ -74,7 +73,7 @@ public class WorkingHoursControllerTest {
     }
 
     @Test
-    public void checkNotifiedDate_returnTrueOrFalse_ifAuthorized() throws Exception {
+    public void isNotifiedDate_returnOKStatus_ifAuthorized() throws Exception {
         given(service.isNotifiedDate(adminId)).willReturn(true);
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
         mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
@@ -84,7 +83,7 @@ public class WorkingHoursControllerTest {
     }
 
     @Test
-    public void checkNotifiedDate_throw401_ifUnauthorized() throws Exception {
+    public void isNotifiedDate_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
         mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
                 .contentType(MediaType.APPLICATION_JSON))

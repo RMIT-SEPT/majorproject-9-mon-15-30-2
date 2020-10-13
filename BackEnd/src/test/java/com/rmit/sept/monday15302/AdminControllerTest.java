@@ -50,7 +50,7 @@ public class AdminControllerTest {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
-    public void givenServices_whenGetServices_thenReturnJsonArray()
+    public void testGetAllServices()
             throws Exception {
         String service1 = "Haircut";
         String service2 = "Massage";
@@ -66,7 +66,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void givenAdmin_whenGetService_returnService() throws Exception {
+    public void testGetServiceByAdmin() throws Exception {
         String adminService = "Haircut";
         AdminDetails admin = new AdminDetails();
         admin.setId("a1");

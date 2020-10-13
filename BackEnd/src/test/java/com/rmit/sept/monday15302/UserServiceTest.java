@@ -58,14 +58,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUser_returnTrue_ifUserAdded() {
+    public void saveUser_returnUser_ifUserAdded() {
         userService.saveUser(user);
         Mockito.verify(userRepository,
                 times(1)).save(user);
     }
 
     @Test(expected = UserException.class)
-    public void createUser_throwException_ifUserNotAdded()
+    public void saveUser_throwException_ifUserNotAdded()
             throws UserException {
         Mockito.doThrow(new UserException("Cannot create a user"))
                 .when(userRepository)
@@ -98,13 +98,13 @@ public class UserServiceTest {
     }
 
     @Test(expected = UserException.class)
-    public void getUserById_throwException_ifNoUserFound()
+    public void getUserById_throwException_ifUserNotFound()
             throws UserException {
         userService.getUserById("Sale");
     }
     
     @Test
-    public void testDeleteUserByUsername() {
+    public void deleteByUsername_deleteUser_ifUserFound() {
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         // when
         userService.deleteByUsername(username);
@@ -113,7 +113,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = UserException.class)
-    public void deleteUserByUsername_throwException_ifNoUserFound()
+    public void deleteByUsername_throwException_ifUserNotFound()
             throws UserException {
         userService.deleteByUsername("Sale");
     }
@@ -135,13 +135,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loadUserByUsername_returnUser_ifUserFound() {
+    public void loadUserByUsername_returnUserDetails_ifUserFound() {
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         assert(userService.loadUserByUsername(username) != null);
     }
 
     @Test(expected = UsernameNotFoundException.class)
-    public void loadUserById_returnUser_ifUserFound() throws UsernameNotFoundException{
+    public void loadUserByUsername_throwException_ifUserNotFound() throws UsernameNotFoundException{
         userService.loadUserByUsername("123");
     }
 

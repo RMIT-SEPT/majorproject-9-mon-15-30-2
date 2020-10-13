@@ -52,14 +52,14 @@ public class CustomerDetailsServiceTest {
     }
 
     @Test
-    public void createCustomer_returnCustomer_ifCustomerIsSaved() {
+    public void saveCustomer_returnCustomer_ifCustomerSaved() {
         customerDetailsService.saveCustomer(customer);
         Mockito.verify(customerDetailsRepository,
                 times(1)).save(customer);
     }
 
     @Test(expected = UserException.class)
-    public void createCustomer_throwException_ifCustomerNotSaved() throws UserException {
+    public void saveCustomer_throwException_ifCustomerNotSaved() throws UserException {
         Mockito.doThrow(new UserException("Cannot save new customer"))
                 .when(customerDetailsRepository)
                 .save(customer);

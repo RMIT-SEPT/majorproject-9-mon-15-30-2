@@ -92,7 +92,7 @@ public class WorkerController {
     }
 
     @GetMapping("/worker/profile/{id}")
-    public ResponseEntity<?> getWorkerById(@PathVariable("id") String id) {
+    public ResponseEntity<?> getWorkerProfileById(@PathVariable("id") String id) {
         if(utility.isCurrentLoggedInUser(id)) {
             return new ResponseEntity<>(workerDetailsService.getWorkerProfileById(id), HttpStatus.OK);
         }

@@ -95,7 +95,7 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void getAvailableSession_SessionsList_ifSessionsFound() throws ParseException {
+    public void getAvailableSession_returnSessions_ifSessionsFound() throws ParseException {
         List<SessionReturn> sessions = sessionService.getAvailableSession(workerId, service);
         boolean isTrue = true;
         for(SessionReturn session : sessions) {
@@ -113,7 +113,7 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void createNewSession_returnSession_ifSessionAdded() throws ParseException {
+    public void saveSession_returnSession_ifSessionAdded() throws ParseException {
         List<Session> toMock = new ArrayList<>();
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1)).thenReturn(toMock);
         sessionService.saveSession(sessionCreated);
@@ -122,10 +122,17 @@ public class SessionServiceTest {
     }
 
     @Test(expected = AdminDetailsException.class)
-    public void validateStartAndEndTime_throwException_ifInvalidTime()
+    public void validateStartTimeAndEndTime_throwException_ifStartTimeAfterEndTime()
             throws AdminDetailsException, ParseException {
         sessionService.validateStartAndEndTime(new Session(worker, 1,
                 "09:00:00", "08:00:00", service));
+    }
+
+    @Test(expected = AdminDetailsException.class)
+    public void validateStartTimeAndEndTime_throwException_ifStartTimeEqualEndTime()
+            throws AdminDetailsException, ParseException {
+        sessionService.validateStartAndEndTime(new Session(worker, 1,
+                "08:00:00", "08:00:00", service));
     }
 
     @Test(expected = WorkingHoursException.class)
@@ -149,7 +156,7 @@ public class SessionServiceTest {
     }
 
     @Test(expected = AdminDetailsException.class)
-    public void validateSessionByTime_throwException_ifInvalidStartTime()
+    public void validateSessionByTime_throwException_ifCollapsedStartTime()
             throws AdminDetailsException, ParseException {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
@@ -158,7 +165,7 @@ public class SessionServiceTest {
     }
 
     @Test(expected = AdminDetailsException.class)
-    public void validateSessionByTime_throwException_ifInvalidEndTime()
+    public void validateSessionByTime_throwException_ifCollapsedEndTime()
             throws AdminDetailsException, ParseException {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
@@ -167,7 +174,7 @@ public class SessionServiceTest {
     }
 
     @Test(expected = AdminDetailsException.class)
-    public void validateSessionByTime_throwException_ifInvalidStartAndEndTime()
+    public void validateSessionByTime_throwException_ifCollapsedStartAndEndTime()
             throws AdminDetailsException, ParseException {
         Mockito.when(sessionRepository.findByWorkerIdAndDay(workerId, 1))
                 .thenReturn(sessions);
@@ -182,18 +189,18 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void isWithinRange_returnFalse_ifNewSessionTimeIsNotCollapsed() throws ParseException {
+    public void isWithinRange_returnFalse_ifNewSessionTimeNotCollapsed() throws ParseException {
         assert(!sessionService.isWithinRange(Utility.convertStringToTime("07:00:00"),
                 Utility.convertStringToTime("08:00:00"), Utility.convertStringToTime("09:00:00")));
     }
 
     @Test
-    public void getSessionsByWorkerAndDay_returnSessions_ifSessionsFound() {
+    public void getSessionsByWorkerIdAndDay_returnSessions_ifSessionsFound() {
         assert(sessionService.getSessionsByWorkerIdAndDay(workerId, 1).contains(session));
     }
 
     @Test(expected = WorkerDetailsException.class)
-    public void getSessionsByWorkerAndDay_throwException_ifNoSessionsFound() {
+    public void getSessionsByWorkerIdAndDay_throwException_ifNoSessionsFound() {
         sessionService.getSessionsByWorkerIdAndDay("123", 4);
     }
 
@@ -301,7 +308,7 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void reSetSessions_returnTrue_ifSessionsDeleted() {
+    public void resetSessions_deleteSessions_ifSessionsFound() {
         // when
         sessionService.resetSessions(adminId);
         // then

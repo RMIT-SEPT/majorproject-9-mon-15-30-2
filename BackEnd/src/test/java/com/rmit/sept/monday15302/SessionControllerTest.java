@@ -89,7 +89,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void testCreateSession_itReturnsOK() throws Exception {
+    public void testCreateNewSession() throws Exception {
 
         given(service.saveSession(Mockito.any(SessionCreated.class))).willReturn(session);
 
@@ -103,7 +103,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void testGetSessionsByWorkerAndDay() throws Exception {
+    public void testGetSessionsByWorkerIdAndDay() throws Exception {
         String workerId = "1";
         int day = 4;
         WorkerDetails worker = new WorkerDetails();
@@ -123,7 +123,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionsByAdminId_returnSessions_ifAuthorized() throws Exception {
+    public void getSessionsByAdminId_returnOKStatus_ifAuthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
         List<SessionCreated> sessions = Arrays.asList(session1);
         given(service.getSessionsByAdminId(adminId)).willReturn(sessions);
@@ -136,7 +136,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionsByAdminId_throw401_ifUnauthorized() throws Exception {
+    public void getSessionsByAdminId_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
         mvc.perform(get("/admin/sessions/{adminId}", adminId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -144,7 +144,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionById_returnSession_ifAuthorized() throws Exception {
+    public void getSessionById_returnOKStatus_ifAuthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
         session.setId(sessionId);
         given(service.getSessionById(sessionId)).willReturn(session);
@@ -156,7 +156,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionById_throw401_ifUnauthorized() throws Exception {
+    public void getSessionById_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
         mvc.perform(get("/admin/session/{sessionId}/{adminId}", sessionId, adminId)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -164,7 +164,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void updateSessions_returnSessionAndStatusOK() throws Exception {
+    public void testUpdateSessions() throws Exception {
         given(service.updateSession(Mockito.any(SessionCreated.class), eq(sessionId))).willReturn(session);
         String jsonString = objectMapper.writeValueAsString(session);
         mvc.perform(put("/admin/editSession/{sessionId}", sessionId)
@@ -175,7 +175,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionsWithinAWeekByWorkerId_throw401_ifUnAuthorized() throws Exception {
+    public void getSessionsWithinAWeekByWorkerId_return401_ifUnauthorized() throws Exception {
         EditWorker worker = new EditWorker();
         given(workerDetailsService.getWorkerById(workerId, adminId)).willReturn(worker);
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
@@ -185,7 +185,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void getSessionsWithinAWeekByWorkerId_returnSessions_ifAuthorized() throws Exception {
+    public void getSessionsWithinAWeekByWorkerId_returnOKStatus_ifAuthorized() throws Exception {
         given(workerDetailsService.getWorkerById(workerId, adminId)).willReturn(new EditWorker());
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
         List<SessionReturn> sessions = new ArrayList<>();
@@ -197,7 +197,7 @@ public class SessionControllerTest {
     }
 
     @Test
-    public void resetSession_returnTrueOfFalse_ifSuccessfully() throws Exception {
+    public void testResetSessions() throws Exception {
         String request = "{\"isReset\":1}";
         mvc.perform(put("/admin/resetSessions/{adminId}", adminId)
                 .content(request)

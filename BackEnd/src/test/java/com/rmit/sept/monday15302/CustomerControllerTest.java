@@ -65,7 +65,7 @@ public class CustomerControllerTest {
             "******", "******");
 
     @Test
-    public void getCustomerById() throws Exception {
+    public void getCustomerById_returnStatusOK_ifAuthorized() throws Exception {
 
         EditCustomer customer = new EditCustomer();
         customer.setUserName(username);
@@ -80,7 +80,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void getCustomerById_throwUnauthorizedStatus() throws Exception {
+    public void getCustomerById_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
 
         mvc.perform(get("/customer/profile/{id}", customerId)
@@ -89,7 +89,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void editProfile_returnStatusOK_ifAuthorized() throws Exception {
+    public void updateCustomer_returnStatusOK_ifAuthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(customer);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(true);
         given(service.updateCustomer(Mockito.any(EditCustomer.class), eq(customerId))).willReturn(customer);
@@ -101,7 +101,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void editProfile_throw401_ifUnauthorized() throws Exception {
+    public void updateCustomer_return401_ifUnauthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(customer);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
         mvc.perform(put("/customer/editProfile/{id}", customerId)
@@ -124,7 +124,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void updatePassword_throw401_ifUnauthorized() throws Exception {
+    public void updatePassword_return401_ifUnauthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(passwordRequest);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
         mvc.perform(put("/customer/updatePassword/{id}", customerId)
