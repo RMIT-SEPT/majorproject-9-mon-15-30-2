@@ -40,7 +40,7 @@ class CreateSession extends Component
         const selectedworker_id = this.state.workerId;
         var stored = JSON.parse(localStorage.getItem("user"));
 
-        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay).then((res) => 
+        HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay, stored.token).then((res) => 
         {
             this.setState({allavailablesessions: res.data});
         }).catch((err) => 
@@ -59,7 +59,7 @@ class CreateSession extends Component
             }
         });
         
-        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay).then((res) =>
+        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) =>
         {
             this.setState({openinghours: res.data});
         }).catch((err) => 
@@ -160,7 +160,7 @@ class CreateSession extends Component
                     this.props.history.push('/login');
                 }
             });
-            Service.getServiceByAdmin(stored.id).then((res) => 
+            Service.getServiceByAdmin(stored.id, stored.token).then((res) => 
             {
                 if(!res.data.empty)
                 {
@@ -196,7 +196,7 @@ class CreateSession extends Component
         {
             if(this.state.error)
             {
-                return <h1>Error</h1>
+                return <h1 className="error">Error</h1>
             }
             return (
                 <React.Fragment>

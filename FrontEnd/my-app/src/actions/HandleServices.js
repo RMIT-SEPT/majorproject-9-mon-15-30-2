@@ -12,10 +12,10 @@ class HandleServices
     }});
   }
 
-  getServiceByAdmin(admin_id) {
+  getServiceByAdmin(admin_id, token) {
     return axios.get("http://localhost:8080/admin/service/" + admin_id,
     { headers: {
-      Authorization: stored.token
+      Authorization: token
     }});
   }
 }

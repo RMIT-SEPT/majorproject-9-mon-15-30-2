@@ -65,19 +65,15 @@ describe('<Employees /> Unit Test', () =>
             lName: "lname",
             phoneNumber: "phone"
         }
+
+        const props = {
+            allemployee: [ employee2 ]
+        }
+
+        const emp = new Employees();
+        emp.state.allemployee.push(employee2); 
         
-        const allemployee = [ employee2 ];
-
-        const wrapper = shallow(<Employees {...allemployee}/>);
-        wrapper.instance().state.allemployee.push(employee2);
-
-        expect(wrapper.find('.container')).toHaveLength(1);
-        expect(wrapper.find('.table')).toHaveLength(2);
-        expect(wrapper.find('.th')).toHaveLength(4);
-        expect(wrapper.find('.username')).toHaveLength(1);
-        expect(wrapper.find('.fName')).toHaveLength(1);
-        expect(wrapper.find('.lName')).toHaveLength(1);
-        expect(wrapper.find('.phoneNumber')).toHaveLength(1);
+        expect(emp.state.allemployee[0]).toBe(employee2);
 
     });
 

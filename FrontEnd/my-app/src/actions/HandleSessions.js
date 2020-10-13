@@ -13,19 +13,19 @@ class HandleSessions
         }});
     }
 
-    getOpeningHoursByAdminAndDay(admin_id, day)
+    getOpeningHoursByAdminAndDay(admin_id, day, token)
     {
         return axios.get("http://localhost:8080/admin/openinghours/"+ admin_id + "/" + day,
         {headers: {
-            Authorization: stored.token
+            Authorization: token
         }});
     }
 
-    getAvailableSessionByWorkerIdAndDay(worker_id, day)
+    getAvailableSessionByWorkerIdAndDay(worker_id, day, token)
     {
         return axios.get("http://localhost:8080/admin/sessions/" + worker_id + "/" + day, 
         {headers: {
-            Authorization: stored.token
+            Authorization: token
         }});
     }
 

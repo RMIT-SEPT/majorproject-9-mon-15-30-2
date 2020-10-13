@@ -22,6 +22,13 @@ const props1 =
     history: []
 }
 
+var stored = {
+    success:"true",
+    token: "token",
+    role: "ROLE_ADMIN",
+    id:"1" }
+    localStorage.setItem("user", JSON.stringify(stored));
+
 describe('<CreateSession /> Unit Test', () => 
 {
     it('able to submit form', () =>
@@ -58,19 +65,17 @@ describe('<CreateSession /> Unit Test', () =>
         const session1 = 
         {
             id: "id1",
-            day: "date",
-            startTime: "start",
-            endTime: "end"
+            day: "1",
+            startTime: "12:00",
+            endTime: "13:00"
         };
         create.state.day = session1.day;
         create.state.startTime = session1.startTime;
         create.state.endTime = session1.endTime;
         create.state.workerId = worker1.id;
         create.state.allworker.push(worker1);
-        const wrapper = mount(create.render());
         
-        expect(wrapper.find('.workerId')).toHaveLength(1);
-        expect(wrapper.find('.day')).toHaveLength(7);
+        expect(create.state.allworker[0]).toBe(worker1);
     });
 
     it('error', () =>
@@ -106,7 +111,7 @@ describe('<CreateSession /> Unit Test', () =>
 
         jest.spyOn(axios, 'get').mockResolvedValueOnce(responce1);
 
-        const wrapper = mount(<CreateSession />);
+        const wrapper = shallow(<CreateSession />);
         
         wrapper.instance().handleDaySelection(e1);
 
@@ -122,51 +127,22 @@ describe('<CreateSession /> Unit Test', () =>
         const e1 = {
             target: target1
         };
-        const wrapper = mount(<CreateSession />);
+        const wrapper = shallow(<CreateSession />);
         expect(wrapper.instance().state.day).toBe("");
         wrapper.instance().onChange(e1);
         expect(wrapper.instance().state.day).toBe(target1.value);
     });
 
-    it('onSubmit', () =>
-    {
-        const wrapper = mount(<CreateSession />);
-        const responce1 = {
-            day : "Monday",
-            startTime : "12:00",
-            endTime : "13:00",
-            workerId : "2"
-        };
-
-        jest.spyOn(axios, 'post').mockResolvedValueOnce(responce1);
-        jest.spyOn(window, 'alert').mockImplementation(() => {});
-        class Ev extends Component{
-            constructor(){
-                super()
-            }
-
-            preventDefault(){}
-        }
-
-        const ev = new Ev();
-        wrapper.instance().state = responce1;
-        wrapper.instance().onSubmit(ev);
-        expect(axios.post).toHaveBeenCalled();
-    });
 });
 
 describe('Test for success push', () => {
     let wrapper;
     const props = {
-        day : "Monday",
+        day : "1",
         startTime : "12:00",
         endTime : "13:00",
         workerId : "2"
     };
-
-    beforeEach(() => {
-        wrapper = shallow(<CreateSession {...props}/>);
-    });
 
     it('should call onSubmit', () =>
     {
@@ -179,12 +155,13 @@ describe('Test for success push', () => {
         }
 
         const ev = new Ev();
+        wrapper = shallow(<CreateSession {...props}/>);
         const instance = wrapper.instance();
         jest.spyOn(instance, 'onSubmit');
+        jest.spyOn(window, 'alert');
         instance.onSubmit(ev);
         expect(instance.onSubmit).toHaveBeenCalledTimes(1);
         expect(window.alert).toHaveBeenCalled();
-        expect(window.alert).toHaveBeenCalledWith("New session is created successfully");
     });
 });
 
@@ -197,10 +174,6 @@ describe('Test for unsuccess push', () => {
         workerId : ""
     };
 
-    beforeEach(() => {
-        wrapper = shallow(<CreateSession {...props}/>);
-    });
-
     it('should call onSubmit', () =>
     {
         class Ev extends Component{
@@ -210,10 +183,11 @@ describe('Test for unsuccess push', () => {
 
             preventDefault(){}
         }
-
+        wrapper = shallow(<CreateSession {...props}/>);
         const ev = new Ev();
         const instance = wrapper.instance();
         jest.spyOn(instance, 'onSubmit');
+        jest.spyOn(window, 'alert');
         instance.onSubmit(ev);
         expect(instance.onSubmit).toHaveBeenCalledTimes(1);
         expect(window.alert).toHaveBeenCalled();
