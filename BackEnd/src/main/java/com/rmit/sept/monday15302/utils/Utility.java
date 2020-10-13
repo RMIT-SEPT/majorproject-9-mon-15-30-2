@@ -1,5 +1,6 @@
 package com.rmit.sept.monday15302.utils;
 
+import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,7 +46,6 @@ public class Utility {
     }
 
     public static int getWorkingDaysInMonth(int month, int year) {
-        // directly return the amount of days of the specified month
         return YearMonth.of(year, month).lengthOfMonth();
     }
 
@@ -59,5 +59,15 @@ public class Utility {
             }
         }
         return isLoggedIn;
+    }
+
+    public void validatePassword(String password, String confirmPassword) {
+        if(password.length() < 6){
+            throw new UserException("Password must be at least 6 characters");
+        }
+
+        if(!password.equals(confirmPassword)){
+            throw new UserException("Confirmed password must match");
+        }
     }
 }

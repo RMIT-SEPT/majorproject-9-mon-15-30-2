@@ -7,14 +7,15 @@ import com.rmit.sept.monday15302.model.CustomerDetails;
 import com.rmit.sept.monday15302.model.JwtBlacklist;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.security.JwtTokenProvider;
-import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.services.CustomerDetailsService;
+import com.rmit.sept.monday15302.services.MapValidationErrorService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import com.rmit.sept.monday15302.utils.Request.LoginRequest;
-import com.rmit.sept.monday15302.validator.UserValidator;
+import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.UserController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +33,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +52,10 @@ public class UserControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private UserService userService;
+    private Utility utility;
 
     @MockBean
     private CustomerDetailsService customerDetailsService;
-
-    @MockBean
-    private UserValidator userValidator;
 
     @MockBean
     private JwtBlacklistRepository jwtBlacklistRepository;
@@ -72,13 +69,10 @@ public class UserControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtTokenProvider tokenProvider;
@@ -88,9 +82,6 @@ public class UserControllerTest {
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @MockBean
-    private SessionService sessionService;
 
     private static CustomerSignup signUp = new CustomerSignup("customer", "******",
             UserType.ROLE_CUSTOMER, "John", "Smith", "Melbourne",
@@ -127,7 +118,7 @@ public class UserControllerTest {
 
     @Test
     public void register_throwException_ifPasswordInvalid() throws Exception {
-        doThrow(new UserException("")).when(userValidator).validate(Mockito.any(CustomerSignup.class), Mockito.any(Errors.class));
+        doThrow(new UserException("")).when(utility).validatePassword(Mockito.any(String.class), Mockito.any(String.class));
         String jsonString = objectMapper.writeValueAsString(signUp);
         mvc.perform(post("/api/users/register")
                 .content(jsonString)
@@ -161,7 +152,6 @@ public class UserControllerTest {
         String request = "{\"token\":\"Bearer abc\"}";
         mvc.perform(put("/api/users/logout")
                 .content(request)
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .equals(jwt);
+                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
     }
 }

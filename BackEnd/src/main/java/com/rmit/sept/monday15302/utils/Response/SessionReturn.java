@@ -36,10 +36,6 @@ public class SessionReturn {
         this.endTime = endTime;
     }
 
-    public SessionReturn() {
-
-    }
-
     public Date getDate() {
         return date;
     }

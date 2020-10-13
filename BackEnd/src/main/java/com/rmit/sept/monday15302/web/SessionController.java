@@ -87,9 +87,9 @@ public class SessionController {
     }
 
     @PutMapping("/resetSessions/{adminId}")
-    public ResponseEntity<?> resetSession(@PathVariable("adminId") String adminId,
-                                @RequestBody Map<String,Integer> json) {
-        boolean isReset = json.get("isReset") == 0 ? false : true;
+    public ResponseEntity<?> resetSessions(@PathVariable("adminId") String adminId,
+                                           @RequestBody Map<String,Integer> json) {
+        boolean isReset = json.get("isReset") != 0;
         if(isReset) {
             sessionService.resetSessions(adminId);
         }

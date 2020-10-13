@@ -2,7 +2,6 @@ package com.rmit.sept.monday15302;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.*;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.*;
@@ -50,9 +49,6 @@ public class WorkerControllerTest {
     private MapValidationErrorService mapValidationErrorService;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
     private AdminDetailsService adminDetailsService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -61,13 +57,10 @@ public class WorkerControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -79,7 +72,7 @@ public class WorkerControllerTest {
     private static String adminId = "a1";
 
     @Test
-    public void givenWorker_fetchOneWorkerById() throws Exception {
+    public void testGetWorkerById() throws Exception {
 
         EditWorker worker = new EditWorker();
         worker.setId(workerId);
@@ -93,7 +86,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void saveWorker_itShouldReturnStatusCreated() throws Exception {
+    public void createNewWorker_returnCreatedStatus_ifWorkerSaved() throws Exception {
         User user = new User("admin", "******", UserType.ROLE_ADMIN);
         user.setId(adminId);
         AdminDetails admin = new AdminDetails("Haircut", "Business", user);
@@ -120,7 +113,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void saveWorker_throwException_ifUserNameExists() throws Exception {
+    public void createNewWorker_throwException_ifUserNameExists() throws Exception {
         User user = new User("admin", "******", UserType.ROLE_ADMIN);
         AdminDetails admin = new AdminDetails("Haircut", "Business", user);
         admin.setId(adminId);
@@ -139,7 +132,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void testDeleteWorker_itShouldReturnStatusOk() throws Exception {
+    public void testDeleteWorker() throws Exception {
         mvc.perform(delete("/admin/deleteWorker/{id}/{adminId}", workerId, adminId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -147,7 +140,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void testEditEmployeeDetails_itShouldReturnStatusOk() throws Exception {
+    public void testUpdateWorker() throws Exception {
         EditWorker worker = new EditWorker(workerId, "worker","John", "Smith", "0412345678");
 
         given(service.updateWorker(Mockito.any(EditWorker.class), eq(workerId), eq(adminId)))
@@ -163,7 +156,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void givenWorkersForAdmin_fetchWorkersByAdmin() throws Exception {
+    public void testGetWorkersByAdmin() throws Exception {
         EditWorker worker = new EditWorker(workerId, "worker",
                 "John", "Smith", "0412345678");
         EditWorker worker2 = new EditWorker("456", "worker2",
@@ -181,7 +174,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void getWorkerById() throws Exception {
+    public void getWorkerProfileById_returnOKStatus_ifAuthorized() throws Exception {
 
         WorkerDetails worker = new WorkerDetails();
         worker.setId(workerId);
@@ -196,7 +189,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void getWorkerById_throwUnauthorizedStatus() throws Exception {
+    public void getWorkerProfileById_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(workerId)).willReturn(false);
 
         mvc.perform(get("/worker/profile/{id}", workerId)
@@ -205,7 +198,7 @@ public class WorkerControllerTest {
     }
 
     @Test
-    public void getSessionsByWorkerId_throwUnauthorizedStatus() throws Exception {
+    public void getSessionsByWorkerId_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(workerId)).willReturn(false);
         mvc.perform(get("/worker/sessions/{worker_id}", workerId)
                 .contentType(MediaType.APPLICATION_JSON))

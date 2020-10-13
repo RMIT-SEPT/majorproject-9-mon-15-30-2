@@ -3,17 +3,14 @@ package com.rmit.sept.monday15302;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
-import com.rmit.sept.monday15302.services.CustomUserService;
 import com.rmit.sept.monday15302.services.CustomerDetailsService;
 import com.rmit.sept.monday15302.services.MapValidationErrorService;
 import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.EditCustomer;
 import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
 import com.rmit.sept.monday15302.utils.Utility;
-import com.rmit.sept.monday15302.validator.PasswordValidator;
 import com.rmit.sept.monday15302.web.CustomerController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,19 +50,10 @@ public class CustomerControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
+    private UserService userService;
 
     @MockBean
     private MapValidationErrorService mapValidationErrorService;
-
-    @MockBean
-    private PasswordValidator passwordValidator;
-
-    @MockBean
-    private UserService userService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -77,7 +65,7 @@ public class CustomerControllerTest {
             "******", "******");
 
     @Test
-    public void getCustomerById() throws Exception {
+    public void getCustomerById_returnStatusOK_ifAuthorized() throws Exception {
 
         EditCustomer customer = new EditCustomer();
         customer.setUserName(username);
@@ -92,7 +80,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void getCustomerById_throwUnauthorizedStatus() throws Exception {
+    public void getCustomerById_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
 
         mvc.perform(get("/customer/profile/{id}", customerId)
@@ -101,7 +89,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void editProfile_returnStatusOK_ifAuthorized() throws Exception {
+    public void updateCustomer_returnStatusOK_ifAuthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(customer);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(true);
         given(service.updateCustomer(Mockito.any(EditCustomer.class), eq(customerId))).willReturn(customer);
@@ -113,7 +101,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void editProfile_throw401_ifUnauthorized() throws Exception {
+    public void updateCustomer_return401_ifUnauthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(customer);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
         mvc.perform(put("/customer/editProfile/{id}", customerId)
@@ -136,7 +124,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void updatePassword_throw401_ifUnauthorized() throws Exception {
+    public void updatePassword_return401_ifUnauthorized() throws Exception {
         String jsonString = objectMapper.writeValueAsString(passwordRequest);
         given(utility.isCurrentLoggedInUser(customerId)).willReturn(false);
         mvc.perform(put("/customer/updatePassword/{id}", customerId)

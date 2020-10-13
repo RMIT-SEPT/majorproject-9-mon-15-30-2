@@ -1,11 +1,10 @@
 package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.model.AdminDetails;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.services.AdminDetailsService;
-import com.rmit.sept.monday15302.services.CustomUserService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.web.AdminController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,19 +41,16 @@ public class AdminControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
-
-    @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Test
-    public void givenServices_whenGetServices_thenReturnJsonArray()
+    public void testGetAllServices()
             throws Exception {
         String service1 = "Haircut";
         String service2 = "Massage";
@@ -70,7 +66,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void givenAdmin_whenGetService_returnService() throws Exception {
+    public void testGetServiceByAdmin() throws Exception {
         String adminService = "Haircut";
         AdminDetails admin = new AdminDetails();
         admin.setId("a1");

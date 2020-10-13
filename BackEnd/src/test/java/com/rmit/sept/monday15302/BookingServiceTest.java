@@ -96,24 +96,24 @@ public class BookingServiceTest {
     }
 
     @Test(expected = BookingException.class)
-    public void findPastBookingsByCustomerId_throwException_ifNoPastBookingsFound()
+    public void getPastBookingsByCustomerId_throwException_ifNoPastBookingsFound()
             throws BookingException {
         bookingService.getPastBookingsByCustomerId(invalidCustomerId);
     }
 
     @Test
-    public void findPastBookingsByCustomerId_returnBookings_ifPastBookingsFound() {
+    public void getPastBookingsByCustomerId_returnBookings_ifPastBookingsFound() {
         assert(bookingService.getPastBookingsByCustomerId(validCustomerId).size() == 2);
     }
 
     @Test(expected = BookingException.class)
-    public void findNewBookingsByCustomerId_throwException_ifNoNewBookingsFound()
+    public void getNewBookingsByCustomerId_throwException_ifNoNewBookingsFound()
             throws BookingException, ParseException {
         bookingService.getNewBookingsByCustomerId(invalidCustomerId);
     }
 
     @Test
-    public void findNewBookingByCustomerID_returnBooking_ifOneBookingIsFound() throws ParseException {
+    public void getNewBookingsByCustomerId_returnBooking_ifOneBookingIsFound() throws ParseException {
         assert(bookingService.getNewBookingsByCustomerId(validCustomerId).size() == 1);
     }
 
@@ -123,7 +123,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void caseSameDay_throwException_ifStatusNotUpdated()
+    public void updateBookingStatus_throwException_ifStatusNotUpdatedForSameDayCase()
             throws ParseException {
         Mockito.doThrow(new BookingException("Cannot update booking " +
                 "status for booking with id " + bookingId)).when(bookingRepository)
@@ -132,7 +132,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void casePastDay_throwException_ifStatusNotUpdated()
+    public void updateBookingStatus_throwException_ifStatusNotUpdatedForPastDayCase()
             throws ParseException {
         Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
         booking.setDate(Utility.getDateAsString(date));
@@ -143,7 +143,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void sortBooking_BookingDateInThePast_updateBookingStatus()
+    public void updateBookingStatus_updateStatus_ifBookingDateInThePast()
             throws ParseException {
         Date date = new Date(today.getTime() - (1000 * 60 * 60 * 24));
         booking.setDate(Utility.getDateAsString(date));
@@ -152,7 +152,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void sortBooking_CurrentDateButBookingTimeInThePast_updateBookingStatus()
+    public void updateBookingStatus_updateStatus_ifCurrentDateButPastBookingTime()
             throws ParseException {
         booking.setEndTime("00:01:00");
         List<Booking> sortedBookings = bookingService.updateBookingStatus(bookings);
@@ -160,7 +160,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void sortBooking_CurrentDateButBookingTimeInThePast_throwException()
+    public void updateBookingStatus_throwException_ifNotUpdatedWhenCurrentDateButPastBookingTime()
             throws ParseException {
         booking.setEndTime("00:01:00");
         Mockito.doThrow(new BookingException("")).when(bookingRepository)
@@ -169,7 +169,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void sortBooking_CurrentDate_statusNotUpdated()
+    public void updateBookingStatus_statusNotUpdated_ifCurrentDate()
             throws ParseException {
         booking.setStartTime("23:00:00");
         booking.setEndTime("23:59:00");
@@ -178,7 +178,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void sortBooking_NewBooking_statusNotUpdated()
+    public void updateBookingStatus_statusNotUpdated_ifBookingDateInFuture()
             throws ParseException {
         Date date = new Date(today.getTime() + (1000 * 60 * 60 * 24));
         booking.setDate(Utility.getDateAsString(date));
@@ -187,7 +187,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void createNewBooking_returnBooking_ifBookingAdded() {
+    public void saveBooking_returnBooking_ifBookingAdded() {
         booking.setConfirmation(Confirmation.PENDING);
         bookingService.saveBooking(booking);
         Mockito.verify(bookingRepository,
@@ -195,7 +195,7 @@ public class BookingServiceTest {
     }
 
     @Test(expected = BookingException.class)
-    public void createNewBooking_throwException_ifBookingNotAdded()
+    public void saveBooking_throwException_ifBookingNotAdded()
             throws BookingException {
         Mockito.doThrow(new BookingException("Cannot create a booking"))
                 .when(bookingRepository)
@@ -204,13 +204,13 @@ public class BookingServiceTest {
     }
     
     @Test(expected = BookingException.class) 
-    public void createNewBooking_throwException_ifBookingStatusIsNotNew() {
+    public void saveBooking_throwException_ifBookingStatusIsNotNew() {
         booking.setStatus(BookingStatus.PAST_BOOKING);
         bookingService.saveBooking(booking);
     }
 
     @Test(expected = BookingException.class)
-    public void createNewBooking_throwException_ifConfirmationNotPending() {
+    public void saveBooking_throwException_ifConfirmationNotPending() {
         booking.setConfirmation(Confirmation.CANCELLED);
         bookingService.saveBooking(booking);
     }
@@ -263,7 +263,7 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void cancelBooking_updateBooking_ifCancellationIsValid() throws ParseException {
+    public void cancelBooking_updateBookingStatus_ifCancellationIsValid() throws ParseException {
         booking.setConfirmation(Confirmation.CONFIRMED);
         Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));
         booking.setDate(Utility.getDateAsString(date));
@@ -274,7 +274,7 @@ public class BookingServiceTest {
     }
 
     @Test(expected = BookingException.class)
-    public void cancelBooking_throwException_ifCannotUpdateBooking()
+    public void cancelBooking_throwException_ifCannotUpdateBookingStatus()
             throws BookingException, ParseException {
         booking.setConfirmation(Confirmation.CONFIRMED);
         Date date = new Date(today.getTime() + 4*(1000 * 60 * 60 * 24));

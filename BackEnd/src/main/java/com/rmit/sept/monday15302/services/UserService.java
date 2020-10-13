@@ -4,35 +4,24 @@ import com.rmit.sept.monday15302.Repositories.UserRepository;
 import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
-import com.rmit.sept.monday15302.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private MapValidationErrorService mapValidationErrorService;
-
-    @Autowired
-    private PasswordValidator passwordValidator;
-
-    @Autowired
-    private UserService userService;
-
     public boolean existsByUsername(String username) {
         User user = getUserByUsername(username);
-        if(user == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(user == null);
     }
 
     public User saveUser(User user) {
@@ -47,6 +36,13 @@ public class UserService {
     public void deleteById(String id) {
         User user = getUserById(id);
         userRepository.delete(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserName(username);
+        if(user==null) throw new UsernameNotFoundException("User not found");
+        return user;
     }
 
     public User getUserByUsername(String username) {

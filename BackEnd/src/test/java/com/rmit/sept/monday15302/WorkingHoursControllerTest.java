@@ -2,10 +2,9 @@ package com.rmit.sept.monday15302;
 
 import com.rmit.sept.monday15302.model.AdminDetails;
 import com.rmit.sept.monday15302.model.WorkingHours;
-import com.rmit.sept.monday15302.security.CustomAuthenticationSuccessHandler;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
-import com.rmit.sept.monday15302.services.CustomUserService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.services.WorkingHoursService;
 import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.WorkingHoursController;
@@ -41,13 +40,10 @@ public class WorkingHoursControllerTest {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @MockBean
-    private CustomUserService customUserService;
+    private UserService userService;
 
     @MockBean
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @MockBean
-    private CustomAuthenticationSuccessHandler successHandler;
 
     @MockBean
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -58,8 +54,7 @@ public class WorkingHoursControllerTest {
     private static String adminId = "a1";
 
     @Test
-    public void givenHours_whenGetOpeningHoursByAdminIdAndDay_thenReturnJsonArray()
-            throws Exception {
+    public void testGetOpeningHoursByAdminIdAndDay() throws Exception {
 
         int day = 1;
         AdminDetails admin = new AdminDetails();
@@ -78,7 +73,7 @@ public class WorkingHoursControllerTest {
     }
 
     @Test
-    public void checkNotifiedDate_returnTrueOrFalse_ifAuthorized() throws Exception {
+    public void isNotifiedDate_returnOKStatus_ifAuthorized() throws Exception {
         given(service.isNotifiedDate(adminId)).willReturn(true);
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(true);
         mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
@@ -88,7 +83,7 @@ public class WorkingHoursControllerTest {
     }
 
     @Test
-    public void checkNotifiedDate_throw401_ifUnauthorized() throws Exception {
+    public void isNotifiedDate_return401_ifUnauthorized() throws Exception {
         given(utility.isCurrentLoggedInUser(adminId)).willReturn(false);
         mvc.perform(get("/admin/checkNotifiedDate/{adminId}", adminId)
                 .contentType(MediaType.APPLICATION_JSON))

@@ -18,33 +18,32 @@ class Employees extends Component
         this.deleteWorker = this.deleteWorker.bind(this);
     }
 
-    deleteWorker(worker_id, token)
+    deleteWorker(worker_id)
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        WorkerAction.deleteWorker(worker_id, stored.id, token).then((res) =>
-        { 
-            this.setState(
-            {
-                allemployee: this.state.allemployee.filter(
-                    allemployee => allemployee.id !== worker_id)
+        if (stored && stored.role === "ROLE_ADMIN") {
+            WorkerAction.deleteWorker(worker_id, stored.id, stored.token).then((res) => {
+                this.setState(
+                    {
+                        allemployee: this.state.allemployee.filter(
+                            allemployee => allemployee.id !== worker_id)
+                    });
+                this.props.history.push('/employees');
+                alert("Employee is deleted successfully");
+            }).catch((err) => {
+                if (String(err.response.status) === "401") {
+                    console.log(err.response.status);
+                    localStorage.clear();
+                    alert("Session Expired");
+                    this.props.history.push('/login');
+                } else {
+                    console.log(err.response.data.message);
+                    this.setState({errorMessage: err.response.data.message});
+                }
             });
-            alert("Employee is deleted successfully");
-            this.props.history.push('/employees');
-        }, (err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
-                localStorage.clear();
-                alert("Session Expired");
-                this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
-                this.setState({errorMessage: err.response.data.message});
-            }
-        });
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 
     editWorker(worker_id)
