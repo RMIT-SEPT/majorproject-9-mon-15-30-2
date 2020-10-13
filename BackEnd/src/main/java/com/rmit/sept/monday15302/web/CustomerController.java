@@ -6,7 +6,6 @@ import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.EditCustomer;
 import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
 import com.rmit.sept.monday15302.utils.Utility;
-import com.rmit.sept.monday15302.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,9 +26,6 @@ public class CustomerController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
-
-    @Autowired
-    private PasswordValidator passwordValidator;
 
     @Autowired
     private UserService userService;
@@ -60,7 +56,7 @@ public class CustomerController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
 
-        passwordValidator.validate(passwordRequest, result);
+        utility.validatePassword(passwordRequest.getNewPassword(), passwordRequest.getConfirmPassword());
 
         if(utility.isCurrentLoggedInUser(id)) {
             return new ResponseEntity<>(userService.changeUserPassword(passwordRequest, id), HttpStatus.OK);

@@ -12,7 +12,7 @@ import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import com.rmit.sept.monday15302.utils.Request.LoginRequest;
 import com.rmit.sept.monday15302.utils.Response.JWTLoginSuccessResponse;
-import com.rmit.sept.monday15302.validator.UserValidator;
+import com.rmit.sept.monday15302.utils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,15 +43,15 @@ public class UserController {
     private CustomerDetailsService customerDetailsService;
 
     @Autowired
-    private UserValidator userValidator;
+    private JwtBlacklistRepository jwtBlacklistRepository;
 
     @Autowired
-    private JwtBlacklistRepository jwtBlacklistRepository;
+    private Utility utility;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody CustomerSignup customerSignup,
                                           BindingResult result) {
-        userValidator.validate(customerSignup, result);
+        utility.validatePassword(customerSignup.getPassword(), customerSignup.getConfirmPassword());
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
         String username = customerSignup.getUsername();

@@ -6,7 +6,6 @@ import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
@@ -19,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 import static com.rmit.sept.monday15302.security.SecurityConstant.HEADER_STRING;
 import static com.rmit.sept.monday15302.security.SecurityConstant.TOKEN_PREFIX;
@@ -59,19 +57,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null,
                             userDetails.getAuthorities());
-
-                String authorities = userDetails.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority).collect(Collectors.joining());
-                System.out.println("Authorities granted : " + authorities);
-
                 authentication.setDetails(new WebAuthenticationDetailsSource()
                         .buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            } else {
-                System.out.println("Not Valid Token");
             }
-
         } catch (Exception ex){
             logger.error("Could not set user authentication in security context", ex);
         }

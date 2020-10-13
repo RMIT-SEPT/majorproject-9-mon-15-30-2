@@ -11,7 +11,6 @@ import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.EditCustomer;
 import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
 import com.rmit.sept.monday15302.utils.Utility;
-import com.rmit.sept.monday15302.validator.PasswordValidator;
 import com.rmit.sept.monday15302.web.CustomerController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,9 +54,6 @@ public class CustomerControllerTest {
 
     @MockBean
     private MapValidationErrorService mapValidationErrorService;
-
-    @MockBean
-    private PasswordValidator passwordValidator;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 

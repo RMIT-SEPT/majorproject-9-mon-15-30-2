@@ -10,10 +10,13 @@ import com.rmit.sept.monday15302.model.UserType;
 import com.rmit.sept.monday15302.security.JwtAuthenticationEntryPoint;
 import com.rmit.sept.monday15302.security.JwtAuthenticationFilter;
 import com.rmit.sept.monday15302.security.JwtTokenProvider;
-import com.rmit.sept.monday15302.services.*;
+import com.rmit.sept.monday15302.services.CustomerDetailsService;
+import com.rmit.sept.monday15302.services.MapValidationErrorService;
+import com.rmit.sept.monday15302.services.SessionService;
+import com.rmit.sept.monday15302.services.UserService;
 import com.rmit.sept.monday15302.utils.Request.CustomerSignup;
 import com.rmit.sept.monday15302.utils.Request.LoginRequest;
-import com.rmit.sept.monday15302.validator.UserValidator;
+import com.rmit.sept.monday15302.utils.Utility;
 import com.rmit.sept.monday15302.web.UserController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +34,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.Errors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +53,10 @@ public class UserControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private CustomerDetailsService customerDetailsService;
+    private Utility utility;
 
     @MockBean
-    private UserValidator userValidator;
+    private CustomerDetailsService customerDetailsService;
 
     @MockBean
     private JwtBlacklistRepository jwtBlacklistRepository;
@@ -120,7 +122,7 @@ public class UserControllerTest {
 
     @Test
     public void register_throwException_ifPasswordInvalid() throws Exception {
-        doThrow(new UserException("")).when(userValidator).validate(Mockito.any(CustomerSignup.class), Mockito.any(Errors.class));
+        doThrow(new UserException("")).when(utility).validatePassword(Mockito.any(String.class), Mockito.any(String.class));
         String jsonString = objectMapper.writeValueAsString(signUp);
         mvc.perform(post("/api/users/register")
                 .content(jsonString)
