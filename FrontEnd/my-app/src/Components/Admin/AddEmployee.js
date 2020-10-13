@@ -43,10 +43,7 @@ class AddEmployee extends Component
             username: this.state.username,
             adminId: stored.id
         }
-<<<<<<< HEAD
         console.log(newEmployee);
-=======
->>>>>>> 51dda63a4d4203ae3a46f47181a65304c5154bf4
         WorkerAction.createNewWorker(newEmployee, stored.token).then((res) =>
         {
             alert("Employee successfully created");
