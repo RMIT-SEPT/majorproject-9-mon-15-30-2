@@ -19,8 +19,8 @@ localStorage.setItem("user", JSON.stringify(stored));
 describe('<HandleServices /> Unit test', () => 
 {
     it('local storage return role role_customer', async () => {
-        var stored1 = JSON.parse(localStorage.getItem("user"));
-        expect(stored1.role).toBe("ROLE_CUSTOMER");
+        var stored = JSON.parse(localStorage.getItem("user"));
+        expect(stored.role).toBe("ROLE_CUSTOMER");
     });
 
     it('get all services successfully', async () => {
@@ -34,9 +34,7 @@ describe('<HandleServices /> Unit test', () =>
         };
 
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
-        await expect(HandleService
-            .getAllServices(stored.token))
-            .resolves.toEqual(data);
+        await expect(HandleService.getAllServices(stored.token)).resolves.toEqual(data);
 
         expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/customer/makebooking/services", {"headers": {"Authorization": "dsfadf"}}
         );
@@ -62,9 +60,7 @@ describe('<HandleServices /> Unit test', () =>
         };
 
         axios.get.mockImplementationOnce(() => Promise.resolve(data));
-        await expect(HandleService
-            .getServiceByAdmin("4",stored.token))
-            .resolves.toEqual(data);
+        await expect(HandleService.getServiceByAdmin("4",stored.token)).resolves.toEqual(data);
 
         expect(axios.get).toHaveBeenCalledWith("http://localhost:8080/admin/service/4", {"headers": {"Authorization": "dsfadf"}}
         );        
@@ -79,4 +75,5 @@ describe('<HandleServices /> Unit test', () =>
         await expect(HandleService.getServiceByAdmin("4",stored.token))
             .rejects.toThrow(errorMessage);
     });
-})
+    
+});

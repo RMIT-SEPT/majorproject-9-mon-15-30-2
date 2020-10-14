@@ -7,6 +7,13 @@ import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+var stored = {
+    success:"true",
+    token: "token",
+    role: "ROLE_ADMIN",
+    id:"1" }
+localStorage.setItem("user", JSON.stringify(stored));
+
 const id1 = "a";
 const params1 = 
 {
@@ -17,12 +24,7 @@ const match1 =
     params:params1
 }
 
-var stored = {
-    success:"true",
-    token: "token",
-    role: "ROLE_ADMIN",
-    id:"1" }
-    localStorage.setItem("user", JSON.stringify(stored))
+
 
 class Ev extends Component{
     constructor(){
@@ -83,7 +85,6 @@ describe('<Employees /> Unit Test', () =>
         jest.spyOn(window, 'alert').mockImplementation(() => {});
         jest.spyOn(console, 'log').mockImplementation(() => {});
 
-        // const newBooking = new NewBookings();
         const props1 = 
         {
             match: match1,
@@ -96,17 +97,14 @@ describe('<Employees /> Unit Test', () =>
         wrapper.instance().deleteWorker();
 
         expect(axios.delete).toHaveBeenCalled();
-
         expect(wrapper.instance().state).toStrictEqual(responce1);
-        expect(console.log).toHaveBeenCalled();
-
         expect(wrapper.instance().props.history).toHaveLength(0);
     });
 
     it('editWorker', () =>
     {
-        jest.spyOn(axios, 'delete').mockResolvedValueOnce(responce1);
-
+        jest.spyOn(axios, 'put').mockResolvedValueOnce(responce1);
+        
         const props1 = 
         {
             match: match1,
@@ -120,4 +118,22 @@ describe('<Employees /> Unit Test', () =>
 
         expect(wrapper.instance().props.history).toHaveLength(1);
     });
-})
+
+    it('component', () => 
+    {
+        
+        const props1 =
+        {
+            match: match1,
+            history: []
+        }
+        const wrapper = shallow(<Employees {...props1}/>);
+        const ev = new Ev;
+        const instance = wrapper.instance();
+        jest.spyOn(instance, 'componentDidMount');
+        instance.state.allemployee.push(employee1);
+        instance.componentDidMount();
+
+        expect(instance.componentDidMount).toHaveBeenCalled();
+    });
+});

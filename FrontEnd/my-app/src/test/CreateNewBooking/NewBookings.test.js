@@ -239,7 +239,7 @@ describe('If onSubmit, alert are being called and successfully pushed', () => {
         jest.spyOn(instance, 'onSubmit');
         instance.onSubmit(ev);
         expect(instance.onSubmit).toHaveBeenCalledTimes(1);
-        expect(window.alert).toHaveBeenCalledWith("Booking successful");
+        expect(window.alert).toHaveBeenCalledWith("New booking is created successfully");
     });
 });
 

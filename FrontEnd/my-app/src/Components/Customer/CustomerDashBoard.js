@@ -27,6 +27,7 @@ class NavigationBar extends Component
 
     render() 
     {
+        console.log("********************************hi");
         return (
             <div>
                 <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">

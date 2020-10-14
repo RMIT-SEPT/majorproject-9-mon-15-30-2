@@ -79,7 +79,6 @@ class ViewAllBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleBookings.getNewBookingsByAdminID(stored.id, stored.token).then((res) => 

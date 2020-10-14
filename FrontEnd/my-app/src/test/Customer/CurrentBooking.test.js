@@ -3,6 +3,7 @@ import {shallow, mount} from "enzyme";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import CurrentBookings from "../../Components/Customer/CurrentBookings";
+import axios from 'axios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -23,7 +24,6 @@ describe('<CurrentBooking /> Unit Test', () =>
         expect(wrapper.find('.container')).toHaveLength(1);
         expect(wrapper.find('.alert')).toHaveLength(1);
     });
-
 
     it('testing currentbooking', () => 
     {
@@ -67,7 +67,7 @@ describe('<CurrentBooking /> Unit Test', () =>
     });
 });
 
-describe('<BookingHistory /> Unit Test Actions', () =>
+describe('<CurrentBooking /> Unit Test Actions', () =>
 {
     let wrapper;
 
@@ -93,4 +93,20 @@ describe('<BookingHistory /> Unit Test Actions', () =>
         expect(instance.componentDidMount).toHaveBeenCalled();
     });
 });
+
+describe('<CurrentBooking /> Unit Test more functions', () => 
+{
+    it('cancelbooking and axios put when call cancel booking', () => 
+    {
+        const wrapper = shallow(<CurrentBookings />);
+        const instance = wrapper.instance();
+
+        jest.spyOn(instance, 'cancelbooking');
+        jest.spyOn(axios, 'put');
+        instance.cancelbooking(1);
+
+        expect(instance.cancelbooking).toHaveBeenCalled();
+        expect(axios.put).toHaveBeenCalled();
+    });
+})
 

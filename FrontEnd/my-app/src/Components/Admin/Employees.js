@@ -30,6 +30,7 @@ class Employees extends Component
                     });
                 this.props.history.push('/employees');
                 alert("Employee is deleted successfully");
+                console.log("Success");
             }).catch((err) => {
                 if (String(err.response.status) === "401") {
                     console.log(err.response.status);
