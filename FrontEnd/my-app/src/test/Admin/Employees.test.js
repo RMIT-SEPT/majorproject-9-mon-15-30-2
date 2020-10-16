@@ -103,7 +103,7 @@ describe('<Employees /> Unit Test', () =>
 
     it('editWorker', () =>
     {
-        jest.spyOn(axios, 'put').mockResolvedValueOnce(responce1);
+        // jest.spyOn(axios, 'put').mockResolvedValueOnce(responce1);
         
         const props1 = 
         {
@@ -121,7 +121,6 @@ describe('<Employees /> Unit Test', () =>
 
     it('component', () => 
     {
-        
         const props1 =
         {
             match: match1,

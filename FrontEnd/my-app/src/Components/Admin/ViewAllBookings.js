@@ -33,9 +33,12 @@ class ViewAllBookings extends Component
             window.location.reload();
         }).catch((err) => 
         {
-            if(String(err.response.status) === "401")
+            if(err.isAxiosError)
             {
-                console.log(err.response.status);
+                console.log("no connection");
+            }
+            else if(String(err.response.status) === "401")
+            {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -61,9 +64,12 @@ class ViewAllBookings extends Component
             window.location.reload();
         }).catch((err) => 
         {
-            if(String(err.response.status) === "401")
+            if(err.isAxiosError)
             {
-                console.log(err.response.status);
+                console.log("no connection");
+            }
+            else if(String(err.response.status) === "401")
+            {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -79,6 +85,7 @@ class ViewAllBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleBookings.getNewBookingsByAdminID(stored.id, stored.token).then((res) => 
@@ -98,7 +105,11 @@ class ViewAllBookings extends Component
                 
             }).catch((err) =>
             {
-                if(String(err.response.status) === "401")
+                if(err.isAxiosError)
+                {
+                    console.log("no connection");
+                }
+                else if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();
@@ -116,7 +127,11 @@ class ViewAllBookings extends Component
                 this.setState({pastbookings: res.data});
             }).catch((err) => 
             {
-                if(String(err.response.status) === "401")
+                if(err.isAxiosError)
+                {
+                    console.log("no connection");
+                }
+                else if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();

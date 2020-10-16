@@ -44,7 +44,11 @@ class UpdatePassword extends Component
             });
         }).catch((err) => 
         {
-            if(String(err.response.status) === "401")
+            if(err.isAxiosError)
+            {
+                console.log("no connection");
+            }
+            else if(String(err.response.status) === "401")
             {
                 console.log(err.response.status);
                 localStorage.clear();
@@ -66,7 +70,6 @@ class UpdatePassword extends Component
     onSave = (e) => 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        e.preventDefault();
         let updatedDetail =
         {
             oldPassword: this.state.oldPassword,
@@ -85,7 +88,11 @@ class UpdatePassword extends Component
             alert("Password updated successfully");
         }, (err) => 
         {
-            if (String(err.response.status) === "401")
+            if(err.isAxiosError)
+            {
+                console.log("no connection");
+            }
+            else if (String(err.response.status) === "401")
             {
                 localStorage.clear();
                 alert("Session Expired");
@@ -126,7 +133,7 @@ class UpdatePassword extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_CUSTOMER" && this.state.id === stored.id)
+        if (stored && stored.role === "ROLE_CUSTOMER")
         {
             return (
                 <React.Fragment>

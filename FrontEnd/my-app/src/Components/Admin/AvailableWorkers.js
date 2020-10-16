@@ -51,6 +51,7 @@ class AvailableWorkers extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
+        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleWorkers.getWorkersByAdmin(stored.id, stored.token).then((res) =>
@@ -59,7 +60,11 @@ class AvailableWorkers extends Component
                 console.log(res.data);
             }).catch((err) =>
             {
-                if(String(err.response.status) === "401")
+                if(err.isAxiosError)
+                {
+                    console.log("no connection");
+                }
+                else if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();
@@ -110,8 +115,8 @@ class AvailableWorkers extends Component
                             {
                                 this.state.allworkersbyadminid.map(
                                     allworkersbyadminid => 
-                                    <React.Fragment>
-                                    <div>
+                                    <React.Fragment key= {allworkersbyadminid.id}>
+                                    <div className="worker_container" >
                                         <button className="btn btn-secondary btn-lg btn-block mb-3" key = {allworkersbyadminid.id} id={"toggler"+allworkersbyadminid.id} onClick={() => this.handleGetSessionByWorkerID(allworkersbyadminid.id, stored.id, stored.token)}>
                                             {allworkersbyadminid.fName}     {allworkersbyadminid.lName}
                                         </button>

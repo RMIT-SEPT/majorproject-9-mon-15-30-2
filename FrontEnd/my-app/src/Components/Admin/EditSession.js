@@ -30,7 +30,7 @@ class EditSession extends Component
 
     updateSession(e)
     {
-        e.preventDefault();
+        // e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
         let editsession = 
         {
@@ -122,7 +122,11 @@ class EditSession extends Component
 
             }).catch((err) => 
             {
-                if(String(err.response.status) === "401")
+                if(err.isAxiosError)
+                {
+                    console.log("no connection");
+                }
+                else if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();
@@ -297,6 +301,10 @@ class EditSession extends Component
                     </div>
                 </React.Fragment>
             )
+        }
+        else
+        {
+            return <Redirect to="/"/>
         }
     }
 }
