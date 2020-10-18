@@ -54,7 +54,6 @@ class AddEmployee extends Component
                 alert("Session Expired");
                 this.props.history.push('/login');
             } else {
-                alert("Employee unsuccessfully created");
                 this.setState({errorMessage: err.response.data.message});
             }
         });
