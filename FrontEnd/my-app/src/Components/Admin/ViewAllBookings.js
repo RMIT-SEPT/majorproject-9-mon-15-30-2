@@ -22,7 +22,6 @@ class ViewAllBookings extends Component
 
     confirmBooking(booking_id, token)
     {
-        console.log("confirm: "+booking_id);
         let bookingResponse =
         {
             status: "NEW_BOOKING",
@@ -31,17 +30,12 @@ class ViewAllBookings extends Component
         HandleBookings.confirmBooking(booking_id, bookingResponse, token).then((res) => 
         {
             window.location.reload();
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
+            } else {
                 alert(err.response.data.message);
             }
         });
@@ -49,7 +43,6 @@ class ViewAllBookings extends Component
 
     rejectBooking(booking_id, token)
     {
-        console.log("reject: "+ booking_id);
         let bookingResponse =
         {
             status: "CANCELLED_BOOKING",
@@ -58,17 +51,12 @@ class ViewAllBookings extends Component
         HandleBookings.confirmBooking(booking_id, bookingResponse, token).then((res) => 
         {
             window.location.reload();
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
+            } else {
                 alert(err.response.data.message);
             }
         });
@@ -77,53 +65,34 @@ class ViewAllBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        
-        if(stored && stored.role === "ROLE_ADMIN")
-        {
-            HandleBookings.getNewBookingsByAdminID(stored.id, stored.token).then((res) => 
-            {
-                for(var i=0; i < res.data.length; i++)
-                {
-                    if(res.data[i].confirmation === "CONFIRMED")
-                    {
-                        console.log(res.data[i]);
+        if(stored && stored.role === "ROLE_ADMIN") {
+            HandleBookings.getNewBookingsByAdminID(stored.id, stored.token).then((res) => {
+                for(var i=0; i < res.data.length; i++) {
+                    if(res.data[i].confirmation === "CONFIRMED") {
                         this.setState({newbookings: this.state.newbookings.concat(res.data[i])});
-                    }
-                    else if(res.data[i].confirmation === "PENDING")
-                    {
+                    } else if(res.data[i].confirmation === "PENDING") {
                         this.setState({pendingbookings: this.state.pendingbookings.concat(res.data[i])});
                     }
                 }
-                
-            }).catch((err) =>
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+            }).catch((err) => {
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
+                } else {
                     console.log(err.response.data.message);
                 }
             });
 
-            HandleBookings.getPastBookingsByAdminID(stored.id, stored.token).then((res) => 
-            {   
+            HandleBookings.getPastBookingsByAdminID(stored.id, stored.token).then((res) => {
                 this.setState({pastbookings: res.data});
             }).catch((err) => 
             {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
+                } else {
                     console.log(err.response.data.message);
                 }
             });
@@ -134,13 +103,10 @@ class ViewAllBookings extends Component
         }
     }
 
-    render()
-    {
+    render() {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if(stored && stored.role === "ROLE_ADMIN")
-        {
-            if(this.state.pendingbookings <= 0 && this.state.newbookings <= 0 && this.state.pastbookings <= 0)
-            {
+        if(stored && stored.role === "ROLE_ADMIN") {
+            if(this.state.pendingbookings <= 0 && this.state.newbookings <= 0 && this.state.pastbookings <= 0) {
                 return(
                     <React.Fragment>
                         <AdminDashboard/>
@@ -151,9 +117,7 @@ class ViewAllBookings extends Component
                         </div>
                     </React.Fragment>
                 )
-            }
-            else
-            {
+            } else {
                 return(
                     <React.Fragment>
                         <AdminDashboard/>

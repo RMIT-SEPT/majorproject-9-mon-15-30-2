@@ -62,7 +62,6 @@ class NewBookings extends Component
         {
             if(!res.data.empty)
             {
-                console.log(res.data);
                 this.setState({ allworker: res.data});
             }
             else
@@ -73,7 +72,6 @@ class NewBookings extends Component
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -91,7 +89,6 @@ class NewBookings extends Component
         {
             if(!res.data.empty)
             {
-                console.log(res.data);
                 this.setState({ availableSessions: res.data});
             }
             else
@@ -102,7 +99,6 @@ class NewBookings extends Component
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -152,23 +148,16 @@ class NewBookings extends Component
             service: this.state.service,
             confirmation: "PENDING"
         }
-        console.log(newbooking);
-        CreateBooking.createBooking(newbooking, stored.token).then((res) => 
+        CreateBooking.createBooking(newbooking, stored.token).then((res) =>
         {
             alert("New booking is created successfully");
             this.props.history.push("/currentbookings");
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
+            } else {
                 this.setState({errorMessage: err.response.data.message});
                 alert(err.response.data.message);
                 this.props.history.push("/newbooking");
@@ -179,20 +168,15 @@ class NewBookings extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
-        console.log(stored);
-        console.log(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             Services.getAllServices(stored.token).then((res) => 
             {
                 this.setState({allservices: res.data});
-                console.log(res.data);
-            }, (err) => 
+            }, (err) =>
             {
                 if(String(err.response.status) === "401")
                 {
-                    console.log(err.response.status);
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');

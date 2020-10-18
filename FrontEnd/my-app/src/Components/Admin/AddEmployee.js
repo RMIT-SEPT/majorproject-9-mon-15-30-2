@@ -43,24 +43,18 @@ class AddEmployee extends Component
             username: this.state.username,
             adminId: stored.id
         }
-        console.log(newEmployee);
         WorkerAction.createNewWorker(newEmployee, stored.token).then((res) =>
         {
             alert("Employee successfully created");
             this.props.history.push('/employees');
         }).catch((err) =>
         {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 alert("Employee unsuccessfully created");
-                console.log(err.response.data.message);
                 this.setState({errorMessage: err.response.data.message});
             }
         });

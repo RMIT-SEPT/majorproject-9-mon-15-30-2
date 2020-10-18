@@ -31,8 +31,7 @@ class Login extends Component
             username: this.state.username,
             password: this.state.password
         }
-        console.log(loginDetail);
-        SignUp.Login(loginDetail).then((res) => 
+        SignUp.Login(loginDetail).then((res) =>
         {
             localStorage.clear();
             localStorage.setItem("user", JSON.stringify(res.data)) 
@@ -43,7 +42,6 @@ class Login extends Component
             if(String(err.response.status) === "401")
             {
                 this.setState({errorMessage: "Username or password is incorrect."});
-                console.log("error "+err.response.status+": Username or password is incorrect.");
             }
         });
     }

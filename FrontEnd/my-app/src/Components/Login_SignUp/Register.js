@@ -46,14 +46,12 @@ class NewBookings extends Component
             address: this.state.address,
             phoneNumber: this.state.phoneNumber
         }
-        console.log(newCustomer);
-        SignUp.Registering(newCustomer).then((res) => 
+        SignUp.Registering(newCustomer).then((res) =>
         {
             alert("Register successfully");
             this.props.history.push("/login");
         }, (err) => 
         {
-            console.log(err.response.data);
             this.setState({errorMessage: err.response.data.message});
         });
     }

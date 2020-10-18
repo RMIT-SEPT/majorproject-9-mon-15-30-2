@@ -28,8 +28,7 @@ class EditSession extends Component
         this.dayselectionChange = this.dayselectionChange.bind(this);
     }
 
-    updateSession(e)
-    {
+    updateSession(e) {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
         let editsession = 
@@ -43,32 +42,21 @@ class EditSession extends Component
         {
             alert("Session updated successfully");
             this.props.history.push('/managessessions');
-        }).catch((err) =>
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 alert(err.response.data.message);
-                console.log(err.response.data.message);
             }
         });
-
-        
     }
 
-    componentDidMount()
-    {
+    componentDidMount() {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if(stored && stored.role === "ROLE_ADMIN")
-        {
-            HandleSession.getSessionBySessionIdAndAdminId(this.state.id, stored.id, stored.token).then((res) => 
-            {
+        if(stored && stored.role === "ROLE_ADMIN") {
+            HandleSession.getSessionBySessionIdAndAdminId(this.state.id, stored.id, stored.token).then((res) => {
                 let editsession = res.data;
                 this.setState({
                     id: editsession.id,
@@ -81,21 +69,14 @@ class EditSession extends Component
                     service: editsession.service
                 });
 
-                HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, this.state.day, stored.token).then((res) => 
-                {
+                HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, this.state.day, stored.token).then((res) => {
                     this.setState({allavailablesessions: res.data});
-                }).catch((err) => 
-                {
-                    if(String(err.response.status) === "401")
-                    {
-                        console.log(err.response.status);
+                }).catch((err) => {
+                    if(String(err.response.status) === "401") {
                         localStorage.clear();
                         alert("Session Expired");
                         this.props.history.push('/login');
-                    }
-                    else
-                    {
-                        console.log(err.response.data.message);
+                    } else {
                         this.setState({allavailablesessions: null});
                     }
                 });
@@ -103,34 +84,23 @@ class EditSession extends Component
                 HandleSession.getOpeningHoursByAdminAndDay(stored.id, this.state.day, stored.token).then((res) =>
                 {
                     this.setState({openinghours: res.data});
-
                 }).catch((err) => 
                 {
-                    if(String(err.response.status) === "401")
-                    {
-                        console.log(err.response.status);
+                    if(String(err.response.status) === "401") {
                         localStorage.clear();
                         alert("Session Expired");
                         this.props.history.push('/login');
-                    }
-                    else
-                    {
+                    } else {
                         this.setState({openinghours: null});
-                        console.log(err.response.data.message);
                     }
                 });
-
             }).catch((err) => 
             {   
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
+                } else {
                     this.props.history.push('/managessessions');
                 }
             });
@@ -141,52 +111,37 @@ class EditSession extends Component
         }
     }
 
-    onChange(e)
-    {
+    onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    dayselectionChange(e)
-    {
+    dayselectionChange(e) {
         var stored = JSON.parse(localStorage.getItem("user"));
         this.setState({[e.target.name]: e.target.value});
         const selectedDay = e.target.value;
         HandleSession.getAvailableSessionByWorkerIdAndDay(this.state.workerId, selectedDay, stored.token).then((res) => 
         {
             this.setState({allavailablesessions: res.data});
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
+            } else {
                 this.setState({allavailablesessions: null});
             }
         });
 
-        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) =>
-        {
+        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) => {
             this.setState({openinghours: res.data});
 
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 this.setState({openinghours: null});
-                console.log(err.response.data.message);
             }
         });
     }
@@ -224,7 +179,6 @@ class EditSession extends Component
                                     <h6>Day</h6>
                                     <div className="form-group">
                                     <select id="inputState" className="form-control" name="day" value={this.state.day}  onChange={this.dayselectionChange} required>
-                                        <option value="unknown" defaultValue>Choose Day</option>
                                         <option className="day" value="1">Sunday</option>
                                         <option className="day"  value="2">Monday</option>
                                         <option className="day"  value="3">Tuesday</option>

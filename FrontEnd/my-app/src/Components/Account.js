@@ -59,12 +59,10 @@ class Account extends Component
                 profile: res.data,
                 id: storedId
             });
-            console.log(res.data);
-        }, (err) => 
+        }, (err) =>
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -80,12 +78,10 @@ class Account extends Component
             {
                 profile: res.data
             });
-            console.log(res.data);
-        }, (err) => 
+        }, (err) =>
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -101,13 +97,10 @@ class Account extends Component
             {
                 session: res.data
             });
-            console.log(res.data);
-        }, (err) => 
+        }, (err) =>
         {
-            console.log(err.response);
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');

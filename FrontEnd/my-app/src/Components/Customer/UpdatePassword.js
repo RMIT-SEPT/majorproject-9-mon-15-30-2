@@ -22,49 +22,38 @@ class UpdatePassword extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_CUSTOMER" ) 
-        {
+        if (stored && stored.role === "ROLE_CUSTOMER" ) {
             this.getCustomerDetail(stored.id, stored.token);
-        }
-        else
-        {
+        } else {
             return <Redirect to="/"/>
         }
     }
 
     getCustomerDetail(storedId, token)
     {
-        return CustomerAction.getProfile(storedId, token).then((res) =>
-        {
+        return CustomerAction.getProfile(storedId, token).then((res) => {
             let customerDetail = res.data;
             this.setState(
             {
                 id: this.state.id,
                 username: customerDetail.username
             });
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 this.props.history.push('/account');
             }
         });
     }
 
-    onChange(e)
-    {
+    onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    onSave = (e) => 
-    {
+    onSave = (e) => {
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
         let updatedDetail =
@@ -73,45 +62,29 @@ class UpdatePassword extends Component
             newPassword: this.state.newPassword,
             confirmPassword: this.state.confirmPassword
         };
-        console.log(updatedDetail);
         this.UpdatePassword(stored.id, stored.token, updatedDetail);
     }
 
     UpdatePassword(storedId, token, newPassword)
     {
-        return CustomerAction.updatePassword(storedId, token, newPassword).then((res) => 
-        { 
+        return CustomerAction.updatePassword(storedId, token, newPassword).then((res) => {
             this.props.history.push('/account');
             alert("Password updated successfully");
-        }, (err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
+        }, (err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response);
-                if (err.response.data.oldPassword)
-                {
-                    console.log(err.response.data.oldPassword);
+            } else {
+                if (err.response.data.oldPassword) {
                     this.setState({errorMessage: "Old Password: "+err.response.data.oldPassword});
                 }
-                else if (err.response.data.newPassword)
-                {
-                    console.log(err.response.data.newPassword);
+                else if (err.response.data.newPassword) {
                     this.setState({errorMessage: "New Password: "+err.response.data.newPassword});
                 }
-                else if (err.response.data.confirmPassword)
-                {
-                    console.log(err.response.data.confirmPassword);
+                else if (err.response.data.confirmPassword) {
                     this.setState({errorMessage: "Confirm Password: "+err.response.data.confirmPassword});
-                }
-                else
-                {
-                    console.log(err.response.data.message);
+                } else {
                     this.setState({errorMessage: err.response.data.message});
                 }
             }

@@ -21,21 +21,14 @@ class BookingHistory extends Component
         var stored = JSON.parse(localStorage.getItem("user"));
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            GetPastBookings.getPastBookingById(stored.id, stored.token).then((res) =>
-            {
+            GetPastBookings.getPastBookingById(stored.id, stored.token).then((res) => {
                 this.setState({pastBookings: res.data});
-                console.log(res.data);
-            }).catch((err) =>
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+            }).catch((err) => {
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
+                } else {
                     console.log(err.response.data.message);
                 }
             });
@@ -49,14 +42,12 @@ class BookingHistory extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.role);
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
             return(
                 <React.Fragment>
                     <CustomerDashboard/>
                     <div className = "container">
-
                         {
                             this.state.pastBookings.length > 0 && 
                             <Table className="table" striped bordered hover size="sm">

@@ -26,12 +26,10 @@ class AvailableWorkers extends Component
         HandleSessions.getSessionInAWeekByWorkerIDAndAdminID(worker_id, admin_id, token).then((res) =>
         {
             this.setState({sessionbyworkerid: res.data});
-            console.log(res.data);
         }).catch((err) =>
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -51,18 +49,15 @@ class AvailableWorkers extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        console.log(stored.token);
         if(stored && stored.role === "ROLE_ADMIN")
         {
             HandleWorkers.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 this.setState({allworkersbyadminid: res.data});
-                console.log(res.data);
             }).catch((err) =>
             {
                 if(String(err.response.status) === "401")
                 {
-                    console.log(err.response.status);
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');

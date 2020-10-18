@@ -14,16 +14,12 @@ class DashboardWorker extends Component
     {
         HandleLogout.Logout().then((response) =>
         {
-            console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(response);
             alert("Logout successfully");
             this.props.history.push('/');
         }).catch((error) =>
         {
-            console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(error);
             alert("Session expired");
             this.props.history.push('/');
         });

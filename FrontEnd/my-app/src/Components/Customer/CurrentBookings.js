@@ -28,7 +28,6 @@ class CurrentBookings extends Component
         {
             if(String(err.response.status) === "401")
             {
-                console.log(err.response.status);
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
@@ -36,7 +35,6 @@ class CurrentBookings extends Component
             else
             {
                 alert(err.response.data.message);
-                console.log(err.response);
             }
         });
     }
@@ -49,12 +47,10 @@ class CurrentBookings extends Component
             GetBookings.getNewBookingById(stored.id, stored.token).then((res) =>
             {
                 this.setState({currentBookings: res.data});
-                console.log(res.data);
             }).catch((err) =>
             {
                 if(String(err.response.status) === "401")
                 {
-                    console.log(err.response.status);
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
@@ -71,14 +67,11 @@ class CurrentBookings extends Component
         }
     }
 
-    render() 
-    {
+    render() {
         var stored = JSON.parse(localStorage.getItem("user"));
-
         if (stored && stored.role === "ROLE_CUSTOMER")
         {
-            if(this.state.currentBookings <= 0)
-            {
+            if(this.state.currentBookings <= 0) {
                 return(
                     <React.Fragment>
                         <CustomerDashboard/>
@@ -89,9 +82,7 @@ class CurrentBookings extends Component
                         </div>
                     </React.Fragment>
                 )
-            }
-            else
-            {
+            } else {
                 return(
                     <React.Fragment>
                         <CustomerDashboard/>

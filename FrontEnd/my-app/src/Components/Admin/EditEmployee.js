@@ -40,18 +40,12 @@ class EditEmployee extends Component
                     username: editEmployee.username,
                     adminId: editEmployee.adminId
                 });
-            }).catch((err) => 
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+            }).catch((err) => {
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
-                    // Render page not found
+                } else {
                     this.props.history.push('/employees');
                 }
             });

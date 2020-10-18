@@ -30,15 +30,12 @@ class Employees extends Component
                     });
                 this.props.history.push('/employees');
                 alert("Employee is deleted successfully");
-                console.log("Success");
             }).catch((err) => {
                 if (String(err.response.status) === "401") {
-                    console.log(err.response.status);
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
                 } else {
-                    console.log(err.response.data.message);
                     this.setState({errorMessage: err.response.data.message});
                 }
             });
@@ -60,23 +57,16 @@ class Employees extends Component
             WorkerAction.getWorkersByAdmin(stored.id, stored.token).then((res) =>
             {
                 this.setState({allemployee: res.data});
-            },(err) =>
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+            },(err) => {
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
-                }
-                else
-                {
+                } else {
                     console.log(err.response.data.message);
                 }
             });
-        }
-        else
-        {
+        } else {
             return <Redirect to="/"/>
         }
     }
@@ -84,10 +74,8 @@ class Employees extends Component
     render() 
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_ADMIN")
-        {
-            if(this.state.allemployee.length <= 0)
-            {
+        if (stored && stored.role === "ROLE_ADMIN") {
+            if(this.state.allemployee.length <= 0) {
                 return(
                     <React.Fragment>
                         <AdminDashboard/>
@@ -98,9 +86,7 @@ class Employees extends Component
                         </div>
                     </React.Fragment>
                 )
-            }
-            else
-            {
+            } else {
                 return(
                     <React.Fragment>
                         <AdminDashboard/>

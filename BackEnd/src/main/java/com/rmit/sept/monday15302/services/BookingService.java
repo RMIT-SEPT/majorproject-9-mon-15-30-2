@@ -167,7 +167,7 @@ public class BookingService {
                 throw new BookingException("Cannot cancel booking");
             }
         } else {
-            throw new BookingException("Cannot cancel a booking. It is not within 48 hours");
+            throw new BookingException("Cannot cancel a booking. It is within 48 hours");
         }
     }
 
@@ -179,19 +179,26 @@ public class BookingService {
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Australia/Sydney"));
         cal.setTime(currentDate);
         int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+        int currentMonth = cal.get(Calendar.MONTH);
 
         cal.setTime(bookingDate);
         int bookingDay = cal.get(Calendar.DAY_OF_MONTH);
+        int bookingMonth = cal.get(Calendar.MONTH);
 
         int days = bookingDay - currentDay;
-        if(days > 2) {
+        int months = bookingMonth - currentMonth;
+        if(months > 0) {
             within = false;
-        } else if(days == 2) {
-            String timeAsString = Utility.getTimeAsString(currentDate);
-            Date currentTime = Utility.convertStringToTime(timeAsString);
-            Date bookingTime = booking.getStartTime();
-            if(currentTime.getTime() <= bookingTime.getTime()) {
+        } else if(months == 0) {
+            if(days > 2) {
                 within = false;
+            } else if(days == 2) {
+                String timeAsString = Utility.getTimeAsString(currentDate);
+                Date currentTime = Utility.convertStringToTime(timeAsString);
+                Date bookingTime = booking.getStartTime();
+                if (currentTime.getTime() <= bookingTime.getTime()) {
+                    within = false;
+                }
             }
         }
         return within;

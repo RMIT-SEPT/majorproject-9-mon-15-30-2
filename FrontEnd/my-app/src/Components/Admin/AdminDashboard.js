@@ -16,14 +16,12 @@ class AdminDashboard extends Component
         {
             console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(response);
             this.props.history.push("/");
             alert("Logout successfully");
         }, (error) =>
         {
             console.log(localStorage.getItem("user"));
             window.localStorage.clear();
-            console.log(error);
             alert("Session expired");
             this.props.history.push('/');
         });

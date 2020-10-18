@@ -30,24 +30,6 @@ class ManagesSessions extends Component
         {
             HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
             {
-                this.setState({notifiedDate: res.data});
-                console.log(res.data)
-            }).catch((err) => 
-            {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
-                    localStorage.clear();
-                    alert("Session Expired");
-                    this.props.history.push('/login');
-                }
-                else
-                {
-                    console.log(err.response.data.message);
-                }
-            });
-            HandleSessions.getAllSessionsByAdminId(stored.id, stored.token).then((res) =>
-            {
                 this.setState({availablesessions: res.data});
                 console.log(res.data);
                 

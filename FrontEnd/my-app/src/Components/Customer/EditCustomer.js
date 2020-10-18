@@ -24,12 +24,9 @@ class EditCustomer extends Component
     componentDidMount()
     {
         var stored = JSON.parse(localStorage.getItem("user"));
-        if (stored && stored.role === "ROLE_CUSTOMER") 
-        {
+        if (stored && stored.role === "ROLE_CUSTOMER") {
             this.getCustomerDetail(stored.id, stored.token);
-        }
-        else
-        {
+        } else {
             return <Redirect to="/"/>
         }
     }
@@ -51,19 +48,13 @@ class EditCustomer extends Component
             });
         }).catch((err) => 
         {
-            if(err.isAxiosError)
-            {
+            if(err.isAxiosError) {
                 console.log("no connection");
-            }
-            else if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+            } else if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 this.props.history.push('/account');
             }
         });
@@ -87,7 +78,6 @@ class EditCustomer extends Component
             phoneNumber: this.state.phoneNumber,
             username: this.state.username
         };
-        console.log(EditCustomer);
         this.updateCustomer(stored.id, stored.token, EditCustomer);
     }
 
@@ -97,26 +87,16 @@ class EditCustomer extends Component
         { 
             this.props.history.push('/account');
             alert("Customer details are updated successfully");
-        }, (err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
+        }, (err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
             }
-            else
-            {
-                console.log(err.response);
-                
-                if (err.response.data.message)
-                {
-                    console.log(err.response.data.message)
+            else {
+                if (err.response.data.message) {
                     this.setState({errorMessage: err.response.data.message});
-                }
-                else if (err.response.data.phoneNumber)
-                {
-                    console.log(err.response.data.phoneNumber);
+                } else if (err.response.data.phoneNumber) {
                     this.setState({errorMessage: "Phone Number: "+err.response.data.phoneNumber});
                 }
             }

@@ -43,38 +43,25 @@ class CreateSession extends Component
         HandleSession.getAvailableSessionByWorkerIdAndDay(selectedworker_id, selectedDay, stored.token).then((res) => 
         {
             this.setState({allavailablesessions: res.data});
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
-                console.log(err.response.data.message);
+            } else {
                 this.setState({allavailablesessions: null});
             }
         });
         
-        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) =>
-        {
+        HandleSession.getOpeningHoursByAdminAndDay(stored.id, selectedDay, stored.token).then((res) => {
             this.setState({openinghours: res.data});
-        }).catch((err) => 
-        {
-            if(String(err.response.status) === "401")
-            {
-                console.log(err.response.status);
+        }).catch((err) => {
+            if(String(err.response.status) === "401") {
                 localStorage.clear();
                 alert("Session Expired");
                 this.props.history.push('/login');
-            }
-            else
-            {
+            } else {
                 this.setState({openinghours: null});
-                console.log(err.response.data.message);
             }
         })
     }
@@ -83,8 +70,7 @@ class CreateSession extends Component
         e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
         let message = "Invalid start time or end time";
-        try 
-        {
+        try {
             let startTime_hours = this.state.startTime.substring(0,2);
             let startTime_minutes = this.state.startTime.substring(3,5);
 
@@ -106,8 +92,7 @@ class CreateSession extends Component
                     endTime : this.state.endTime + ":00",
                     workerId : this.state.workerId
                 }
-                console.log(newsession);
-                HandleSession.createNewSession(newsession, stored.token).then((res) => 
+                HandleSession.createNewSession(newsession, stored.token).then((res) =>
                 {
                     this.props.history.push('/');
                     alert("New session is created successfully");
@@ -115,7 +100,6 @@ class CreateSession extends Component
                 {
                     if(String(err.response.status) === "401")
                     {
-                        console.log(err.response.status);
                         localStorage.clear();
                         alert("Session Expired");
                         this.props.history.push('/login');
@@ -123,7 +107,6 @@ class CreateSession extends Component
                     else
                     {
                         message = err.response.data.message;
-                        console.log(message);
                         this.setState({errorMessage: err.response.data.message});
                         alert(message);
                     }
@@ -153,9 +136,7 @@ class CreateSession extends Component
                 }
             },(err) => 
             {
-                if(String(err.response.status) === "401")
-                {
-                    console.log(err.response.status);
+                if(String(err.response.status) === "401") {
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
@@ -170,13 +151,11 @@ class CreateSession extends Component
                 else
                 {
                     this.setState({service: "No service"});
-                    console.log("Service: Empty");
                 }
             }, (err) => 
             {
                 if(String(err.response.status) === "401")
                 {
-                    console.log(err.response.status);
                     localStorage.clear();
                     alert("Session Expired");
                     this.props.history.push('/login');
