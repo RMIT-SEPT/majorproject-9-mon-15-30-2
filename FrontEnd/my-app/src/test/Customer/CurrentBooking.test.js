@@ -5,6 +5,7 @@ import Adapter from "enzyme-adapter-react-16";
 import CurrentBookings from "../../Components/Customer/CurrentBookings";
 import axios from 'axios';
 import { cleanup } from "@testing-library/react";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -19,10 +20,12 @@ describe('<CurrentBooking /> Unit Test', () =>
             role: "ROLE_CUSTOMER"
         }
         localStorage.setItem("user", JSON.stringify(stored));
+        moxios.install();
     });
 
     afterEach(() => 
     {
+        moxios.uninstall();
         cleanup();
     });
 

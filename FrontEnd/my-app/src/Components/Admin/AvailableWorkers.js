@@ -60,11 +60,7 @@ class AvailableWorkers extends Component
                 console.log(res.data);
             }).catch((err) =>
             {
-                if(err.isAxiosError)
-                {
-                    console.log("no connection");
-                }
-                else if(String(err.response.status) === "401")
+                if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();

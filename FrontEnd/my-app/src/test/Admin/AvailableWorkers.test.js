@@ -5,6 +5,7 @@ import Adapter from "enzyme-adapter-react-16";
 import AvailableWorkers from "../../Components/Admin/AvailableWorkers";
 import axios from 'axios';
 import { cleanup } from "@testing-library/react";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,9 +18,12 @@ describe('<AvailableWorker /> Unit Test', () =>
             role: "ROLE_ADMIN",
             id:"1" }
         localStorage.setItem("user", JSON.stringify(stored));
+
+        moxios.install();
     });
 
     afterEach(() => {
+        moxios.uninstall();
         cleanup;
     });
 

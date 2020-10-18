@@ -6,11 +6,20 @@ import axios from 'axios';
 import { Redirect } from "react-router-dom";
 import { cleanup } from "@testing-library/react";
 import UpdatePassword from "../../Components/Customer/UpdatePassword";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('<UpdatePassword /> Unit Test', () => 
 {
+    beforeAll(() => 
+    {
+        moxios.install();
+    });
+    afterAll(() => 
+    {
+        moxios.uninstall();
+    });
     beforeEach(() => 
     {
         var stored = {
@@ -135,7 +144,8 @@ describe('<UpdatePassword /> Unit Test', () =>
         const e = {
             target: {
                 value: "1"
-            }
+            },
+            preventDefault() {}
         };
         const props =
         {

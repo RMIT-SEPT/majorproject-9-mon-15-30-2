@@ -33,11 +33,7 @@ class ViewAllBookings extends Component
             window.location.reload();
         }).catch((err) => 
         {
-            if(err.isAxiosError)
-            {
-                console.log("no connection");
-            }
-            else if(String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 localStorage.clear();
                 alert("Session Expired");
@@ -64,11 +60,7 @@ class ViewAllBookings extends Component
             window.location.reload();
         }).catch((err) => 
         {
-            if(err.isAxiosError)
-            {
-                console.log("no connection");
-            }
-            else if(String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 localStorage.clear();
                 alert("Session Expired");
@@ -105,11 +97,7 @@ class ViewAllBookings extends Component
                 
             }).catch((err) =>
             {
-                if(err.isAxiosError)
-                {
-                    console.log("no connection");
-                }
-                else if(String(err.response.status) === "401")
+                if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();
@@ -127,11 +115,7 @@ class ViewAllBookings extends Component
                 this.setState({pastbookings: res.data});
             }).catch((err) => 
             {
-                if(err.isAxiosError)
-                {
-                    console.log("no connection");
-                }
-                else if(String(err.response.status) === "401")
+                if(String(err.response.status) === "401")
                 {
                     console.log(err.response.status);
                     localStorage.clear();

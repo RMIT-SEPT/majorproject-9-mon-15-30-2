@@ -7,11 +7,20 @@ import { Redirect } from "react-router-dom";
 import { cleanup } from "@testing-library/react";
 import EditCustomer from "../../Components/Customer/EditCustomer";
 import HandleCustomer from "../../actions/HandleCustomer";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('<EditCustomer /> Unit Test', () => 
 {
+    beforeAll(() => 
+    {
+        moxios.install();
+    });
+    afterAll(() => 
+    {
+        moxios.uninstall();
+    });
     beforeEach(() => 
     {
         var stored = {
@@ -67,7 +76,8 @@ describe('<EditCustomer /> Unit Test', () =>
                 params: {
                     id: 1
                 }
-            }
+            },
+            preventDefault() {}
         };
         const wrapper = shallow(<EditCustomer {...props} />);
         const instance = wrapper.instance();
@@ -139,7 +149,8 @@ describe('<EditCustomer /> Unit Test', () =>
         const e = {
             target: {
                 value: "1"
-            }
+            },
+            preventDefault(){}
         };
         const props =
         {

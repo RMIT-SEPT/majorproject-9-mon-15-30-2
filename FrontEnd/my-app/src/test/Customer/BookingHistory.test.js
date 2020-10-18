@@ -5,11 +5,21 @@ import Adapter from "enzyme-adapter-react-16";
 import BookingHistory from "../../Components/Customer/BookingHistory";
 import { cleanup } from "@testing-library/react";
 import axios from 'axios';
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('<BookingHistory /> Unit Test', () => 
 {
+    beforeAll(() => 
+    {
+        moxios.install();
+    });
+    afterAll(() => 
+    {
+        moxios.uninstall();
+    });
+
     beforeEach(() => 
     {
         var stored = {

@@ -99,11 +99,7 @@ class EditCustomer extends Component
             alert("Customer details are updated successfully");
         }, (err) => 
         {
-            if(err.isAxiosError)
-            {
-                console.log("no connection");
-            }
-            else if (String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 localStorage.clear();
                 alert("Session Expired");

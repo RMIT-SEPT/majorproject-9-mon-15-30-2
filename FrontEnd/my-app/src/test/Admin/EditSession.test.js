@@ -5,6 +5,7 @@ import Adapter from "enzyme-adapter-react-16";
 import EditSession from "../../Components/Admin/EditSession";
 import axios from 'axios';
 import { cleanup } from "@testing-library/react";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -18,10 +19,13 @@ describe('<EditSession/> Unit Test', () =>
             role: "ROLE_ADMIN",
             id:"1" }
         localStorage.setItem("user", JSON.stringify(stored));
+
+        moxios.install();
     });
 
     afterEach(() => 
     {
+        moxios.uninstall();
         cleanup();
     });
 
@@ -272,6 +276,9 @@ describe('<EditSession/> Unit Test', () =>
         const e = {
             target: {
                 value: "1"
+            },
+            preventDefault() {
+                
             }
         };
         const wrapper = shallow(<EditSession {...props}/>);

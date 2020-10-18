@@ -7,11 +7,21 @@ import axios from 'axios';
 import ViewAllBookings from "../../Components/Admin/ViewAllBookings";
 import { Redirect } from "react-router-dom";
 import { cleanup } from "@testing-library/react";
+import moxios from 'moxios';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('<ViewAllBookings /> Unit Test', () =>
 {
+    beforeAll(() => 
+    {
+        moxios.install();
+    });
+    afterAll(() => 
+    {
+        moxios.uninstall();
+    });
+
     beforeEach(() => 
     {
         var stored = {

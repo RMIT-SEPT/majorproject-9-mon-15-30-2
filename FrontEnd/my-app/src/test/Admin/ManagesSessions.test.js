@@ -5,11 +5,22 @@ import Adapter from "enzyme-adapter-react-16";
 import axios from 'axios';
 import ManageSessions from "../../Components/Admin/ManagesSessions";
 import { cleanup } from "@testing-library/react";
+import moxios from 'moxios';
+
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('<ManageSessions /> Unit Test', () =>
 {
+    beforeAll(() => 
+    {
+        moxios.install();
+    });
+    afterAll(() => 
+    {
+        moxios.uninstall();
+    });
+    
     beforeEach(() => 
     {
         var stored = {
