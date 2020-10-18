@@ -6,11 +6,20 @@ import AdminHomePage from "../../Components/Admin/AdminHomePage";
 
 Enzyme.configure({ adapter: new Adapter() });
 
+var stored = {
+    role: "ROLE_ADMIN"
+}
+jest.spyOn(JSON, 'parse').mockImplementation(() => {
+    return stored;
+});
+
 describe('<AdminHomePage /> Unit Test', () => 
 {
+
     it('renders container', () => 
     {
         const wrapper = shallow(<AdminHomePage />);
+        expect(JSON.parse).toHaveBeenCalled();
         expect(wrapper.find('.container')).toHaveLength(1);
     });
 

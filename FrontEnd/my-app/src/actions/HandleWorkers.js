@@ -1,41 +1,73 @@
 import axios from "axios";
 
-class HandleWorkers {
-  getWorkerByAdmin(admin_id){
-    return axios.get("http://localhost:8080/workers/" + admin_id);
-  }
-
-  getWorkerByID(worker_id)
+class HandleWorkers 
+{
+  getWorkersByAdmin(admin_id, token)
   {
-    return axios.get("http://localhost:8080/worker/" + worker_id);
-  }
-
-  getWorkerByService(service)
-  {
-    return axios.get("http://localhost:8080/makebooking/byservice/" + service);
-  }
-
-  updateWorker(worker, id){
-      return axios.put("http://localhost:8080/editWorker/" + id, worker);
-  }
-
-
-  deleteWorker(id){
-    return axios.delete("http://localhost:8080/deleteWorker/" + id, {withCredentials: false},
+    return axios.get("http://localhost:8080/admin/workers/" + admin_id, 
     {headers: {
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        }
-    });
-  }
-
-   createNewWorker(worker) {
-    return axios.post("http://localhost:8080/createWorker",worker, {withCredentials: false},
-    {headers: {
-    'Access-Control-Allow-Origin' : '*',
-    'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      Authorization: token
     }});
   }
-  
+
+  getWorkerByID(worker_id, admin_id, token)
+  {
+    return axios.get("http://localhost:8080/admin/worker/" + worker_id + "/" + admin_id,
+    {headers: {
+      Authorization: token
+    }});
+  }
+
+  getWorkerByService(service, token)
+  {
+    return axios.get("http://localhost:8080/customer/makebooking/workers/" + service, 
+    {headers: {
+      Authorization: token
+    }});
+  }
+
+  updateWorker(worker, id, admin_id, token)
+  {
+    return axios.put("http://localhost:8080/admin/editWorker/" + id + "/" + admin_id, worker,
+    {headers: {
+      Authorization: token
+    }});
+  }
+
+  deleteWorker(id, admin_id, token)
+  {
+    return axios.delete("http://localhost:8080/admin/deleteWorker/" + id + "/" + admin_id,
+    {headers: {
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      Authorization: token
+    }});
+  }
+
+  createNewWorker(worker, token) 
+  {
+    return axios.post("http://localhost:8080/admin/createWorker",worker,
+    {headers: {
+      'Access-Control-Allow-Origin' : '*',
+      'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      Authorization: token
+    }});
+  }
+
+  getProfile(id, token)
+  {
+    return axios.get("http://localhost:8080/worker/profile/" + id ,
+      {headers: {
+        Authorization: token
+      }});
+  }
+
+  getSession(id, token)
+  {
+    return axios.get("http://localhost:8080/worker/sessions/" + id ,
+      {headers: {
+        Authorization: token
+      }});
+  }
 }
-export default new HandleWorkers()
+export default new HandleWorkers();
