@@ -27,22 +27,25 @@ public class AdminDetailsServiceTest {
     private AdminDetailsRepository adminDetailsRepository;
 
     private static List<String> serviceList;
+    private static String admin1_id = "a1";
+    private static String admin2_id = "a2";
+    private static String admin3_id = "a3";
+    private static String service1 = "Massage";
+    private static String service2 = "Haircut";
 
     @Before
     public void setup() {
-        String service = "Massage";
-
         AdminDetails admin1 = new AdminDetails();
-        admin1.setId("a1");
-        admin1.setService(service);
+        admin1.setId(admin1_id);
+        admin1.setService(service1);
 
         AdminDetails admin2 = new AdminDetails();
-        admin2.setId("a2");
-        admin2.setService("Haircut");
+        admin2.setId(admin2_id);
+        admin2.setService(service2);
 
         AdminDetails admin3 = new AdminDetails();
-        admin3.setId("a3");
-        admin3.setService(service);
+        admin3.setId(admin3_id);
+        admin3.setService(service1);
 
         serviceList = Arrays.asList(admin1.getService(), admin2.getService());
 
@@ -51,7 +54,7 @@ public class AdminDetailsServiceTest {
 
         List<String> adminIdList = Arrays.asList(admin1.getId(), admin3.getId());
 
-        Mockito.when(adminDetailsRepository.getAdminIdByService(service))
+        Mockito.when(adminDetailsRepository.getAdminIdByService(service1))
                 .thenReturn(adminIdList);
 
         Mockito.when(adminDetailsRepository.getAdminById(admin2.getId())).thenReturn(admin2);
@@ -59,25 +62,19 @@ public class AdminDetailsServiceTest {
 
     @Test
     public void getServiceByAdminId_returnService_ifServiceFound() {
-        String service = "Massage";
-        String adminId = "a1";
-        assert(adminDetailsService.getServiceByAdminId(adminId).equals(service));
+        assert(adminDetailsService.getServiceByAdminId(admin1_id).equals(service1));
     }
 
     @Test(expected = AdminDetailsException.class)
-    public void getServiceByAdminId_throwException_ifNoServiceFound()
+    public void getServiceByAdminId_throwException_ifServiceNotFound()
             throws AdminDetailsException {
-        String adminId = "a4";
-        adminDetailsService.getServiceByAdminId(adminId);
+        adminDetailsService.getServiceByAdminId("a4");
     }
 
     @Test
     public void getAdminIdByService_returnAdminIds_ifAdminFound() {
-        String service = "Massage";
-        String admin1 = "a1";
-        String admin2 = "a3";
-        List<String> adminList = adminDetailsService.getAdminIdByService(service);
-        assert(adminList.contains(admin1) && adminList.contains(admin2));
+        List<String> adminList = adminDetailsService.getAdminIdByService(service1);
+        assert(adminList.contains(admin1_id) && adminList.contains(admin3_id));
     }
 
     @Test(expected = AdminDetailsException.class)
@@ -90,8 +87,6 @@ public class AdminDetailsServiceTest {
     public void getAllServices_returnServices_ifServicesFound() {
         Mockito.when(adminDetailsRepository.getAllServices())
                 .thenReturn(serviceList);
-        String service1 = "Massage";
-        String service2 = "Haircut";
         List<String> serviceList = adminDetailsService.getAllServices();
         assert(serviceList.contains(service1) && serviceList.contains(service2));
     }
@@ -106,8 +101,7 @@ public class AdminDetailsServiceTest {
 
     @Test
     public void getAdminById_returnAdmin_ifAdminFound() {
-        String admin2 = "a2";
-        assert(adminDetailsService.getAdminById(admin2) != null);
+        assert(adminDetailsService.getAdminById(admin2_id) != null);
     }
 
     @Test(expected = AdminDetailsException.class)

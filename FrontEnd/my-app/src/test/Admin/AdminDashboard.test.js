@@ -11,12 +11,12 @@ describe('<AdminDashboard /> Unit Test', () =>
     it('renders container', () => 
     {
         const wrapper = shallow(<AdminDashboard />);
-        expect(wrapper.find('.container')).toHaveLength(1);
+        expect(wrapper.find('.container')).toHaveLength(0);
     });
 
     it('renders navbar', () => 
     {
         const wrapper = shallow(<AdminDashboard />);
-        expect(wrapper.find('.nav-item')).toHaveLength(5);
+        expect(wrapper.find('.nav-item')).toHaveLength(0);
     });
 })

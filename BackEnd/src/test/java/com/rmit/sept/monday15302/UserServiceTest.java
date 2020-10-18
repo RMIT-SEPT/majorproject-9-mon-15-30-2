@@ -5,6 +5,7 @@ import com.rmit.sept.monday15302.exception.UserException;
 import com.rmit.sept.monday15302.model.User;
 import com.rmit.sept.monday15302.model.UserType;
 import com.rmit.sept.monday15302.services.UserService;
+import com.rmit.sept.monday15302.utils.Request.UpdatePassword;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.times;
@@ -25,14 +28,20 @@ public class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     static private User user;
-    static private final String username = "admin";
+    static private final String username = "customer";
     static private final String userId = "123";
+    private static UpdatePassword passwordRequest;
 
     @Before
     public void setup() {
-        user = new User(username, "*", UserType.ADMIN);
+        user = new User(username, "******", UserType.ROLE_CUSTOMER);
         user.setId(userId);
+
+        passwordRequest = new UpdatePassword("******", "123456", "123456");
 
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         Mockito.when(userRepository.getUserById(userId)).thenReturn(user);
@@ -49,14 +58,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUser_returnTrue_ifUserAdded() {
+    public void saveUser_returnUser_ifUserAdded() {
         userService.saveUser(user);
         Mockito.verify(userRepository,
                 times(1)).save(user);
     }
 
     @Test(expected = UserException.class)
-    public void createUser_throwException_ifUserNotAdded()
+    public void saveUser_throwException_ifUserNotAdded()
             throws UserException {
         Mockito.doThrow(new UserException("Cannot create a user"))
                 .when(userRepository)
@@ -89,13 +98,13 @@ public class UserServiceTest {
     }
 
     @Test(expected = UserException.class)
-    public void getUserById_throwException_ifNoUserFound()
+    public void getUserById_throwException_ifUserNotFound()
             throws UserException {
         userService.getUserById("Sale");
     }
     
     @Test
-    public void testDeleteUserByUsername() {
+    public void deleteByUsername_deleteUser_ifUserFound() {
         Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
         // when
         userService.deleteByUsername(username);
@@ -104,9 +113,36 @@ public class UserServiceTest {
     }
 
     @Test(expected = UserException.class)
-    public void deleteUserByUsername_throwException_ifNoUserFound()
+    public void deleteByUsername_throwException_ifUserNotFound()
             throws UserException {
         userService.deleteByUsername("Sale");
+    }
+
+    @Test
+    public void changeUserPassword_returnUser_ifPasswordChanged() {
+        Mockito.when(userRepository.save(user)).thenReturn(user);
+        // when
+        Mockito.when(bCryptPasswordEncoder.matches("******","******")).thenReturn(true);
+        userService.changeUserPassword(passwordRequest, userId);
+        // then
+        Mockito.verify(userRepository, times(1)).save(user);
+    }
+
+    @Test(expected = UserException.class)
+    public void changeUserPassword_throwException_ifOldPasswordNotMatch() throws UserException {
+        passwordRequest.setOldPassword("123456");
+        userService.changeUserPassword(passwordRequest, userId);
+    }
+
+    @Test
+    public void loadUserByUsername_returnUserDetails_ifUserFound() {
+        Mockito.when(userRepository.findByUserName(username)).thenReturn(user);
+        assert(userService.loadUserByUsername(username) != null);
+    }
+
+    @Test(expected = UsernameNotFoundException.class)
+    public void loadUserByUsername_throwException_ifUserNotFound() throws UsernameNotFoundException{
+        userService.loadUserByUsername("123");
     }
 
 }

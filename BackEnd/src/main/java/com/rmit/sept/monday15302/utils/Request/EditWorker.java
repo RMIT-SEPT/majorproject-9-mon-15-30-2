@@ -13,9 +13,6 @@ public class EditWorker {
     @Size(max = 21, min = 3)
     private String userName;
 
-    @NotBlank(message = "Password is required")
-    private String password;
-
     @NotBlank(message = "Worker's first name is required")
     private String fName;
 
@@ -26,11 +23,10 @@ public class EditWorker {
     @Pattern(regexp="(^$|[0-9]{10})")
     private String phoneNumber;
 
-    public EditWorker(String id, String username, String password, String fName,
-                String lName, String phoneNumber) {
+    public EditWorker(String id, String username, String fName, String lName,
+                      String phoneNumber) {
         this.id = id;
         this.userName = username;
-        this.password = password;
         this.fName = fName;
         this.lName = lName;
         this.phoneNumber = phoneNumber;
@@ -52,10 +48,6 @@ public class EditWorker {
         return lName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -67,5 +59,6 @@ public class EditWorker {
     public void setUsername(String s) {
         this.userName = s;
     }
+
 }
 
