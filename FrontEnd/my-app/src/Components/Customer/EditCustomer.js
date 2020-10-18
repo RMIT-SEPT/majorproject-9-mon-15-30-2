@@ -76,6 +76,7 @@ class EditCustomer extends Component
 
     onUpdate = (e) => 
     {
+        e.preventDefault();
         var stored = JSON.parse(localStorage.getItem("user"));
         let EditCustomer = 
         {

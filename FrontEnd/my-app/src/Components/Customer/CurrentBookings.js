@@ -19,17 +19,14 @@ class CurrentBookings extends Component
 
     cancelbooking(booking_id)
     {
-        GetBookings.cancelBooking(booking_id).then((res) => 
+        var stored = JSON.parse(localStorage.getItem("user"));
+        GetBookings.cancelBooking(booking_id, stored.token).then((res) => 
         {
             alert("Booking id: " + booking_id + " has been cancelled");
             window.location.reload();
         }).catch((err) => 
         {
-            if(err.isAxiosError)
-            {
-                console.log("no connection");
-            }
-            else if(String(err.response.status) === "401")
+            if(String(err.response.status) === "401")
             {
                 console.log(err.response.status);
                 localStorage.clear();
